@@ -13,10 +13,16 @@
         <vm:MainVM/>
     </Window.DataContext>
     <Grid>
-  
 
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
         <views:CollectionCanvas x:Name="MainCanvas" Shapes="{Binding Shapes, Mode=OneWay}" MyProperty="31">
         </views:CollectionCanvas>
 
+
+        <Button  Grid.Row ="1" Command="{Binding SaveProjectCommand}"></Button>
+        
     </Grid>
 </Window>

@@ -19,14 +19,11 @@ namespace TikzFix.VM
         public ICollection<Shape> Shapes
         {
             get { return shapes; }
-           // private set { SetProperty<ICollection<UIElement>>(ref (ICollection<UIElement>)shapes, value); }
+           // private set { SetProperty<ICollection<Shape>>(ref shapes, value); }
         }
-
-
 
         public MainVM()
         {
-
             // Add a Line Element
             Line myLine = new Line
             {
@@ -40,11 +37,6 @@ namespace TikzFix.VM
                 StrokeThickness = 2
             };
             Shapes.Add(myLine);
-            Debug.WriteLine("rE?");
         }
-
-
-
-
     }
 }

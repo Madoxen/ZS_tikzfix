@@ -3,16 +3,9 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
+
 using System.Windows.Shapes;
 
 namespace TikzFix.Views
@@ -67,8 +60,9 @@ namespace TikzFix.Views
                         collectionCanvas.c.Children.Add(element);
                     }
 
-                    if (e.NewValue is INotifyCollectionChanged cc)
+                    if (collection is INotifyCollectionChanged cc)
                     {
+                        Debug.WriteLine("ASDASADAS");
                         cc.CollectionChanged += collectionCanvas.CollectionChanged;
                     }
 
@@ -93,12 +87,10 @@ namespace TikzFix.Views
 
         private void CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            if (e.NewItems is not ICollection<Shape> newItems)
-                throw new ArgumentException("Value type mismatch: is " + e.NewItems.GetType().Name + "required ICollection<Shape>");
 
-            if (e.OldItems is not ICollection<Shape> oldItems)
-                throw new ArgumentException("Value type mismatch: is " + e.OldItems.GetType().Name + "required ICollection<UIElement>");
-
+            var newItems = e.NewItems?.Cast<Shape>().ToList();
+            var oldItems = e.OldItems?.Cast<Shape>().ToList();
+       
             switch (e.Action)
             {
                 case NotifyCollectionChangedAction.Add:
@@ -115,7 +107,7 @@ namespace TikzFix.Views
                     break;
 
                 case NotifyCollectionChangedAction.Replace:
-                    c.Children[e.OldStartingIndex] = newItems.ElementAt(0); //TODO: not sure if this works in all cases?
+                    c.Children[e.OldStartingIndex] = (Shape)newItems.ElementAt(0); //TODO: not sure if this works in all cases?
                     break;
 
                 case NotifyCollectionChangedAction.Move:
