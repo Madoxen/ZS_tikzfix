@@ -4,12 +4,19 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TikzFix"
+        xmlns:views="clr-namespace:TikzFix.Views"
+        xmlns:vm="clr-namespace:TikzFix.VM"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
 
-        <Canvas Name="MainCanvas">
-        </Canvas>
+    <Window.DataContext>
+        <vm:MainVM/>
+    </Window.DataContext>
+    <Grid>
+  
+
+        <views:CollectionCanvas x:Name="MainCanvas" Shapes="{Binding Shapes, Mode=OneWay}" MyProperty="31">
+        </views:CollectionCanvas>
 
     </Grid>
 </Window>
