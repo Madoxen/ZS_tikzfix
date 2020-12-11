@@ -6,6 +6,8 @@
              xmlns:local="clr-namespace:TikzFix.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Canvas x:Name="c">
+    <Canvas x:Name="c" Width="1000" Height="1000">
+        
     </Canvas>
+    
 </UserControl>
