@@ -1,8 +1,8 @@
 ﻿namespace TikzFix.Model.Tool
 {
-    class CanvasEvent
+    class CanvasEventArgs
     {
-        public CanvasEvent(int x, int y, MouseState mouseState)
+        public CanvasEventArgs(int x, int y, MouseState mouseState)
         {
             X = x;
             Y = y;

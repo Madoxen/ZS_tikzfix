@@ -10,7 +10,7 @@ namespace TikzFix.Model.ToolImpl
         private int x1, y1;
         private bool firstClick = true;
 
-        public DrawingShape GetShape(CanvasEvent canvasEvent)
+        public DrawingShape GetShape(CanvasEventArgs canvasEvent)
         {
             if (canvasEvent.MouseState == MouseState.DOWN)
             {

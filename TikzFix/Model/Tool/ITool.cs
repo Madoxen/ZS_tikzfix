@@ -2,6 +2,6 @@
 {
     interface ITool
     {
-        DrawingShape GetShape(CanvasEvent canvasEvent);
+        DrawingShape GetShape(CanvasEventArgs canvasEvent);
     }
 }

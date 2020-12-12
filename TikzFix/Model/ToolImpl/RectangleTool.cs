@@ -5,7 +5,7 @@ namespace TikzFix.Model.ToolImpl
 {
     class RectangleTool : ITool
     {
-        public DrawingShape GetShape(CanvasEvent canvasEvent)
+        public DrawingShape GetShape(CanvasEventArgs canvasEvent)
         {
             throw new NotImplementedException();
         }
