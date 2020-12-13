@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:local="clr-namespace:TikzFix"
         xmlns:views="clr-namespace:TikzFix.Views"
         xmlns:vm="clr-namespace:TikzFix.VM"
@@ -12,9 +13,28 @@
     <Window.DataContext>
         <vm:MainVM/>
     </Window.DataContext>
+
+    <Window.Resources>
+        <views:MouseEventToCanvasEventConverter x:Key="MouseEventConverter"></views:MouseEventToCanvasEventConverter>
+    </Window.Resources>
     <Grid>
-        
-        <views:CollectionCanvas x:Name="MainCanvas" Shapes="{Binding Shapes, Mode=OneWay}">
+
+        <views:CollectionCanvas x:Name="MainCanvas" Shapes="{Binding Shapes, Mode=OneWay}" Background="Transparent">
+            <b:Interaction.Triggers>
+
+                <b:EventTrigger EventName="MouseLeftButtonDown">
+                    <b:InvokeCommandAction Command="{Binding StepDrawingCommand}" EventArgsConverter="{StaticResource MouseEventConverter}"></b:InvokeCommandAction>
+                </b:EventTrigger>
+
+                <b:EventTrigger EventName="MouseLeftButtonUp">
+                    <b:InvokeCommandAction Command="{Binding StepDrawingCommand}" EventArgsConverter="{StaticResource MouseEventConverter}"></b:InvokeCommandAction>
+                </b:EventTrigger>
+
+                <b:EventTrigger EventName="MouseMove">
+                    <b:InvokeCommandAction Command="{Binding UpdateDrawingCommand}" EventArgsConverter="{StaticResource MouseEventConverter}"></b:InvokeCommandAction>
+                </b:EventTrigger>
+
+            </b:Interaction.Triggers>
         </views:CollectionCanvas>
 
     </Grid>
