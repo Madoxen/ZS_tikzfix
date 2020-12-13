@@ -23,10 +23,6 @@ namespace TikzFix
         public MainWindow()
         {
             InitializeComponent();
-
-            
-
-
         }
     }
 }
