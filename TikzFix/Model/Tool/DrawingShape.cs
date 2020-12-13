@@ -4,7 +4,7 @@ namespace TikzFix.Model.Tool
 {
     class DrawingShape
     {
-        public static DrawingShape EMPTY_SHAPE = new DrawingShape(null, ShapeState.EMPTY);
+        public static readonly DrawingShape EMPTY_SHAPE = new DrawingShape(null, ShapeState.EMPTY);
 
         public DrawingShape(Shape shape, ShapeState shapeState)
         {
@@ -14,12 +14,12 @@ namespace TikzFix.Model.Tool
 
         public Shape Shape
         {
-            get;
+            get; set;
         }
 
         public ShapeState ShapeState
         {
-            get;
+            get; set;
         }
     }
 }

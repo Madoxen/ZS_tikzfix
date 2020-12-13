@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Windows;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using TikzFix.Model.Tool;
@@ -7,7 +6,7 @@ using TikzFix.Utils;
 
 namespace TikzFix.Model.ToolImpl
 {
-    class RectangleTool : ITool
+    class EllipseTool : ITool
     {
         private const int DEF_STROKE_THICKNESS = 2;
 
@@ -20,17 +19,18 @@ namespace TikzFix.Model.ToolImpl
         private int x1, y1;
         private DrawingShape current;
 
+
+
         public DrawingShape GetShape(CanvasEventArgs canvasEventArgs)
         {
             if (canvasEventArgs.MouseState == MouseState.DOWN)
             {
                 current = new DrawingShape(
-                new Rectangle
+                new Ellipse
                 {
                     Stroke = StrokeColor,
                     StrokeThickness = DEF_STROKE_THICKNESS,
                 },
-
                 ShapeState.EMPTY
             );
 
@@ -49,12 +49,12 @@ namespace TikzFix.Model.ToolImpl
 
         private void UpdateCurrent(CanvasEventArgs canvasEventArgs)
         {
-            current.Shape.Width = Math.Abs(x1 - canvasEventArgs.X);
-            current.Shape.Height = Math.Abs(y1 - canvasEventArgs.Y);
+            current.Shape.Width = Math.Abs(x1 - canvasEventArgs.X) * 2;
+            current.Shape.Height = Math.Abs(y1 - canvasEventArgs.Y) * 2;
 
             current.Shape.Margin = ShapeUtils.GetMargin(
-                Math.Min(x1, canvasEventArgs.X),
-                Math.Min(y1, canvasEventArgs.Y)
+                x1 - Math.Abs(x1 - canvasEventArgs.X),
+                y1 - Math.Abs(y1 - canvasEventArgs.Y)
             );
 
             if (canvasEventArgs.MouseState == MouseState.UP)

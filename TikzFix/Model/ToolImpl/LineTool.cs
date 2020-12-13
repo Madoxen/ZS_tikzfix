@@ -1,4 +1,5 @@
-﻿using System.Windows.Shapes;
+﻿using System.Windows.Media;
+using System.Windows.Shapes;
 using TikzFix.Model.Tool;
 
 namespace TikzFix.Model.ToolImpl
@@ -7,22 +8,28 @@ namespace TikzFix.Model.ToolImpl
     {
         private const int DEF_STROKE_THICKNESS = 2;
 
+        public SolidColorBrush StrokeColor
+        {
+            get; set;
+        } = Brushes.Black;
+
+
         private int x1, y1;
         private bool firstClick = true;
 
-        public DrawingShape GetShape(CanvasEventArgs canvasEvent)
+        public DrawingShape GetShape(CanvasEventArgs canvasEventArgs)
         {
-            if (canvasEvent.MouseState == MouseState.DOWN)
+            if (canvasEventArgs.MouseState == MouseState.DOWN)
             {
                 if (firstClick)
                 {
-                    x1 = canvasEvent.X;
-                    y1 = canvasEvent.Y;
+                    x1 = canvasEventArgs.X;
+                    y1 = canvasEventArgs.Y;
                     firstClick = false;
 
                     // return EMPTY_SHAPE when DOWN | MOVE
                     // if need it can be changed to draw first point
-                    // to show user where was clikced before selecting second point
+                    // to show user where was clicked before selecting second point
                     return DrawingShape.EMPTY_SHAPE;
                 }
                 else
@@ -31,18 +38,18 @@ namespace TikzFix.Model.ToolImpl
                     return new DrawingShape(
                         new Line
                         {
-                            Stroke = System.Windows.Media.Brushes.LightSteelBlue,
+                            Stroke = StrokeColor,
                             X1 = x1,
-                            X2 = canvasEvent.X,
+                            X2 = canvasEventArgs.X,
                             Y1 = y1,
-                            Y2 = canvasEvent.Y,
+                            Y2 = canvasEventArgs.Y,
                             StrokeThickness = DEF_STROKE_THICKNESS
                         },
                         ShapeState.FINISHED
                     );
                 }
             }
-            else if (canvasEvent.MouseState == MouseState.UP)
+            else if (canvasEventArgs.MouseState == MouseState.UP)
             {
                 return DrawingShape.EMPTY_SHAPE;
             }
