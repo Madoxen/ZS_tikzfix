@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+
 using System.Windows;
+using System.Diagnostics;
+using System.Windows.Input;
 using System.Windows.Shapes;
 using TikzFix.Model.Tool;
 using TikzFix.Model.ToolImpl;
@@ -25,7 +28,6 @@ namespace TikzFix.VM
 
 
         private readonly ObservableCollection<Shape> shapes = new ObservableCollection<Shape>();
-
         public ICollection<Shape> Shapes
         {
             get { return shapes; }
@@ -33,19 +35,26 @@ namespace TikzFix.VM
         }
 
         // TODO, observe this in canvas and draw (it can be null)
-        private Shape currentDrawingShape;
-
-        public Shape CurrentDrawingShape
+        private DrawingShape currentDrawingShape;
+        public DrawingShape CurrentDrawingShape
         {
             get => currentDrawingShape;
             private set
             {
-                currentDrawingShape = value;
+                Shapes.Remove(currentDrawingShape?.Shape); // remove shape to stop drawing it
+                if (value != null)
+                {
+                    Shapes.Add(value.Shape); // remove shape to stop drawing it
+                }
                 SetProperty(ref currentDrawingShape, value);
             }
         }
 
-
+        public RelayCommand CancelDrawingCommand { get; } //Should be called whenever user wants to cancel drawing TODO: Add cancel functionality
+        public RelayCommand<CanvasEventArgs> StepDrawingCommand { get; }  //Should be called when mouse button is pressed
+        public RelayCommand<CanvasEventArgs> UpdateDrawingCommand { get; } //Should be called when mouse pointer is moved
+        public RelayCommand CommitDrawingCommand { get; }
+        
         public MainVM()
         {
             Tools.Add(lineTool);
@@ -64,6 +73,11 @@ namespace TikzFix.VM
             // Add elipse from [50,50] to [0,25]
             CurrentToolIndex = 2;
             DrawTestEllipse();
+            
+            CancelDrawingCommand = new RelayCommand(CancelDrawing);
+            StepDrawingCommand = new RelayCommand<CanvasEventArgs>(StepDrawing);
+            UpdateDrawingCommand = new RelayCommand<CanvasEventArgs>(UpdateDrawing, CanUpdateDrawing);
+
         }
 
 
@@ -79,7 +93,7 @@ namespace TikzFix.VM
                 case ShapeState.DRAWING:
                     // shape drawing isn't finished
                     // draw shape but do not add it to list
-                    CurrentDrawingShape = drawingShape.Shape;
+                    CurrentDrawingShape = drawingShape;
                     break;
 
                 case ShapeState.FINISHED:
@@ -90,7 +104,28 @@ namespace TikzFix.VM
             }
         }
 
-        #region tests
+
+        private void CancelDrawing()
+        {
+            CurrentDrawingShape = null;
+        }
+
+        private void StepDrawing(CanvasEventArgs e)
+        {
+            HandleDrawingShape(currentTool.GetShape(e)); //update shape with event args.
+        }
+
+        private void UpdateDrawing(CanvasEventArgs e)
+        {
+            HandleDrawingShape(currentTool.GetShape(e)); //update shape with event args.
+        }
+
+        private bool CanUpdateDrawing(object _)
+        {
+            return CurrentDrawingShape?.Shape != null;
+        }
+
+
 
         private void DrawTestLine()
         {
