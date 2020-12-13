@@ -73,7 +73,10 @@ namespace TikzFix.VM
             // Add elipse from [50,50] to [0,25]
             CurrentToolIndex = 2;
             DrawTestEllipse();
-            
+
+
+            CurrentToolIndex = 2;
+
             CancelDrawingCommand = new RelayCommand(CancelDrawing);
             StepDrawingCommand = new RelayCommand<CanvasEventArgs>(StepDrawing);
             UpdateDrawingCommand = new RelayCommand<CanvasEventArgs>(UpdateDrawing, CanUpdateDrawing);
@@ -87,7 +90,8 @@ namespace TikzFix.VM
             {
                 case ShapeState.EMPTY:
                     // do nothing, ShapeCannot be drawn yet
-                    CurrentDrawingShape = null;
+                    // CurrentDrawingShape = null;
+                    CurrentDrawingShape = drawingShape;
                     break;
 
                 case ShapeState.DRAWING:

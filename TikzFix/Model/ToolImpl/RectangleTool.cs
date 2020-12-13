@@ -37,7 +37,7 @@ namespace TikzFix.Model.ToolImpl
                 x1 = canvasEventArgs.X;
                 y1 = canvasEventArgs.Y;
 
-                return DrawingShape.EMPTY_SHAPE;
+                return current;
             }
             else
             {
@@ -61,7 +61,7 @@ namespace TikzFix.Model.ToolImpl
             {
                 current.ShapeState = ShapeState.FINISHED;
             }
-            else if (canvasEventArgs.MouseState == MouseState.UP)
+            else if (canvasEventArgs.MouseState == MouseState.MOVE)
             {
                 current.ShapeState = ShapeState.DRAWING;
             }
