@@ -112,12 +112,12 @@ namespace TikzFix.VM
 
         private void StepDrawing(CanvasEventArgs e)
         {
-            HandleDrawingShape(currentTool.GetShape(e)); //update shape with event args.
+            HandleDrawingShape(CurrentTool.GetShape(e)); //update shape with event args.
         }
 
         private void UpdateDrawing(CanvasEventArgs e)
         {
-            HandleDrawingShape(currentTool.GetShape(e)); //update shape with event args.
+            HandleDrawingShape(CurrentTool.GetShape(e)); //update shape with event args.
         }
 
         private bool CanUpdateDrawing(object _)
@@ -125,7 +125,7 @@ namespace TikzFix.VM
             return CurrentDrawingShape?.Shape != null;
         }
 
-
+        #region tests
 
         private void DrawTestLine()
         {
