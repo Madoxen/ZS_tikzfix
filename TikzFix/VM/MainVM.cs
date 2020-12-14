@@ -41,10 +41,13 @@ namespace TikzFix.VM
             get => currentDrawingShape;
             private set
             {
-                Shapes.Remove(currentDrawingShape?.Shape); // remove shape to stop drawing it
-                if (value != null)
+                if (value != currentDrawingShape)
                 {
-                    Shapes.Add(value.Shape); // remove shape to stop drawing it
+                    Shapes.Remove(currentDrawingShape?.Shape); // remove shape to stop drawing it
+                    if (value != null)
+                    {
+                        Shapes.Add(value.Shape); // remove shape to stop drawing it
+                    }
                 }
                 SetProperty(ref currentDrawingShape, value);
             }
@@ -75,7 +78,7 @@ namespace TikzFix.VM
             DrawTestEllipse();
 
 
-            CurrentToolIndex = 2;
+            CurrentToolIndex = 0;
 
             CancelDrawingCommand = new RelayCommand(CancelDrawing);
             StepDrawingCommand = new RelayCommand<CanvasEventArgs>(StepDrawing);
@@ -88,7 +91,7 @@ namespace TikzFix.VM
         {
             switch (drawingShape.ShapeState)
             {
-                case ShapeState.EMPTY:
+                case ShapeState.START:
                     // do nothing, ShapeCannot be drawn yet
                     // CurrentDrawingShape = null;
                     CurrentDrawingShape = drawingShape;

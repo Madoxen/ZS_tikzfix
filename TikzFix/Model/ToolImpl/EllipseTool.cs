@@ -31,19 +31,17 @@ namespace TikzFix.Model.ToolImpl
                     Stroke = StrokeColor,
                     StrokeThickness = DEF_STROKE_THICKNESS,
                 },
-                ShapeState.EMPTY
+                ShapeState.START
             );
 
                 x1 = canvasEventArgs.X;
                 y1 = canvasEventArgs.Y;
-
-                return current;
             }
             else
             {
                 UpdateCurrent(canvasEventArgs);
-                return current;
             }
+            return current;
         }
 
 

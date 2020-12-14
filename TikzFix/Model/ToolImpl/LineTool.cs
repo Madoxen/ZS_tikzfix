@@ -1,6 +1,9 @@
-﻿using System.Windows.Media;
+﻿using System;
+using System.Windows.Media;
 using System.Windows.Shapes;
+
 using TikzFix.Model.Tool;
+using TikzFix.Utils;
 
 namespace TikzFix.Model.ToolImpl
 {
@@ -15,48 +18,47 @@ namespace TikzFix.Model.ToolImpl
 
 
         private int x1, y1;
-        private bool firstClick = true;
+        private DrawingShape current;
 
         public DrawingShape GetShape(CanvasEventArgs canvasEventArgs)
         {
             if (canvasEventArgs.MouseState == MouseState.DOWN)
             {
-                if (firstClick)
-                {
                     x1 = canvasEventArgs.X;
                     y1 = canvasEventArgs.Y;
-                    firstClick = false;
 
-                    // return EMPTY_SHAPE when DOWN | MOVE
-                    // if need it can be changed to draw first point
-                    // to show user where was clicked before selecting second point
-                    return DrawingShape.EMPTY_SHAPE;
-                }
-                else
-                {
-                    firstClick = true;
-                    return new DrawingShape(
-                        new Line
-                        {
-                            Stroke = StrokeColor,
-                            X1 = x1,
-                            X2 = canvasEventArgs.X,
-                            Y1 = y1,
-                            Y2 = canvasEventArgs.Y,
-                            StrokeThickness = DEF_STROKE_THICKNESS
-                        },
-                        ShapeState.FINISHED
-                    );
-                }
-            }
-            else if (canvasEventArgs.MouseState == MouseState.UP)
-            {
-                return DrawingShape.EMPTY_SHAPE;
+                    current = new DrawingShape(
+                    new Line
+                    {
+                        Stroke = StrokeColor,
+                        X1 = x1,
+                        X2 = x1,
+                        Y1 = y1,
+                        Y2 = y1,
+                        StrokeThickness = DEF_STROKE_THICKNESS
+                    }, ShapeState.START);
             }
             else
             {
-                return DrawingShape.EMPTY_SHAPE;
+                if (current.Shape is not Line l)
+                    throw new Exception("Shape-Tool type mismatch, tool type: LineTool, expected shape type Line");
+
+                l.X2 = canvasEventArgs.X;
+                l.Y2 = canvasEventArgs.Y;
+
+                if (canvasEventArgs.MouseState == MouseState.UP)
+                {
+                    current.ShapeState = ShapeState.FINISHED;
+                }
+                else if (canvasEventArgs.MouseState == MouseState.MOVE)
+                {
+                    current.ShapeState = ShapeState.DRAWING;
+                }
             }
+
+            return current;
         }
+
+
     }
 }
