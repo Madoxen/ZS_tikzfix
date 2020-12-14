@@ -30,20 +30,17 @@ namespace TikzFix.Model.ToolImpl
                     Stroke = StrokeColor,
                     StrokeThickness = DEF_STROKE_THICKNESS,
                 },
-
-                ShapeState.EMPTY
+                ShapeState.START
             );
 
                 x1 = canvasEventArgs.X;
                 y1 = canvasEventArgs.Y;
-
-                return DrawingShape.EMPTY_SHAPE;
             }
             else
             {
                 UpdateCurrent(canvasEventArgs);
-                return current;
             }
+            return current;
         }
 
 
@@ -61,7 +58,7 @@ namespace TikzFix.Model.ToolImpl
             {
                 current.ShapeState = ShapeState.FINISHED;
             }
-            else if (canvasEventArgs.MouseState == MouseState.UP)
+            else if (canvasEventArgs.MouseState == MouseState.MOVE)
             {
                 current.ShapeState = ShapeState.DRAWING;
             }

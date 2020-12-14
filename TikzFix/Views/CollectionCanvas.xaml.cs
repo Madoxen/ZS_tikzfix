@@ -62,7 +62,6 @@ namespace TikzFix.Views
 
                     if (collection is INotifyCollectionChanged cc)
                     {
-                        Debug.WriteLine("ASDASADAS");
                         cc.CollectionChanged += collectionCanvas.CollectionChanged;
                     }
 
@@ -87,7 +86,6 @@ namespace TikzFix.Views
 
         private void CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-
             var newItems = e.NewItems?.Cast<Shape>().ToList();
             var oldItems = e.OldItems?.Cast<Shape>().ToList();
        

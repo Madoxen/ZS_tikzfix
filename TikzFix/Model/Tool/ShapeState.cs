@@ -2,16 +2,15 @@
 {
     enum ShapeState
     {
-        // when user stared drawing but nothing can be printed
-        // e.g. user picked line and clicked at one point
-        // before clicking second point line cannot be drawn
-        EMPTY, 
+        //Initial phase of drawing (usually means that user clicked once)
+        START, 
 
-        // shape can be drawn
+        // shape is being drawn
         DRAWING,
 
         // drawing shape is finished, after next action 
         // tool will start drawing new shape
+        // this will commit the shape to the canvas shape registry
         FINISHED
     }
 }
