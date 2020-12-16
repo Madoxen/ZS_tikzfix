@@ -36,7 +36,7 @@
         </Menu>
 
         <!--TODO: Automate this ?-->
-        <ToolBarTray Grid.Row="1">
+        <ToolBarTray Grid.Row="1" >
             <ToolBar>
                 <Button Command="{Binding ChangeToolCommand}" ToolTip="Line">
                     <Button.CommandParameter>
@@ -64,7 +64,7 @@
         </ToolBarTray>
 
 
-        <views:CollectionCanvas x:Name="MainCanvas" Shapes="{Binding Shapes, Mode=OneWay}" Background="Transparent"  CanvasSelectable="{Binding CanvasSelectable}" SelectedShapes="{Binding SelectedShapes}" Grid.Row="2">
+        <views:CollectionCanvas Panel.ZIndex="-10" x:Name="MainCanvas" Shapes="{Binding Shapes, Mode=OneWay}" Background="Transparent"  CanvasSelectable="{Binding CanvasSelectable}" SelectedShapes="{Binding SelectedShapes}" Grid.Row="2">
             <b:Interaction.Triggers>
                 <b:EventTrigger EventName="MouseLeftButtonDown">
                     <b:InvokeCommandAction Command="{Binding StepDrawingCommand}" EventArgsConverter="{StaticResource MouseEventConverter}"></b:InvokeCommandAction>
