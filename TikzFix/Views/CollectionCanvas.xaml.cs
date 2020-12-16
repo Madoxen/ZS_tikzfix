@@ -5,7 +5,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-
+using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Shapes;
 
 namespace TikzFix.Views
@@ -15,11 +16,26 @@ namespace TikzFix.Views
     /// </summary>
     public partial class CollectionCanvas : UserControl
     {
+
+        private readonly Rectangle selectionRectangle;
+        private Point selectionStartPoint;
+
         public CollectionCanvas()
         {
             InitializeComponent();
+            selectionRectangle = new Rectangle()
+            {
+                Stroke = Brushes.Aqua,
+                StrokeThickness = 1,
+                Fill = new SolidColorBrush()
+                {
+                    Opacity = 0.5,
+                    Color = Colors.Aqua
+                }
+            };
         }
 
+        //Shapes to be drawn on underlaying canvas
         public ICollection<Shape> Shapes
         {
             get { return (ICollection<Shape>)GetValue(ShapesProperty); }
@@ -31,18 +47,43 @@ namespace TikzFix.Views
             DependencyProperty.Register("Shapes", typeof(ICollection<Shape>), typeof(CollectionCanvas), new PropertyMetadata(null, OnShapesPropertyChanged));
 
 
-
-
-        public int MyProperty
+        //Shapes selected by user when using selector 
+        public ICollection<Shape> SelectedShapes
         {
-            get { return (int)GetValue(MyPropertyProperty); }
-            set { SetValue(MyPropertyProperty, value); }
+            get { return (ICollection<Shape>)GetValue(SelectedShapesProperty); }
+            set { SetValue(SelectedShapesProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for MyProperty.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty MyPropertyProperty =
-            DependencyProperty.Register("MyProperty", typeof(int), typeof(CollectionCanvas), new PropertyMetadata(0));
+        // Using a DependencyProperty as the backing store for SelectedShapes.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty SelectedShapesProperty =
+            DependencyProperty.Register("SelectedShapes", typeof(ICollection<Shape>), typeof(CollectionCanvas), new PropertyMetadata(null));
 
+
+
+
+        public bool CanvasSelectable
+        {
+            get { return (bool)GetValue(CanvasSelectableProperty); }
+            set { SetValue(CanvasSelectableProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for CanvasSelectable.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty CanvasSelectableProperty =
+            DependencyProperty.Register("CanvasSelectable", typeof(bool), typeof(CollectionCanvas), new PropertyMetadata(true, OnCanvasSelectableChanged));
+
+
+        private static void OnCanvasSelectableChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is not CollectionCanvas collectionCanvas)
+                throw new ArgumentException("Value type mismatch: is " + d.GetType().Name + " required " + typeof(CollectionCanvas));
+
+            if (e.NewValue is not bool b)
+                throw new ArgumentException("Value type mismatch: is " + e.NewValue.GetType().Name + "required bool");
+
+            collectionCanvas.CanvasSelectable = b;
+            if (collectionCanvas.CanvasSelectable == false)
+                collectionCanvas.SelectedShapes.Clear();
+        }
 
 
         //Called when SetProperty is called in VM
@@ -88,7 +129,7 @@ namespace TikzFix.Views
         {
             var newItems = e.NewItems?.Cast<Shape>().ToList();
             var oldItems = e.OldItems?.Cast<Shape>().ToList();
-       
+
             switch (e.Action)
             {
                 case NotifyCollectionChangedAction.Add:
@@ -113,8 +154,67 @@ namespace TikzFix.Views
                     break;
             }
         }
+
+
+
+
+
+        private void HandleSelectionBegin(object sender, MouseButtonEventArgs e)
+        {
+            if (!CanvasSelectable)
+                return; //Canvas is marked as not selectable, abort
+            if (selectionRectangle.Visibility == Visibility.Visible)
+                return;
+
+            selectionRectangle.Visibility = Visibility.Visible;
+            Point pos = e.GetPosition(c);
+            selectionStartPoint = pos;
+            c.Children.Add(selectionRectangle);
+        }
+
+        private void HandleSelectionMoved(object sender, MouseEventArgs e)
+        {
+            if (!CanvasSelectable)
+                return; //Canvas is marked as not selectable, abort
+
+            Point pos = e.GetPosition(c);
+            selectionRectangle.Width = Math.Abs(pos.X - selectionStartPoint.X);
+            selectionRectangle.Height = Math.Abs(pos.Y - selectionStartPoint.Y);
+            selectionRectangle.Margin = new Thickness(Math.Min(pos.X, selectionStartPoint.X), Math.Min(pos.Y, selectionStartPoint.Y), 0, 0);
+        }
+
+
+        private void HandleSelectionEnded(object sender, MouseButtonEventArgs e)
+        {
+            if (!CanvasSelectable)
+                return; //Canvas is marked as not selectable, abort
+
+            Point pos = e.GetPosition(c);
+            SelectedShapes = GetSelectedShapes(c, new RectangleGeometry(new Rect(Math.Min(pos.X, selectionStartPoint.X), Math.Min(pos.Y, selectionStartPoint.Y), selectionRectangle.Width, selectionRectangle.Height)));
+            c.Children.Remove(selectionRectangle);
+            selectionRectangle.Visibility = Visibility.Collapsed;
+        }
+
+
+        private IList<Shape> GetSelectedShapes(UIElement element, Geometry geometry)
+        {
+            var shapes = new List<Shape>();
+
+            VisualTreeHelper.HitTest(element, null,
+                result =>
+                {
+                    var shape = result.VisualHit as Shape;
+
+                    if (shape != null)
+                    {
+                        shapes.Add(shape);
+                    }
+
+                    return HitTestResultBehavior.Continue;
+                },
+                new GeometryHitTestParameters(geometry));
+
+            return shapes;
+        }
     }
-
-
-
 }
