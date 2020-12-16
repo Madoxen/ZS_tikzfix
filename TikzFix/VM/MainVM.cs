@@ -166,6 +166,7 @@ namespace TikzFix.VM
         {
             CurrentToolIndex = index;
         }
+        #endregion
 
         #region Selection Commands
         public void CancelSelection()
