@@ -20,7 +20,7 @@ namespace TikzFix.VM
 
         public readonly List<ITool> Tools = new List<ITool>();
 
-        public int CurrentToolIndex { get; }
+        public int CurrentToolIndex { set; get; }
 
         public ITool CurrentTool => Tools[CurrentToolIndex];
 
@@ -57,7 +57,9 @@ namespace TikzFix.VM
         public RelayCommand<CanvasEventArgs> StepDrawingCommand { get; }  //Should be called when mouse button is pressed
         public RelayCommand<CanvasEventArgs> UpdateDrawingCommand { get; } //Should be called when mouse pointer is moved
         public RelayCommand CommitDrawingCommand { get; }
-        
+
+        public RelayCommand<int> ChangeToolCommand { get; }
+
         public MainVM()
         {
             Tools.Add(lineTool);
@@ -83,6 +85,7 @@ namespace TikzFix.VM
             CancelDrawingCommand = new RelayCommand(CancelDrawing);
             StepDrawingCommand = new RelayCommand<CanvasEventArgs>(StepDrawing);
             UpdateDrawingCommand = new RelayCommand<CanvasEventArgs>(UpdateDrawing, CanUpdateDrawing);
+            ChangeToolCommand = new RelayCommand<int>(ChangeTool);
 
         }
 
@@ -130,6 +133,11 @@ namespace TikzFix.VM
         private bool CanUpdateDrawing(object _)
         {
             return CurrentDrawingShape?.Shape != null;
+        }
+
+        private void ChangeTool(int index)
+        {
+            CurrentToolIndex = index;
         }
 
         #region tests
