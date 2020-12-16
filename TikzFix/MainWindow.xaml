@@ -19,7 +19,7 @@
     </Window.Resources>
     <Grid>
 
-        <views:CollectionCanvas x:Name="MainCanvas" Shapes="{Binding Shapes, Mode=OneWay}" Background="Transparent">
+        <views:CollectionCanvas x:Name="MainCanvas" Shapes="{Binding Shapes, Mode=OneWay}" Background="Transparent" CanvasSelectable="{Binding CanvasSelectable}" SelectedShapes="{Binding SelectedShapes, Mode=TwoWay}">
             <b:Interaction.Triggers>
 
                 <b:EventTrigger EventName="MouseLeftButtonDown">
@@ -33,6 +33,10 @@
                 <b:EventTrigger EventName="MouseMove">
                     <b:InvokeCommandAction Command="{Binding UpdateDrawingCommand}" EventArgsConverter="{StaticResource MouseEventConverter}"></b:InvokeCommandAction>
                 </b:EventTrigger>
+
+                <b:KeyTrigger Key="Delete">
+                    <b:InvokeCommandAction Command="{Binding DeleteSelectionCommand}"></b:InvokeCommandAction>
+                </b:KeyTrigger>
 
             </b:Interaction.Triggers>
         </views:CollectionCanvas>

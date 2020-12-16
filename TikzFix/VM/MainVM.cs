@@ -20,7 +20,19 @@ namespace TikzFix.VM
 
         public readonly List<ITool> Tools = new List<ITool>();
 
-        public int CurrentToolIndex { get; }
+        private int currentToolIndex;
+        public int CurrentToolIndex
+        {
+            get
+            {
+                return currentToolIndex;
+            }
+            set
+            {
+                SetProperty(ref currentToolIndex, value);
+                CanvasSelectable = value < 0;
+            }
+        }
 
         public ITool CurrentTool => CurrentToolIndex >= 0 ? Tools[CurrentToolIndex] : null;
 
@@ -31,8 +43,23 @@ namespace TikzFix.VM
         public ICollection<Shape> Shapes
         {
             get { return shapes; }
-            // private set { SetProperty<ICollection<Shape>>(ref shapes, value); }
         }
+
+
+        private ICollection<Shape> selectedShapes = new List<Shape>();
+        public ICollection<Shape> SelectedShapes
+        {
+            get { return selectedShapes; }
+            set { SetProperty(ref selectedShapes, value); }
+        }
+
+        private bool canvasSelectable = false;
+        public bool CanvasSelectable
+        {
+            get { return canvasSelectable; }
+            set { SetProperty(ref canvasSelectable, value); }
+        }
+
 
         // TODO, observe this in canvas and draw (it can be null)
         private DrawingShape currentDrawingShape;
@@ -57,6 +84,11 @@ namespace TikzFix.VM
         public RelayCommand<CanvasEventArgs> StepDrawingCommand { get; }  //Should be called when mouse button is pressed
         public RelayCommand<CanvasEventArgs> UpdateDrawingCommand { get; } //Should be called when mouse pointer is moved
         public RelayCommand CommitDrawingCommand { get; }
+
+
+        public RelayCommand CancelSelectionCommand { get; }
+        public RelayCommand DeleteSelectionCommand { get; }
+
 
         public MainVM()
         {
@@ -85,11 +117,11 @@ namespace TikzFix.VM
             UpdateDrawingCommand = new RelayCommand<CanvasEventArgs>(UpdateDrawing, CanUpdateDrawing);
 
 
-
-
+            DeleteSelectionCommand = new RelayCommand(DeleteSelection);
+            CancelSelectionCommand = new RelayCommand(CancelSelection);
         }
 
-
+        #region Drawing
         private void HandleDrawingShape(DrawingShape drawingShape)
         {
             if (drawingShape == null)
@@ -137,6 +169,28 @@ namespace TikzFix.VM
         {
             return CurrentDrawingShape?.Shape != null;
         }
+        #endregion
+
+        #region Selection Commands
+        public void CancelSelection()
+        {
+            SelectedShapes.Clear();
+        }
+
+        public void DeleteSelection()
+        {
+            foreach (Shape s in SelectedShapes)
+            {
+                Shapes.Remove(s);
+            }
+
+            SelectedShapes.Clear();
+        }
+
+        #endregion
+
+
+
 
         #region tests
 

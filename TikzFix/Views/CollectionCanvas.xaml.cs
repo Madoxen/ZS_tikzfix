@@ -56,8 +56,19 @@ namespace TikzFix.Views
 
         // Using a DependencyProperty as the backing store for SelectedShapes.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty SelectedShapesProperty =
-            DependencyProperty.Register("SelectedShapes", typeof(ICollection<Shape>), typeof(CollectionCanvas), new PropertyMetadata(null));
+            DependencyProperty.Register("SelectedShapes", typeof(ICollection<Shape>), typeof(CollectionCanvas), new PropertyMetadata(null, OnShapesSelectedChanged));
 
+
+        private static void OnShapesSelectedChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is not CollectionCanvas collectionCanvas)
+                throw new ArgumentException("Value type mismatch: is " + d.GetType().Name + " required " + typeof(CollectionCanvas));
+
+            if (e.NewValue is not ICollection<Shape> shapeCollection)
+                throw new ArgumentException("Value type mismatch: is " + e.NewValue.GetType().Name + "required ICollection<Shape>");
+
+            collectionCanvas.SelectedShapes = shapeCollection;
+        }
 
 
 
@@ -190,6 +201,7 @@ namespace TikzFix.Views
                 return; //Canvas is marked as not selectable, abort
 
             Point pos = e.GetPosition(c);
+            Debug.WriteLine(GetSelectedShapes(c, new RectangleGeometry(new Rect(Math.Min(pos.X, selectionStartPoint.X), Math.Min(pos.Y, selectionStartPoint.Y), selectionRectangle.Width, selectionRectangle.Height))).Count);
             SelectedShapes = GetSelectedShapes(c, new RectangleGeometry(new Rect(Math.Min(pos.X, selectionStartPoint.X), Math.Min(pos.Y, selectionStartPoint.Y), selectionRectangle.Width, selectionRectangle.Height)));
             c.Children.Remove(selectionRectangle);
             selectionRectangle.Visibility = Visibility.Collapsed;
