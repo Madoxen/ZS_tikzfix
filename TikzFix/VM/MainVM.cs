@@ -22,7 +22,7 @@ namespace TikzFix.VM
 
         public int CurrentToolIndex { get; }
 
-        public ITool CurrentTool => Tools[CurrentToolIndex];
+        public ITool CurrentTool => CurrentToolIndex >= 0 ? Tools[CurrentToolIndex] : null;
 
         #endregion
 
@@ -57,7 +57,7 @@ namespace TikzFix.VM
         public RelayCommand<CanvasEventArgs> StepDrawingCommand { get; }  //Should be called when mouse button is pressed
         public RelayCommand<CanvasEventArgs> UpdateDrawingCommand { get; } //Should be called when mouse pointer is moved
         public RelayCommand CommitDrawingCommand { get; }
-        
+
         public MainVM()
         {
             Tools.Add(lineTool);
@@ -78,17 +78,23 @@ namespace TikzFix.VM
             DrawTestEllipse();
 
 
-            CurrentToolIndex = 0;
+            CurrentToolIndex = -1;
 
             CancelDrawingCommand = new RelayCommand(CancelDrawing);
             StepDrawingCommand = new RelayCommand<CanvasEventArgs>(StepDrawing);
             UpdateDrawingCommand = new RelayCommand<CanvasEventArgs>(UpdateDrawing, CanUpdateDrawing);
+
+
+
 
         }
 
 
         private void HandleDrawingShape(DrawingShape drawingShape)
         {
+            if (drawingShape == null)
+                return;
+
             switch (drawingShape.ShapeState)
             {
                 case ShapeState.START:
@@ -119,12 +125,12 @@ namespace TikzFix.VM
 
         private void StepDrawing(CanvasEventArgs e)
         {
-            HandleDrawingShape(CurrentTool.GetShape(e)); //update shape with event args.
+            HandleDrawingShape(CurrentTool?.GetShape(e)); //update shape with event args.
         }
 
         private void UpdateDrawing(CanvasEventArgs e)
         {
-            HandleDrawingShape(CurrentTool.GetShape(e)); //update shape with event args.
+            HandleDrawingShape(CurrentTool?.GetShape(e)); //update shape with event args.
         }
 
         private bool CanUpdateDrawing(object _)
