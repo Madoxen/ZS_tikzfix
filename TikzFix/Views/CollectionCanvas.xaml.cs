@@ -67,14 +67,14 @@ namespace TikzFix.Views
 
         private static void OnShapesSelectedChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (d is not CollectionCanvas collectionCanvas)
+            if (d is not CollectionCanvas cc)
                 throw new ArgumentException("Value type mismatch: is " + d.GetType().Name + " required " + typeof(CollectionCanvas));
 
-            if (collectionCanvas.SelectedShapes is INotifyCollectionChanged newcc)
-                newcc.CollectionChanged += collectionCanvas.SelectedShapesCollectionChangedHandler;
+            if (cc.SelectedShapes is INotifyCollectionChanged new_icc)
+                new_icc.CollectionChanged += cc.SelectedShapesCollectionChangedHandler;
 
-            if (e.OldValue is INotifyCollectionChanged oldcc)
-                oldcc.CollectionChanged -= collectionCanvas.SelectedShapesCollectionChangedHandler;
+            if (e.OldValue is INotifyCollectionChanged old_icc)
+                old_icc.CollectionChanged -= cc.SelectedShapesCollectionChangedHandler;
 
 
             if (e.OldValue is ICollection<Shape> oldShapeCollection)
@@ -85,9 +85,9 @@ namespace TikzFix.Views
                 }
             }
 
-            foreach (Shape s in collectionCanvas.SelectedShapes)
+            foreach (Shape s in cc.SelectedShapes)
             {
-                s.Effect = new BlurEffect() { Radius = 2, KernelType = KernelType.Box };
+                s.Effect = cc.selectionEffect;
             }
         }
 
@@ -135,14 +135,11 @@ namespace TikzFix.Views
 
         private static void OnCanvasSelectableChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (d is not CollectionCanvas collectionCanvas)
+            if (d is not CollectionCanvas cc)
                 throw new ArgumentException("Value type mismatch: is " + d.GetType().Name + " required " + typeof(CollectionCanvas));
 
-            if (e.NewValue is not bool b)
-                throw new ArgumentException("Value type mismatch: is " + e.NewValue.GetType().Name + "required bool");
-
-            if (collectionCanvas.CanvasSelectable == false)
-                collectionCanvas.SelectedShapes?.Clear();
+            if (cc.CanvasSelectable == false)
+                cc.SelectedShapes?.Clear();
         }
 
 
@@ -151,38 +148,35 @@ namespace TikzFix.Views
         //If set to null, will simply Clear the collection
         private static void OnShapesPropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
-            if (sender is CollectionCanvas collectionCanvas)
+            if (sender is CollectionCanvas cc)
             {
-                if (e.NewValue is ICollection<Shape> collection)
+                cc.c.Children.Clear(); //clear all children
+                foreach (Shape element in cc.Shapes)
                 {
-                    collectionCanvas.c.Children.Clear(); //clear all children
-                    foreach (Shape element in collection)
-                    {
-                        collectionCanvas.c.Children.Add(element);
-                    }
+                    cc.c.Children.Add(element);
+                }
 
-                    if (collection is INotifyCollectionChanged cc)
-                    {
-                        cc.CollectionChanged += collectionCanvas.ShapesCollectionChanged;
-                    }
-                }
-                else if (e.NewValue == null)
+                if (cc.Shapes is INotifyCollectionChanged icc)
                 {
-                    collectionCanvas.c.Children.Clear();
-                    collectionCanvas.Shapes = null;
+                    icc.CollectionChanged += cc.ShapesCollectionChanged;
                 }
-                else
+
+                if (e.NewValue == null)
                 {
-                    throw new ArgumentException("Value type mismatch: is " + e.NewValue.GetType().Name + "required ICollection<Shape>");
+                    cc.c.Children.Clear();
+                    cc.Shapes = null;
                 }
 
                 if (e.OldValue is INotifyCollectionChanged oldcc)
                 {
-                    oldcc.CollectionChanged -= collectionCanvas.ShapesCollectionChanged;
+                    oldcc.CollectionChanged -= cc.ShapesCollectionChanged;
                 }
             }
         }
 
+        /// <summary>
+        /// Called whenever Shapes collection is changed
+        /// </summary>
         private void ShapesCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             var newItems = e.NewItems?.Cast<Shape>().ToList();
@@ -217,6 +211,7 @@ namespace TikzFix.Views
         }
 
 
+        #region Selection handling
         private void HandleSelectionBegin(object sender, MouseButtonEventArgs e)
         {
             if (!CanvasSelectable)
@@ -224,9 +219,9 @@ namespace TikzFix.Views
             if (selectionRectangle.Visibility == Visibility.Visible)
                 return;
 
-            selectionRectangle.Visibility = Visibility.Visible;
             Point pos = e.GetPosition(c);
             selectionStartPoint = pos;
+            selectionRectangle.Visibility = Visibility.Visible;
             c.Children.Add(selectionRectangle);
             SelectedShapes.Clear(ResetEffect);
         }
@@ -258,7 +253,12 @@ namespace TikzFix.Views
             selectionRectangle.Visibility = Visibility.Collapsed;
         }
 
-
+        /// <summary>
+        /// Geometry hittest against the shapes on the canvas
+        /// </summary>
+        /// <param name="element">Element that contains shapes</param>
+        /// <param name="geometry">Geometry of hit test (in our case a selection rectangle)</param>
+        /// <returns></returns>
         private IList<Shape> GetSelectedShapes(UIElement element, Geometry geometry)
         {
             var shapes = new List<Shape>();
@@ -282,6 +282,7 @@ namespace TikzFix.Views
             return shapes;
         }
 
+        #endregion
 
         private void ResetEffect(ICollection<Shape> shapes)
         {
@@ -290,7 +291,5 @@ namespace TikzFix.Views
                 s.Effect = null;
             }
         }
-
-
     }
 }

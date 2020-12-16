@@ -175,6 +175,7 @@ namespace TikzFix.VM
         #region Selection Commands
         public void CancelSelection()
         {
+            //FIXME: Cannot do .Clear because Clear does not convey information about old items
             SelectedShapes = new ObservableCollection<Shape>();
         }
 
@@ -185,6 +186,7 @@ namespace TikzFix.VM
                 Shapes.Remove(s);
             }
 
+            //FIXME: Cannot do .Clear because Clear does not convey information about old items
             SelectedShapes = new ObservableCollection<Shape>();
         }
 
