@@ -7,6 +7,7 @@ using System.Windows.Input;
 using System.Windows.Shapes;
 using TikzFix.Model.Tool;
 using TikzFix.Model.ToolImpl;
+using System.Linq;
 
 namespace TikzFix.VM
 {
@@ -20,9 +21,21 @@ namespace TikzFix.VM
 
         public readonly List<ITool> Tools = new List<ITool>();
 
-        public int CurrentToolIndex { get; }
+        private int currentToolIndex;
+        public int CurrentToolIndex
+        {
+            get
+            {
+                return currentToolIndex;
+            }
+            set
+            {
+                SetProperty(ref currentToolIndex, value);
+                CanvasSelectable = value < 0;
+            }
+        }
 
-        public ITool CurrentTool => Tools[CurrentToolIndex];
+        public ITool CurrentTool => CurrentToolIndex >= 0 ? Tools[CurrentToolIndex] : null;
 
         #endregion
 
@@ -31,8 +44,23 @@ namespace TikzFix.VM
         public ICollection<Shape> Shapes
         {
             get { return shapes; }
-            // private set { SetProperty<ICollection<Shape>>(ref shapes, value); }
         }
+
+
+        private ObservableCollection<Shape> selectedShapes = new ObservableCollection<Shape>();
+        public ObservableCollection<Shape> SelectedShapes
+        {
+            get { return selectedShapes; }
+            set { SetProperty(ref selectedShapes, value); }
+        }
+
+        private bool canvasSelectable = false;
+        public bool CanvasSelectable
+        {
+            get { return canvasSelectable; }
+            set { SetProperty(ref canvasSelectable, value); }
+        }
+
 
         // TODO, observe this in canvas and draw (it can be null)
         private DrawingShape currentDrawingShape;
@@ -57,25 +85,37 @@ namespace TikzFix.VM
         public RelayCommand<CanvasEventArgs> StepDrawingCommand { get; }  //Should be called when mouse button is pressed
         public RelayCommand<CanvasEventArgs> UpdateDrawingCommand { get; } //Should be called when mouse pointer is moved
         public RelayCommand CommitDrawingCommand { get; }
-        
+
+
+        public RelayCommand CancelSelectionCommand { get; }
+        public RelayCommand DeleteSelectionCommand { get; }
+
+
         public MainVM()
         {
             Tools.Add(lineTool);
             Tools.Add(rectangleTool);
             Tools.Add(ellipseTool);
 
-    
-            CurrentToolIndex = 2;
+  
+            CurrentToolIndex = -1;
 
             CancelDrawingCommand = new RelayCommand(CancelDrawing);
             StepDrawingCommand = new RelayCommand<CanvasEventArgs>(StepDrawing);
             UpdateDrawingCommand = new RelayCommand<CanvasEventArgs>(UpdateDrawing, CanUpdateDrawing);
 
+
+            DeleteSelectionCommand = new RelayCommand(DeleteSelection);
+            CancelSelectionCommand = new RelayCommand(CancelSelection);
+
         }
 
-
+        #region Drawing
         private void HandleDrawingShape(DrawingShape drawingShape)
         {
+            if (drawingShape == null)
+                return;
+
             switch (drawingShape.ShapeState)
             {
                 case ShapeState.START:
@@ -106,17 +146,41 @@ namespace TikzFix.VM
 
         private void StepDrawing(CanvasEventArgs e)
         {
-            HandleDrawingShape(CurrentTool.GetShape(e)); //update shape with event args.
+            HandleDrawingShape(CurrentTool?.GetShape(e)); //update shape with event args.
         }
 
         private void UpdateDrawing(CanvasEventArgs e)
         {
-            HandleDrawingShape(CurrentTool.GetShape(e)); //update shape with event args.
+            HandleDrawingShape(CurrentTool?.GetShape(e)); //update shape with event args.
         }
 
         private bool CanUpdateDrawing(object _)
         {
             return CurrentDrawingShape?.Shape != null;
         }
+
+        #endregion
+
+        #region Selection Commands
+        public void CancelSelection()
+        {
+            //FIXME: Cannot do .Clear because Clear does not convey information about old items
+            SelectedShapes = new ObservableCollection<Shape>();
+        }
+
+        public void DeleteSelection()
+        {
+            foreach (Shape s in SelectedShapes)
+            {
+                Shapes.Remove(s);
+            }
+
+            //FIXME: Cannot do .Clear because Clear does not convey information about old items
+            SelectedShapes = new ObservableCollection<Shape>();
+        }
+
+        #endregion
+
+
     }
 }

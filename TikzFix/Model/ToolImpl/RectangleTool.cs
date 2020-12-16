@@ -17,10 +17,15 @@ namespace TikzFix.Model.ToolImpl
         } = Brushes.Black;
 
 
+        public SolidColorBrush FillColor
+        {
+            get; set;
+        } = Brushes.Transparent;
+
         private int x1, y1;
         private DrawingShape current;
 
-        public DrawingShape GetShape(CanvasEventArgs canvasEventArgs)
+        public virtual DrawingShape GetShape(CanvasEventArgs canvasEventArgs)
         {
             if (canvasEventArgs.MouseState == MouseState.DOWN)
             {
@@ -29,10 +34,11 @@ namespace TikzFix.Model.ToolImpl
                 {
                     Stroke = StrokeColor,
                     StrokeThickness = DEF_STROKE_THICKNESS,
+                    Fill = FillColor
                 },
                 ShapeState.START
             );
-
+            
                 x1 = canvasEventArgs.X;
                 y1 = canvasEventArgs.Y;
             }
