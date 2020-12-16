@@ -7,6 +7,7 @@ using System.Windows.Input;
 using System.Windows.Shapes;
 using TikzFix.Model.Tool;
 using TikzFix.Model.ToolImpl;
+using System.Linq;
 
 namespace TikzFix.VM
 {
@@ -20,9 +21,22 @@ namespace TikzFix.VM
 
         public readonly List<ITool> Tools = new List<ITool>();
 
-        public int CurrentToolIndex { set; get; }
 
-        public ITool CurrentTool => Tools[CurrentToolIndex];
+        private int currentToolIndex;
+        public int CurrentToolIndex
+        {
+            get
+            {
+                return currentToolIndex;
+            }
+            set
+            {
+                SetProperty(ref currentToolIndex, value);
+                CanvasSelectable = value < 0;
+            }
+        }
+
+        public ITool CurrentTool => CurrentToolIndex >= 0 ? Tools[CurrentToolIndex] : null;
 
         #endregion
 
@@ -31,8 +45,23 @@ namespace TikzFix.VM
         public ICollection<Shape> Shapes
         {
             get { return shapes; }
-            // private set { SetProperty<ICollection<Shape>>(ref shapes, value); }
         }
+
+
+        private ObservableCollection<Shape> selectedShapes = new ObservableCollection<Shape>();
+        public ObservableCollection<Shape> SelectedShapes
+        {
+            get { return selectedShapes; }
+            set { SetProperty(ref selectedShapes, value); }
+        }
+
+        private bool canvasSelectable = false;
+        public bool CanvasSelectable
+        {
+            get { return canvasSelectable; }
+            set { SetProperty(ref canvasSelectable, value); }
+        }
+
 
         // TODO, observe this in canvas and draw (it can be null)
         private DrawingShape currentDrawingShape;
@@ -58,7 +87,11 @@ namespace TikzFix.VM
         public RelayCommand<CanvasEventArgs> UpdateDrawingCommand { get; } //Should be called when mouse pointer is moved
         public RelayCommand CommitDrawingCommand { get; }
 
+
         public RelayCommand<int> ChangeToolCommand { get; }
+        public RelayCommand CancelSelectionCommand { get; }
+        public RelayCommand DeleteSelectionCommand { get; }
+
 
         public MainVM()
         {
@@ -66,32 +99,26 @@ namespace TikzFix.VM
             Tools.Add(rectangleTool);
             Tools.Add(ellipseTool);
 
-            // TEST
-            // Add line from [1,1] to [50,50]
-            CurrentToolIndex = 0;
-            DrawTestLine();
-
-            // Add rectangle from [100,200] to [40,40]
-            CurrentToolIndex = 1;
-            DrawTestRectangle();
-
-            // Add elipse from [50,50] to [0,25]
-            CurrentToolIndex = 2;
-            DrawTestEllipse();
-
-
-            CurrentToolIndex = 0;
+  
+            CurrentToolIndex = -1;
 
             CancelDrawingCommand = new RelayCommand(CancelDrawing);
             StepDrawingCommand = new RelayCommand<CanvasEventArgs>(StepDrawing);
             UpdateDrawingCommand = new RelayCommand<CanvasEventArgs>(UpdateDrawing, CanUpdateDrawing);
             ChangeToolCommand = new RelayCommand<int>(ChangeTool);
 
+
+            DeleteSelectionCommand = new RelayCommand(DeleteSelection);
+            CancelSelectionCommand = new RelayCommand(CancelSelection);
+
         }
 
-
+        #region Drawing
         private void HandleDrawingShape(DrawingShape drawingShape)
         {
+            if (drawingShape == null)
+                return;
+
             switch (drawingShape.ShapeState)
             {
                 case ShapeState.START:
@@ -122,12 +149,12 @@ namespace TikzFix.VM
 
         private void StepDrawing(CanvasEventArgs e)
         {
-            HandleDrawingShape(CurrentTool.GetShape(e)); //update shape with event args.
+            HandleDrawingShape(CurrentTool?.GetShape(e)); //update shape with event args.
         }
 
         private void UpdateDrawing(CanvasEventArgs e)
         {
-            HandleDrawingShape(CurrentTool.GetShape(e)); //update shape with event args.
+            HandleDrawingShape(CurrentTool?.GetShape(e)); //update shape with event args.
         }
 
         private bool CanUpdateDrawing(object _)
@@ -140,58 +167,26 @@ namespace TikzFix.VM
             CurrentToolIndex = index;
         }
 
-        #region tests
-
-        private void DrawTestLine()
+        #region Selection Commands
+        public void CancelSelection()
         {
-            // user clicked on point [1,1]
-            HandleDrawingShape(CurrentTool.GetShape(new CanvasEventArgs(1, 1, MouseState.DOWN)));
-
-            // user hold mouse and move
-            HandleDrawingShape(CurrentTool.GetShape(new CanvasEventArgs(20, 20, MouseState.MOVE)));
-            HandleDrawingShape(CurrentTool.GetShape(new CanvasEventArgs(30, 30, MouseState.MOVE)));
-
-            // user release mouse
-            HandleDrawingShape(CurrentTool.GetShape(new CanvasEventArgs(40, 40, MouseState.UP)));
-
-            // user clicked for the second time, at this point it should draw new line
-            HandleDrawingShape(CurrentTool.GetShape(new CanvasEventArgs(50, 50, MouseState.DOWN)));
-
-            // user hold mouse and move
-            HandleDrawingShape(CurrentTool.GetShape(new CanvasEventArgs(60, 60, MouseState.MOVE)));
-            HandleDrawingShape(CurrentTool.GetShape(new CanvasEventArgs(70, 70, MouseState.MOVE)));
-
-            // user release mouse
-            HandleDrawingShape(CurrentTool.GetShape(new CanvasEventArgs(80, 80, MouseState.UP)));
+            //FIXME: Cannot do .Clear because Clear does not convey information about old items
+            SelectedShapes = new ObservableCollection<Shape>();
         }
 
-        private void DrawTestRectangle()
+        public void DeleteSelection()
         {
-            // user clicked on point [100,200]
-            HandleDrawingShape(CurrentTool.GetShape(new CanvasEventArgs(100, 200, MouseState.DOWN)));
+            foreach (Shape s in SelectedShapes)
+            {
+                Shapes.Remove(s);
+            }
 
-            // user hold mouse and move, this should update current rectangle on canvas
-            HandleDrawingShape(CurrentTool.GetShape(new CanvasEventArgs(80, 170, MouseState.MOVE)));
-            HandleDrawingShape(CurrentTool.GetShape(new CanvasEventArgs(60, 100, MouseState.MOVE)));
-
-            // user release mouse, at this point rectangle shouldn't be modified by any mouse action
-            HandleDrawingShape(CurrentTool.GetShape(new CanvasEventArgs(40, 40, MouseState.UP)));
-        }
-
-        private void DrawTestEllipse()
-        {
-            // user clicked on point [50,50]
-            HandleDrawingShape(CurrentTool.GetShape(new CanvasEventArgs(50, 50, MouseState.DOWN)));
-
-
-            // user hold mouse and move, this should update current ellipse on canvas
-            HandleDrawingShape(CurrentTool.GetShape(new CanvasEventArgs(80, 170, MouseState.MOVE)));
-            HandleDrawingShape(CurrentTool.GetShape(new CanvasEventArgs(60, 100, MouseState.MOVE)));
-
-            // user release mouse, at this point ellipse shouldn't be modified by any mouse action
-            HandleDrawingShape(CurrentTool.GetShape(new CanvasEventArgs(0, 25, MouseState.UP)));
+            //FIXME: Cannot do .Clear because Clear does not convey information about old items
+            SelectedShapes = new ObservableCollection<Shape>();
         }
 
         #endregion
+
+
     }
 }
