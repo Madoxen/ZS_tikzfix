@@ -21,6 +21,7 @@ namespace TikzFix.VM
 
         public readonly List<ITool> Tools = new List<ITool>();
 
+
         private int currentToolIndex;
         public int CurrentToolIndex
         {
@@ -87,6 +88,7 @@ namespace TikzFix.VM
         public RelayCommand CommitDrawingCommand { get; }
 
 
+        public RelayCommand<int> ChangeToolCommand { get; }
         public RelayCommand CancelSelectionCommand { get; }
         public RelayCommand DeleteSelectionCommand { get; }
 
@@ -103,6 +105,7 @@ namespace TikzFix.VM
             CancelDrawingCommand = new RelayCommand(CancelDrawing);
             StepDrawingCommand = new RelayCommand<CanvasEventArgs>(StepDrawing);
             UpdateDrawingCommand = new RelayCommand<CanvasEventArgs>(UpdateDrawing, CanUpdateDrawing);
+            ChangeToolCommand = new RelayCommand<int>(ChangeTool);
 
 
             DeleteSelectionCommand = new RelayCommand(DeleteSelection);
@@ -159,7 +162,10 @@ namespace TikzFix.VM
             return CurrentDrawingShape?.Shape != null;
         }
 
-        #endregion
+        private void ChangeTool(int index)
+        {
+            CurrentToolIndex = index;
+        }
 
         #region Selection Commands
         public void CancelSelection()
