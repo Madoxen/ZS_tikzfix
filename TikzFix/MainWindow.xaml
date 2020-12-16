@@ -19,7 +19,7 @@
     </Window.Resources>
     <Grid>
 
-        <views:CollectionCanvas x:Name="MainCanvas" Shapes="{Binding Shapes, Mode=OneWay}" Background="Transparent" CanvasSelectable="{Binding CanvasSelectable}" SelectedShapes="{Binding SelectedShapes, Mode=TwoWay}">
+        <views:CollectionCanvas x:Name="MainCanvas" Shapes="{Binding Shapes, Mode=OneWay}" Background="Transparent" CanvasSelectable="{Binding CanvasSelectable}" SelectedShapes="{Binding SelectedShapes}">
             <b:Interaction.Triggers>
 
                 <b:EventTrigger EventName="MouseLeftButtonDown">

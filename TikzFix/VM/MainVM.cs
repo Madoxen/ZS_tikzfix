@@ -7,6 +7,7 @@ using System.Windows.Input;
 using System.Windows.Shapes;
 using TikzFix.Model.Tool;
 using TikzFix.Model.ToolImpl;
+using System.Linq;
 
 namespace TikzFix.VM
 {
@@ -46,8 +47,8 @@ namespace TikzFix.VM
         }
 
 
-        private ICollection<Shape> selectedShapes = new List<Shape>();
-        public ICollection<Shape> SelectedShapes
+        private ObservableCollection<Shape> selectedShapes = new ObservableCollection<Shape>();
+        public ObservableCollection<Shape> SelectedShapes
         {
             get { return selectedShapes; }
             set { SetProperty(ref selectedShapes, value); }
@@ -109,7 +110,6 @@ namespace TikzFix.VM
             CurrentToolIndex = 2;
             DrawTestEllipse();
 
-
             CurrentToolIndex = -1;
 
             CancelDrawingCommand = new RelayCommand(CancelDrawing);
@@ -119,6 +119,7 @@ namespace TikzFix.VM
 
             DeleteSelectionCommand = new RelayCommand(DeleteSelection);
             CancelSelectionCommand = new RelayCommand(CancelSelection);
+
         }
 
         #region Drawing
@@ -174,7 +175,7 @@ namespace TikzFix.VM
         #region Selection Commands
         public void CancelSelection()
         {
-            SelectedShapes?.Clear();
+            SelectedShapes = new ObservableCollection<Shape>();
         }
 
         public void DeleteSelection()
@@ -184,7 +185,7 @@ namespace TikzFix.VM
                 Shapes.Remove(s);
             }
 
-            SelectedShapes?.Clear();
+            SelectedShapes = new ObservableCollection<Shape>();
         }
 
         #endregion

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Linq;
@@ -7,7 +8,11 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Effects;
 using System.Windows.Shapes;
+
+using TikzFix.Utils;
+
 
 namespace TikzFix.Views
 {
@@ -19,6 +24,7 @@ namespace TikzFix.Views
 
         private readonly Rectangle selectionRectangle;
         private Point selectionStartPoint;
+        private Effect selectionEffect = new DropShadowEffect() { Color = Colors.Aqua };
 
         public CollectionCanvas()
         {
@@ -64,10 +70,55 @@ namespace TikzFix.Views
             if (d is not CollectionCanvas collectionCanvas)
                 throw new ArgumentException("Value type mismatch: is " + d.GetType().Name + " required " + typeof(CollectionCanvas));
 
-            if (e.NewValue is not ICollection<Shape> shapeCollection)
-                throw new ArgumentException("Value type mismatch: is " + e.NewValue.GetType().Name + "required ICollection<Shape>");
+            if (collectionCanvas.SelectedShapes is INotifyCollectionChanged newcc)
+                newcc.CollectionChanged += collectionCanvas.SelectedShapesCollectionChangedHandler;
 
-            collectionCanvas.SelectedShapes = shapeCollection;
+            if (e.OldValue is INotifyCollectionChanged oldcc)
+                oldcc.CollectionChanged -= collectionCanvas.SelectedShapesCollectionChangedHandler;
+
+
+            if (e.OldValue is ICollection<Shape> oldShapeCollection)
+            {
+                foreach (Shape s in oldShapeCollection)
+                {
+                    s.Effect = null;
+                }
+            }
+
+            foreach (Shape s in collectionCanvas.SelectedShapes)
+            {
+                s.Effect = new BlurEffect() { Radius = 2, KernelType = KernelType.Box };
+            }
+        }
+
+        private void SelectedShapesCollectionChangedHandler(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            var newItems = e.NewItems?.Cast<Shape>().ToList();
+            var oldItems = e.OldItems?.Cast<Shape>().ToList();
+
+
+            switch (e.Action)
+            {
+                case NotifyCollectionChangedAction.Add:
+                    foreach (Shape ele in newItems)
+                    {
+                        ele.Effect = selectionEffect;
+                    }
+                    break;
+
+                case NotifyCollectionChangedAction.Remove:
+                    foreach (Shape ele in oldItems)
+                    {
+                        ele.Effect = null;
+                    }
+                    break;
+
+                case NotifyCollectionChangedAction.Replace:
+                    oldItems[e.OldStartingIndex].Effect = null;
+                    newItems[e.NewStartingIndex].Effect = selectionEffect;
+                    break;
+
+            }
         }
 
 
@@ -90,7 +141,6 @@ namespace TikzFix.Views
             if (e.NewValue is not bool b)
                 throw new ArgumentException("Value type mismatch: is " + e.NewValue.GetType().Name + "required bool");
 
-            collectionCanvas.CanvasSelectable = b;
             if (collectionCanvas.CanvasSelectable == false)
                 collectionCanvas.SelectedShapes?.Clear();
         }
@@ -113,10 +163,8 @@ namespace TikzFix.Views
 
                     if (collection is INotifyCollectionChanged cc)
                     {
-                        cc.CollectionChanged += collectionCanvas.CollectionChanged;
+                        cc.CollectionChanged += collectionCanvas.ShapesCollectionChanged;
                     }
-
-                    collectionCanvas.Shapes = collection;
                 }
                 else if (e.NewValue == null)
                 {
@@ -130,12 +178,12 @@ namespace TikzFix.Views
 
                 if (e.OldValue is INotifyCollectionChanged oldcc)
                 {
-                    oldcc.CollectionChanged -= collectionCanvas.CollectionChanged;
+                    oldcc.CollectionChanged -= collectionCanvas.ShapesCollectionChanged;
                 }
             }
         }
 
-        private void CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private void ShapesCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             var newItems = e.NewItems?.Cast<Shape>().ToList();
             var oldItems = e.OldItems?.Cast<Shape>().ToList();
@@ -156,11 +204,14 @@ namespace TikzFix.Views
                     break;
 
                 case NotifyCollectionChangedAction.Replace:
-                    c.Children[e.OldStartingIndex] = (Shape)newItems.ElementAt(0); //TODO: not sure if this works in all cases?
+                    c.Children[e.OldStartingIndex] = newItems[0]; //TODO: not sure if this works in all cases?
                     break;
 
                 case NotifyCollectionChangedAction.Move:
                     throw new NotImplementedException();
+
+                case NotifyCollectionChangedAction.Reset:
+                    c.Children.Clear();
                     break;
             }
         }
@@ -177,6 +228,7 @@ namespace TikzFix.Views
             Point pos = e.GetPosition(c);
             selectionStartPoint = pos;
             c.Children.Add(selectionRectangle);
+            SelectedShapes.Clear(ResetEffect);
         }
 
         private void HandleSelectionMoved(object sender, MouseEventArgs e)
@@ -197,7 +249,11 @@ namespace TikzFix.Views
                 return; //Canvas is marked as not selectable, abort
 
             Point pos = e.GetPosition(c);
-            SelectedShapes = GetSelectedShapes(c, new RectangleGeometry(new Rect(Math.Min(pos.X, selectionStartPoint.X), Math.Min(pos.Y, selectionStartPoint.Y), selectionRectangle.Width, selectionRectangle.Height)));
+            var raycastResult = GetSelectedShapes(c, new RectangleGeometry(new Rect(Math.Min(pos.X, selectionStartPoint.X), Math.Min(pos.Y, selectionStartPoint.Y), selectionRectangle.Width, selectionRectangle.Height)));
+            foreach (Shape s in raycastResult)
+            {
+                SelectedShapes.Add(s);
+            }
             c.Children.Remove(selectionRectangle);
             selectionRectangle.Visibility = Visibility.Collapsed;
         }
@@ -221,7 +277,20 @@ namespace TikzFix.Views
                 },
                 new GeometryHitTestParameters(geometry));
 
+
+            shapes.Remove(selectionRectangle);
             return shapes;
         }
+
+
+        private void ResetEffect(ICollection<Shape> shapes)
+        {
+            foreach (Shape s in shapes)
+            {
+                s.Effect = null;
+            }
+        }
+
+
     }
 }
