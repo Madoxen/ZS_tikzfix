@@ -38,6 +38,10 @@
                     <b:InvokeCommandAction Command="{Binding DeleteSelectionCommand}"></b:InvokeCommandAction>
                 </b:KeyTrigger>
 
+                <b:KeyTrigger Key="Esc">
+                    <b:InvokeCommandAction Command="{Binding CancelSelectionCommand}"></b:InvokeCommandAction>
+                </b:KeyTrigger>
+
             </b:Interaction.Triggers>
         </views:CollectionCanvas>
 

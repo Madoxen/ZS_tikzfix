@@ -71,7 +71,6 @@ namespace TikzFix.Views
         }
 
 
-
         public bool CanvasSelectable
         {
             get { return (bool)GetValue(CanvasSelectableProperty); }
@@ -93,7 +92,7 @@ namespace TikzFix.Views
 
             collectionCanvas.CanvasSelectable = b;
             if (collectionCanvas.CanvasSelectable == false)
-                collectionCanvas.SelectedShapes.Clear();
+                collectionCanvas.SelectedShapes?.Clear();
         }
 
 
@@ -167,9 +166,6 @@ namespace TikzFix.Views
         }
 
 
-
-
-
         private void HandleSelectionBegin(object sender, MouseButtonEventArgs e)
         {
             if (!CanvasSelectable)
@@ -201,7 +197,6 @@ namespace TikzFix.Views
                 return; //Canvas is marked as not selectable, abort
 
             Point pos = e.GetPosition(c);
-            Debug.WriteLine(GetSelectedShapes(c, new RectangleGeometry(new Rect(Math.Min(pos.X, selectionStartPoint.X), Math.Min(pos.Y, selectionStartPoint.Y), selectionRectangle.Width, selectionRectangle.Height))).Count);
             SelectedShapes = GetSelectedShapes(c, new RectangleGeometry(new Rect(Math.Min(pos.X, selectionStartPoint.X), Math.Min(pos.Y, selectionStartPoint.Y), selectionRectangle.Width, selectionRectangle.Height)));
             c.Children.Remove(selectionRectangle);
             selectionRectangle.Visibility = Visibility.Collapsed;

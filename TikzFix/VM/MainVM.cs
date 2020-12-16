@@ -174,7 +174,7 @@ namespace TikzFix.VM
         #region Selection Commands
         public void CancelSelection()
         {
-            SelectedShapes.Clear();
+            SelectedShapes?.Clear();
         }
 
         public void DeleteSelection()
@@ -184,7 +184,7 @@ namespace TikzFix.VM
                 Shapes.Remove(s);
             }
 
-            SelectedShapes.Clear();
+            SelectedShapes?.Clear();
         }
 
         #endregion
