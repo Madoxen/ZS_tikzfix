@@ -93,7 +93,7 @@ namespace TikzFix.Model.ToolImpl
                 throw new Exception($"Shape-Tool type mismatch, tool type: {GetType().Name}, expected shape type Rectangle");
             }
 
-            return $"\\draw ({(int)e.Margin.Left},{(int)e.Margin.Top}) rectangle ({(int)(e.Width)},{(int)(e.Height)});";
+            return $"\\draw ({(int)e.Margin.Left},{(int)e.Margin.Top}) rectangle ({(int)(e.Width + e.Margin.Left)},{(int)(e.Height + e.Margin.Top)});";
         }
     }
 }
