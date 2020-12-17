@@ -1,9 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Media;
 using System.Windows.Shapes;
-
 using TikzFix.Model.Tool;
-using TikzFix.Utils;
 
 namespace TikzFix.Model.ToolImpl
 {
@@ -24,19 +23,19 @@ namespace TikzFix.Model.ToolImpl
         {
             if (canvasEventArgs.MouseState == MouseState.DOWN)
             {
-                    x1 = canvasEventArgs.X;
-                    y1 = canvasEventArgs.Y;
+                x1 = canvasEventArgs.X;
+                y1 = canvasEventArgs.Y;
 
-                    current = new DrawingShape(
-                    new Line
-                    {
-                        Stroke = StrokeColor,
-                        X1 = x1,
-                        X2 = x1,
-                        Y1 = y1,
-                        Y2 = y1,
-                        StrokeThickness = DEF_STROKE_THICKNESS
-                    }, ShapeState.START);
+                current = new DrawingShape(
+                new Line
+                {
+                    Stroke = StrokeColor,
+                    X1 = x1,
+                    X2 = x1,
+                    Y1 = y1,
+                    Y2 = y1,
+                    StrokeThickness = DEF_STROKE_THICKNESS
+                }, ShapeState.START);
             }
             else
             {
@@ -59,6 +58,30 @@ namespace TikzFix.Model.ToolImpl
             return current;
         }
 
+        public LocalShapeData ConvertToShapeData(Shape shape)
+        {
+            if (shape is not Line l)
+            {
+                throw new Exception("Shape-Tool type mismatch, tool type: LineTool, expected shape type Line");
+            }
 
+            List<CanvasEventArgs> keyPointList = new List<CanvasEventArgs>
+            {
+                new CanvasEventArgs((int)l.X1, (int)l.Y1, MouseState.DOWN),
+                new CanvasEventArgs((int)l.X2, (int)l.Y2, MouseState.UP)
+            };
+
+            return new LocalShapeData(GetType().Name, keyPointList);
+        }
+
+        public string GenerateTikzShape(Shape shape)
+        {
+            if (shape is not Line l)
+            {
+                throw new Exception("Shape-Tool type mismatch, tool type: LineTool, expected shape type Line");
+            }
+
+            return $"\\draw ({l.X1},{l.Y1})--({l.X2},{l.Y2});";
+        }
     }
 }

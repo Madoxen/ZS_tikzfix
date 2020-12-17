@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Windows;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using TikzFix.Model.Tool;
@@ -38,7 +37,7 @@ namespace TikzFix.Model.ToolImpl
                 },
                 ShapeState.START
             );
-            
+
                 x1 = canvasEventArgs.X;
                 y1 = canvasEventArgs.Y;
             }
@@ -68,6 +67,16 @@ namespace TikzFix.Model.ToolImpl
             {
                 current.ShapeState = ShapeState.DRAWING;
             }
+        }
+
+        public LocalShapeData ConvertToShapeData(Shape shape)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GenerateTikzShape(Shape shape)
+        {
+            throw new NotImplementedException();
         }
     }
 }

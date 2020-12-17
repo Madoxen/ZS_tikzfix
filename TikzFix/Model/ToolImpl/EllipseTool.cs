@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using TikzFix.Model.JsonFormatter;
 using TikzFix.Model.Tool;
 using TikzFix.Utils;
 
@@ -63,6 +64,16 @@ namespace TikzFix.Model.ToolImpl
             {
                 current.ShapeState = ShapeState.DRAWING;
             }
+        }
+
+        public LocalShapeData ConvertToShapeData(Shape shape)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GenerateTikzShape(Shape shape)
+        {
+            throw new NotImplementedException();
         }
     }
 }
