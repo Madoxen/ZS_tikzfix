@@ -62,7 +62,7 @@ namespace TikzFix.Model.ToolImpl
         {
             if (shape is not Line l)
             {
-                throw new Exception("Shape-Tool type mismatch, tool type: LineTool, expected shape type Line");
+                throw new Exception($"Shape-Tool type mismatch, tool type: {GetType().Name}, expected shape type Line");
             }
 
             List<CanvasEventArgs> keyPointList = new List<CanvasEventArgs>
@@ -78,7 +78,7 @@ namespace TikzFix.Model.ToolImpl
         {
             if (shape is not Line l)
             {
-                throw new Exception("Shape-Tool type mismatch, tool type: LineTool, expected shape type Line");
+                throw new Exception($"Shape-Tool type mismatch, tool type: {GetType().Name}, expected shape type Line");
             }
 
             return $"\\draw ({l.X1},{l.Y1})--({l.X2},{l.Y2});";

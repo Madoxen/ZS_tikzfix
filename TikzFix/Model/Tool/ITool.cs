@@ -1,5 +1,4 @@
 ﻿using System.Windows.Shapes;
-using TikzFix.Model.JsonFormatter;
 
 namespace TikzFix.Model.Tool
 {
