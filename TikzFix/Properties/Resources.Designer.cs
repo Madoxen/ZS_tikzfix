@@ -104,5 +104,23 @@ namespace TikzFix.Properties {
                 return ResourceManager.GetString("menu_file_saveas", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to JSON.
+        /// </summary>
+        public static string menu_file_saveas_json {
+            get {
+                return ResourceManager.GetString("menu_file_saveas_json", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to TikZ.
+        /// </summary>
+        public static string menu_file_saveas_tikz {
+            get {
+                return ResourceManager.GetString("menu_file_saveas_tikz", resourceCulture);
+            }
+        }
     }
 }

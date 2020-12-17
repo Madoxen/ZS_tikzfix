@@ -8,9 +8,17 @@ using System.Windows.Shapes;
 using TikzFix.Model.Tool;
 using TikzFix.Model.ToolImpl;
 using System.Linq;
+using TikzFix.Utils;
+using System;
+using System.Text.Json;
+using System.IO;
 
 namespace TikzFix.VM
 {
+    /// <summary>
+    /// Main window VM, maintains main shape collection that is shown to the user by canvas
+    /// also maintains all available tools and selection functionality
+    /// </summary>
     class MainVM : BaseVM
     {
         #region Tools
@@ -18,7 +26,6 @@ namespace TikzFix.VM
         private readonly ITool rectangleTool = new RectangleTool();
         private readonly ITool lineTool = new LineTool();
         private readonly ITool ellipseTool = new EllipseTool();
-
         public readonly List<ITool> Tools = new List<ITool>();
 
 
@@ -44,22 +51,37 @@ namespace TikzFix.VM
         private readonly ObservableCollection<Shape> shapes = new ObservableCollection<Shape>();
         public ICollection<Shape> Shapes
         {
-            get { return shapes; }
+            get
+            {
+                return shapes;
+            }
         }
 
 
         private ObservableCollection<Shape> selectedShapes = new ObservableCollection<Shape>();
         public ObservableCollection<Shape> SelectedShapes
         {
-            get { return selectedShapes; }
-            set { SetProperty(ref selectedShapes, value); }
+            get
+            {
+                return selectedShapes;
+            }
+            set
+            {
+                SetProperty(ref selectedShapes, value);
+            }
         }
 
         private bool canvasSelectable = false;
         public bool CanvasSelectable
         {
-            get { return canvasSelectable; }
-            set { SetProperty(ref canvasSelectable, value); }
+            get
+            {
+                return canvasSelectable;
+            }
+            set
+            {
+                SetProperty(ref canvasSelectable, value);
+            }
         }
 
 
@@ -82,15 +104,44 @@ namespace TikzFix.VM
             }
         }
 
-        public RelayCommand CancelDrawingCommand { get; } //Should be called whenever user wants to cancel drawing TODO: Add cancel functionality
-        public RelayCommand<CanvasEventArgs> StepDrawingCommand { get; }  //Should be called when mouse button is pressed
-        public RelayCommand<CanvasEventArgs> UpdateDrawingCommand { get; } //Should be called when mouse pointer is moved
-        public RelayCommand CommitDrawingCommand { get; }
+        public RelayCommand CancelDrawingCommand
+        {
+            get;
+        }
+
+        //Should be called whenever user wants to cancel drawing TODO: Add cancel functionality
+        public RelayCommand<CanvasEventArgs> StepDrawingCommand
+        {
+            get;
+        }
+
+        //Should be called when mouse button is pressed
+        public RelayCommand<CanvasEventArgs> UpdateDrawingCommand
+        {
+            get;
+        }
+
+        //Should be called when mouse pointer is moved
+        public RelayCommand CommitDrawingCommand
+        {
+            get;
+        }
 
 
-        public RelayCommand<int> ChangeToolCommand { get; }
-        public RelayCommand CancelSelectionCommand { get; }
-        public RelayCommand DeleteSelectionCommand { get; }
+        public RelayCommand<int> ChangeToolCommand
+        {
+            get;
+        }
+        public RelayCommand CancelSelectionCommand
+        {
+            get;
+        }
+        public RelayCommand DeleteSelectionCommand
+        {
+            get;
+        }
+
+
 
 
         public MainVM()
@@ -99,7 +150,7 @@ namespace TikzFix.VM
             Tools.Add(rectangleTool);
             Tools.Add(ellipseTool);
 
-  
+
             CurrentToolIndex = -1;
 
             CancelDrawingCommand = new RelayCommand(CancelDrawing);

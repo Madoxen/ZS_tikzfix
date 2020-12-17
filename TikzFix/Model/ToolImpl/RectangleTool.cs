@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Windows;
 using System.Windows.Media;
 using System.Windows.Shapes;
+
 using TikzFix.Model.Tool;
 using TikzFix.Utils;
 
 namespace TikzFix.Model.ToolImpl
 {
-    class RectangleTool : ITool
+    internal class RectangleTool : ITool
     {
         private const int DEF_STROKE_THICKNESS = 2;
 
@@ -38,7 +38,7 @@ namespace TikzFix.Model.ToolImpl
                 },
                 ShapeState.START
             );
-            
+
                 x1 = canvasEventArgs.X;
                 y1 = canvasEventArgs.Y;
             }

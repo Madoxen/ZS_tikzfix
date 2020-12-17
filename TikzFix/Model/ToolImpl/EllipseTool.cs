@@ -6,7 +6,7 @@ using TikzFix.Utils;
 
 namespace TikzFix.Model.ToolImpl
 {
-    class EllipseTool : ITool
+    internal class EllipseTool : ITool
     {
         private const int DEF_STROKE_THICKNESS = 2;
 

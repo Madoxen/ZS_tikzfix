@@ -1,4 +1,6 @@
-﻿namespace TikzFix.Model.Tool
+﻿using System.Windows.Shapes;
+
+namespace TikzFix.Model.Tool
 {
     interface ITool
     {
