@@ -15,6 +15,10 @@ using System.IO;
 
 namespace TikzFix.VM
 {
+    /// <summary>
+    /// Main window VM, maintains main shape collection that is shown to the user by canvas
+    /// also maintains all available tools and selection functionality
+    /// </summary>
     class MainVM : BaseVM
     {
         #region Tools
@@ -22,7 +26,6 @@ namespace TikzFix.VM
         private readonly ITool rectangleTool = new RectangleTool();
         private readonly ITool lineTool = new LineTool();
         private readonly ITool ellipseTool = new EllipseTool();
-
         public readonly List<ITool> Tools = new List<ITool>();
 
 
@@ -104,15 +107,21 @@ namespace TikzFix.VM
         public RelayCommand CancelDrawingCommand
         {
             get;
-        } //Should be called whenever user wants to cancel drawing TODO: Add cancel functionality
+        }
+
+        //Should be called whenever user wants to cancel drawing TODO: Add cancel functionality
         public RelayCommand<CanvasEventArgs> StepDrawingCommand
         {
             get;
-        }  //Should be called when mouse button is pressed
+        }
+
+        //Should be called when mouse button is pressed
         public RelayCommand<CanvasEventArgs> UpdateDrawingCommand
         {
             get;
-        } //Should be called when mouse pointer is moved
+        }
+
+        //Should be called when mouse pointer is moved
         public RelayCommand CommitDrawingCommand
         {
             get;
@@ -153,9 +162,6 @@ namespace TikzFix.VM
             DeleteSelectionCommand = new RelayCommand(DeleteSelection);
             CancelSelectionCommand = new RelayCommand(CancelSelection);
 
-            SaveCommand = new RelayCommand(SaveTest);
-            LoadCommand = new RelayCommand(LoadTest);
-            GenerateTikzCommand = new RelayCommand(GenerateTikz);
         }
 
         #region Drawing
@@ -233,106 +239,6 @@ namespace TikzFix.VM
 
         #endregion
 
-        #region IO
-
-        public RelayCommand SaveCommand
-        {
-            get;
-        }
-
-        public RelayCommand LoadCommand
-        {
-            get;
-        }
-
-        public RelayCommand GenerateTikzCommand
-        {
-            get;
-        }
-
-        private ITool GetTool(string toolName)
-        {
-            foreach (ITool tool in Tools)
-            {
-                if (tool.GetType().Name == toolName)
-                {
-                    return tool;
-                }
-            }
-
-            throw new Exception("Unsuported shape type. Currently suppoerted: [Line, Ellipse, Rectangle]");
-        }
-
-        private ITool GetTool(Shape shape)
-        {
-            return GetTool(shape.MapShapeWithTool());
-        }
-
-        private const string testFileName = "savedData.json";
-
-        private void Save(string fileName)
-        {
-            List<LocalShapeData> canvasShapesData = new List<LocalShapeData>();
-
-            foreach (Shape shape in Shapes)
-            {
-                canvasShapesData.Add(GetTool(shape).ConvertToShapeData(shape));
-            }
-
-            string jsonString = JsonSerializer.Serialize(canvasShapesData);
-            File.WriteAllText(fileName, jsonString);
-        }
-
-        private void SaveTest()
-        {
-            Save(testFileName);
-        }
-
-
-        private void Load(string fileName)
-        {
-            string jsonString = File.ReadAllText(fileName);
-
-            Shapes.Clear();
-
-            List<LocalShapeData> canvasShapesData = JsonSerializer.Deserialize<List<LocalShapeData>>(jsonString);
-
-            ITool currentTool;
-
-            foreach (LocalShapeData shapeData in canvasShapesData)
-            {
-                currentTool = GetTool(shapeData.ToolName);
-
-                foreach (CanvasEventArgs canvasEventArgs in shapeData.KeyPoints)
-                {
-                    var r = currentTool.GetShape(canvasEventArgs);
-
-                    if (r.ShapeState == ShapeState.FINISHED)
-                    {
-                        Shapes.Add(r.Shape);
-                    }
-                }
-            }
-        }
-
-        private void LoadTest()
-        {
-            Load(testFileName);
-        }
-
-
-        private void GenerateTikz()
-        {
-            List<string> r = new List<string>();
-            foreach (Shape shape in Shapes)
-            {
-                r.Add(GetTool(shape).GenerateTikzShape(shape));
-            }
-
-            Debug.WriteLine(string.Format(ITool.TIKZ_MAIN, string.Join("\n", r)));
-        }
-
-        #endregion
 
     }
 }

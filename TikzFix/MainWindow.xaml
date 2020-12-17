@@ -16,7 +16,7 @@
     Width="800">
 
     <Window.DataContext>
-        <vm:MainVM />
+        <vm:MainVM x:Name="MainVM" />
     </Window.DataContext>
 
     <Window.Resources>
@@ -34,17 +34,35 @@
 
         <Menu
             Grid.Row="0">
+            <Menu.DataContext>
+                <vm:FileVM x:Name="FileVM"/>
+            </Menu.DataContext>
             <MenuItem
                 Header="{Binding Source={x:Static resx:Resources.menu_file}}">
                 <MenuItem
-                    Header="{Binding Source={x:Static resx:Resources.menu_file_save}}"
+                    Header="{Binding Source={x:Static resx:Resources.menu_file_saveas}}">
+
+
+                    <MenuItem
+                    Header="{Binding Source={x:Static resx:Resources.menu_file_saveas_json}}"
+                    Command="{Binding SaveCommand}" >
+
+                        <MenuItem.CommandParameter>
+                            <sys:Int32>0</sys:Int32>
+                        </MenuItem.CommandParameter>
+                    </MenuItem>
+
+
+                    <MenuItem
+                    Header="{Binding Source={x:Static resx:Resources.menu_file_saveas_tikz}}"
                     Command="{Binding SaveCommand}">
-                </MenuItem>
-                <MenuItem
-                    Header="{Binding Source={x:Static resx:Resources.menu_file_saveas}}"
-                    Command="{Binding GenerateTikzCommand}">
+                        <MenuItem.CommandParameter>
+                            <sys:Int32>1</sys:Int32>
+                        </MenuItem.CommandParameter>
+                    </MenuItem>
 
                 </MenuItem>
+
                 <MenuItem
                     Header="{Binding Source={x:Static resx:Resources.menu_file_load}}"
                     Command="{Binding LoadCommand}">

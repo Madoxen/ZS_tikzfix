@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using TikzFix.Model.Tool;
@@ -7,7 +6,7 @@ using TikzFix.Utils;
 
 namespace TikzFix.Model.ToolImpl
 {
-    class EllipseTool : ITool
+    internal class EllipseTool : ITool
     {
         private const int DEF_STROKE_THICKNESS = 2;
 
@@ -64,34 +63,6 @@ namespace TikzFix.Model.ToolImpl
             {
                 current.ShapeState = ShapeState.DRAWING;
             }
-        }
-
-        public LocalShapeData ConvertToShapeData(Shape shape)
-        {
-            if (shape is not Ellipse e)
-            {
-                throw new Exception($"Shape-Tool type mismatch, tool type: {GetType().Name}, expected shape type Ellipse");
-            }
-            int X1 = (int)(e.Margin.Left + e.Width / 2);
-            int Y1 = (int)(e.Margin.Top + e.Height / 2);
-
-            List<CanvasEventArgs> keyPointList = new List<CanvasEventArgs>
-            {
-                new CanvasEventArgs(X1, Y1, MouseState.DOWN),
-                new CanvasEventArgs(X1+(int)(e.Width/2), (int)(Y1+e.Height/2), MouseState.UP)
-            };
-
-            return new LocalShapeData(GetType().Name, keyPointList);
-        }
-
-        public string GenerateTikzShape(Shape shape)
-        {
-            if (shape is not Ellipse e)
-            {
-                throw new Exception($"Shape-Tool type mismatch, tool type: {GetType().Name}, expected shape type Ellipse");
-            }
-
-            return $"\\draw ({(int)(e.Margin.Left + e.Width / 2)},{(int)(e.Margin.Top + e.Height / 2)}) ellipse ({(int)(shape.Width / 2)} and {(int)(shape.Height / 2)});";
         }
     }
 }

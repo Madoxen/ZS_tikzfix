@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Windows.Media;
 using System.Windows.Shapes;
+
 using TikzFix.Model.Tool;
 using TikzFix.Utils;
 
 namespace TikzFix.Model.ToolImpl
 {
-    class RectangleTool : ITool
+    internal class RectangleTool : ITool
     {
         private const int DEF_STROKE_THICKNESS = 2;
 
@@ -68,32 +68,6 @@ namespace TikzFix.Model.ToolImpl
             {
                 current.ShapeState = ShapeState.DRAWING;
             }
-        }
-
-        public LocalShapeData ConvertToShapeData(Shape shape)
-        {
-            if (shape is not Rectangle e)
-            {
-                throw new Exception($"Shape-Tool type mismatch, tool type: {GetType().Name}, expected shape type Rectangle");
-            }
-
-            List<CanvasEventArgs> keyPointList = new List<CanvasEventArgs>
-            {
-                new CanvasEventArgs((int)e.Margin.Left,(int)e.Margin.Top, MouseState.DOWN),
-                new CanvasEventArgs((int)(e.Margin.Left+e.Width), (int)(e.Margin.Top+e.Height), MouseState.UP)
-            };
-
-            return new LocalShapeData(GetType().Name, keyPointList);
-        }
-
-        public string GenerateTikzShape(Shape shape)
-        {
-            if (shape is not Rectangle e)
-            {
-                throw new Exception($"Shape-Tool type mismatch, tool type: {GetType().Name}, expected shape type Rectangle");
-            }
-
-            return $"\\draw ({(int)e.Margin.Left},{(int)e.Margin.Top}) rectangle ({(int)(e.Width + e.Margin.Left)},{(int)(e.Height + e.Margin.Top)});";
         }
     }
 }

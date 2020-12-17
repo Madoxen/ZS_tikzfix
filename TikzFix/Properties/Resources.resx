@@ -132,4 +132,10 @@
   <data name="menu_file_saveas" xml:space="preserve">
     <value>Save as...</value>
   </data>
+  <data name="menu_file_saveas_json" xml:space="preserve">
+    <value>JSON</value>
+  </data>
+  <data name="menu_file_saveas_tikz" xml:space="preserve">
+    <value>TikZ</value>
+  </data>
 </root>
