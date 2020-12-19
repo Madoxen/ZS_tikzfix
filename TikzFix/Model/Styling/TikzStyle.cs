@@ -1,4 +1,5 @@
-﻿using System.Windows.Media;
+﻿using System.Text.Json.Serialization;
+using System.Windows.Media;
 
 namespace TikzFix.Model.Styling
 {
@@ -19,19 +20,19 @@ namespace TikzFix.Model.Styling
             get; set;
         }
 
-        public SolidColorBrush StrokeColor
+        public Color StrokeColor
         {
             get; set;
         }
 
-        public SolidColorBrush FillColor
+        public Color FillColor
         {
             get; set;
         }
 
         public TikzStyle(
-            SolidColorBrush strokeColor,
-            SolidColorBrush fillColor,
+            Color strokeColor,
+            Color fillColor,
             LineEnding lineEnding = LineEnding.NONE,
             LineWidth lineWidth = LineWidth.THIN,
             LineType lineType = LineType.SOLID
@@ -42,6 +43,11 @@ namespace TikzFix.Model.Styling
             LineType = lineType;
             StrokeColor = strokeColor;
             FillColor = fillColor;
+        }
+
+        public override string ToString()
+        {
+            return $"{LineEnding} {LineWidth} {LineType} {StrokeColor} {FillColor}";
         }
     }
 }

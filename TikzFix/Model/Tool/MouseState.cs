@@ -1,6 +1,6 @@
 ﻿namespace TikzFix.Model.Tool
 {
-    enum MouseState
+    public enum MouseState
     {
         DOWN, // clicked left mouse button
         MOVE, // moving mouse when left button is pressed

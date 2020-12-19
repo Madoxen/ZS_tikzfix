@@ -170,8 +170,8 @@ namespace TikzFix.VM
         #region Drawing
 
         private readonly TikzStyle style = new TikzStyle(
-            Brushes.Orange,
-            Brushes.Green,
+            Color.FromRgb(100, 30, 200),
+            Color.FromRgb(200, 0, 50),
             LineEnding.NONE,
             LineWidth.ULTRA_THICK,
             LineType.SOLID

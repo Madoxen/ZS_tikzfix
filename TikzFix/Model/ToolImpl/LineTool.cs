@@ -9,14 +9,6 @@ namespace TikzFix.Model.ToolImpl
 {
     internal class LineTool : ITool
     {
-        private const int DEF_STROKE_THICKNESS = 2;
-
-        public SolidColorBrush StrokeColor
-        {
-            get; set;
-        } = Brushes.Black;
-
-
         private int x1, y1;
         private DrawingShape current;
 
@@ -29,7 +21,7 @@ namespace TikzFix.Model.ToolImpl
 
                 var line = new Line
                 {
-                    Stroke = style.StrokeColor,
+                    Stroke = new SolidColorBrush(style.StrokeColor),
                     X1 = x1,
                     X2 = x1,
                     Y1 = y1,

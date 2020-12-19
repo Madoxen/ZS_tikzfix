@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Windows.Shapes;
-
+using TikzFix.Model.TikzShapes;
 using TikzFix.Model.Tool;
 using TikzFix.Model.ToolImpl;
 
@@ -27,29 +27,28 @@ namespace TikzFix.Model.FormatLoader
         }
 
 
-        public ICollection<Shape> ConvertMany(string data)
+        public ICollection<TikzShape> ConvertMany(string data)
         {
-            throw new NotImplementedException();
+            List<LocalShapeData> canvasShapesData = JsonSerializer.Deserialize<List<LocalShapeData>>(data);
+            List<TikzShape> shapes = new List<TikzShape>();
 
-            //List<LocalShapeData> canvasShapesData = JsonSerializer.Deserialize<List<LocalShapeData>>(data);
-            //List<Shape> shapes = new List<Shape>(canvasShapesData.Count);
-            //ITool currentTool;
+            ITool currentTool;
 
-            //foreach (LocalShapeData shapeData in canvasShapesData)
-            //{
-            //    currentTool = toolNameToolMap[shapeData.ToolName];
+            foreach (LocalShapeData shapeData in canvasShapesData)
+            {
+                currentTool = toolNameToolMap[shapeData.ToolName];
 
-            //    foreach (CanvasEventArgs canvasEventArgs in shapeData.KeyPoints)
-            //    {
-            //        DrawingShape r = currentTool.GetShape(canvasEventArgs);
+                foreach (CanvasEventArgs canvasEventArgs in shapeData.KeyPoints)
+                {
+                    DrawingShape r = currentTool.GetShape(canvasEventArgs, shapeData.Style);
 
-            //        if (r.ShapeState == ShapeState.FINISHED)
-            //        {
-            //            shapes.Add(r.TikzShape);
-            //        }
-            //    }
-            //}
-            //return shapes;
+                    if (r.ShapeState == ShapeState.FINISHED)
+                    {
+                        shapes.Add(r.TikzShape);
+                    }
+                }
+            }
+            return shapes;
         }
     }
 }

@@ -12,6 +12,7 @@ using System.Windows.Shapes;
 
 using TikzFix.Model.FormatGenerator;
 using TikzFix.Model.FormatLoader;
+using TikzFix.Model.TikzShapes;
 using TikzFix.Model.Tool;
 
 namespace TikzFix.VM
@@ -34,8 +35,8 @@ namespace TikzFix.VM
 
         private readonly List<IFormatGenerator> formatGenerators = new List<IFormatGenerator>()
         {
-            new JsonFormatGenerator(),
-            new TikzFormatGenerator(),
+            //new JsonFormatGenerator(),
+            //new TikzFormatGenerator(),
         };
 
         private int currentFormatGeneratorIndex = 0;
@@ -51,11 +52,17 @@ namespace TikzFix.VM
         public IFormatLoader currentFormatLoader => currentFormatLoaderIndex >= 0 ? formatLoaders[currentFormatLoaderIndex] : null;
 
 
-        private ICollection<Shape> shapes;
-        public ICollection<Shape> Shapes
+        private ICollection<TikzShape> shapes;
+        public ICollection<TikzShape> Shapes
         {
-            get { return shapes; }
-            set { SetProperty(ref shapes, value); }
+            get
+            {
+                return shapes;
+            }
+            set
+            {
+                SetProperty(ref shapes, value);
+            }
         }
 
         public RelayCommand<int> SaveCommand
@@ -96,15 +103,23 @@ namespace TikzFix.VM
 
         private void Save(string fileName)
         {
-            string dataString = currentFormatGenerator.ConvertMany(Shapes);
-            File.WriteAllText(fileName, dataString);
+            List<LocalShapeData> localShapesData = new List<LocalShapeData>(shapes.Count);
+            foreach (TikzShape s in shapes)
+            {
+                localShapesData.Add(s.GenerateLocalData());
+            }
+
+            Debug.WriteLine(string.Join(", ", localShapesData));
+            var x = JsonSerializer.Serialize(localShapesData);
+
+            File.WriteAllText(fileName, x);
         }
 
         private void Load(string fileName)
         {
             string dataString = File.ReadAllText(fileName);
             shapes.Clear();
-            foreach (Shape s in currentFormatLoader.ConvertMany(dataString))
+            foreach (TikzShape s in currentFormatLoader.ConvertMany(dataString))
             {
                 shapes.Add(s);
             }

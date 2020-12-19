@@ -5,12 +5,15 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Shapes;
 using TikzFix.Model.Styling;
+using TikzFix.Model.Tool;
 
 namespace TikzFix.Model.TikzShapes
 {
     public abstract class TikzShape
     {
-        public Shape Shape
+        public abstract LocalShapeData GenerateLocalData();
+
+        public abstract Shape Shape
         {
             get; set;
         }
