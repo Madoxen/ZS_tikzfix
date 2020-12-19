@@ -50,7 +50,7 @@ namespace TikzFix.Tests
             CurrentTool.GetShape(new CanvasEventArgs(30, 30, MouseState.MOVE));
            
             // user release mouse
-            Line l = (Line)CurrentTool.GetShape(new CanvasEventArgs(50, 50, MouseState.UP)).Shape;
+            Line l = (Line)CurrentTool.GetShape(new CanvasEventArgs(50, 50, MouseState.UP)).TikzShape;
 
             Assert.AreEqual(1, l.X1);
             Assert.AreEqual(50, l.X2);
@@ -71,7 +71,7 @@ namespace TikzFix.Tests
             CurrentTool.GetShape(new CanvasEventArgs(60, 100, MouseState.MOVE));
 
             // user release mouse, at this point rectangle shouldn't be modified by any mouse action
-            Rectangle r = (Rectangle)CurrentTool.GetShape(new CanvasEventArgs(40, 40, MouseState.UP)).Shape;
+            Rectangle r = (Rectangle)CurrentTool.GetShape(new CanvasEventArgs(40, 40, MouseState.UP)).TikzShape;
 
             Assert.AreEqual(60, r.Width);
             Assert.AreEqual(160, r.Height);
@@ -92,7 +92,7 @@ namespace TikzFix.Tests
             CurrentTool.GetShape(new CanvasEventArgs(60, 100, MouseState.MOVE));
 
             // user release mouse, at this point ellipse shouldn't be modified by any mouse action
-            Ellipse e = (Ellipse)CurrentTool.GetShape(new CanvasEventArgs(0, 25, MouseState.UP)).Shape;
+            Ellipse e = (Ellipse)CurrentTool.GetShape(new CanvasEventArgs(0, 25, MouseState.UP)).TikzShape;
 
 
             Assert.AreEqual(50, e.Width);

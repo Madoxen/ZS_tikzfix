@@ -12,6 +12,9 @@ using TikzFix.Utils;
 using System;
 using System.Text.Json;
 using System.IO;
+using TikzFix.Model.Styling;
+using TikzFix.Model.TikzShapes;
+using System.Windows.Media;
 
 namespace TikzFix.VM
 {
@@ -48,8 +51,8 @@ namespace TikzFix.VM
         #endregion
 
 
-        private readonly ObservableCollection<Shape> shapes = new ObservableCollection<Shape>();
-        public ICollection<Shape> Shapes
+        private readonly ObservableCollection<TikzShape> shapes = new ObservableCollection<TikzShape>();
+        public ICollection<TikzShape> Shapes
         {
             get
             {
@@ -58,8 +61,8 @@ namespace TikzFix.VM
         }
 
 
-        private ObservableCollection<Shape> selectedShapes = new ObservableCollection<Shape>();
-        public ObservableCollection<Shape> SelectedShapes
+        private ObservableCollection<TikzShape> selectedShapes = new ObservableCollection<TikzShape>();
+        public ObservableCollection<TikzShape> SelectedShapes
         {
             get
             {
@@ -94,10 +97,10 @@ namespace TikzFix.VM
             {
                 if (value != currentDrawingShape)
                 {
-                    Shapes.Remove(currentDrawingShape?.Shape); // remove shape to stop drawing it
+                    Shapes.Remove(currentDrawingShape?.TikzShape); // remove shape to stop drawing it
                     if (value != null)
                     {
-                        Shapes.Add(value.Shape); // remove shape to stop drawing it
+                        Shapes.Add(value.TikzShape); // remove shape to stop drawing it
                     }
                 }
                 SetProperty(ref currentDrawingShape, value);
@@ -165,6 +168,15 @@ namespace TikzFix.VM
         }
 
         #region Drawing
+
+        private readonly TikzStyle style = new TikzStyle(
+            Brushes.Orange,
+            Brushes.Green,
+            LineEnding.NONE,
+            LineWidth.ULTRA_THICK,
+            LineType.SOLID
+            );
+
         private void HandleDrawingShape(DrawingShape drawingShape)
         {
             if (drawingShape == null)
@@ -187,7 +199,7 @@ namespace TikzFix.VM
                 case ShapeState.FINISHED:
                     // drawing shape is finished, add to list
                     CurrentDrawingShape = null;
-                    Shapes.Add(drawingShape.Shape);
+                    Shapes.Add(drawingShape.TikzShape);
                     break;
             }
         }
@@ -200,17 +212,17 @@ namespace TikzFix.VM
 
         private void StepDrawing(CanvasEventArgs e)
         {
-            HandleDrawingShape(CurrentTool?.GetShape(e)); //update shape with event args.
+            HandleDrawingShape(CurrentTool?.GetShape(e, style)); //update shape with event args.
         }
 
         private void UpdateDrawing(CanvasEventArgs e)
         {
-            HandleDrawingShape(CurrentTool?.GetShape(e)); //update shape with event args.
+            HandleDrawingShape(CurrentTool?.GetShape(e, style)); //update shape with event args.
         }
 
         private bool CanUpdateDrawing(object _)
         {
-            return CurrentDrawingShape?.Shape != null;
+            return CurrentDrawingShape?.TikzShape != null;
         }
 
         private void ChangeTool(int index)
@@ -223,18 +235,18 @@ namespace TikzFix.VM
         public void CancelSelection()
         {
             //FIXME: Cannot do .Clear because Clear does not convey information about old items
-            SelectedShapes = new ObservableCollection<Shape>();
+            SelectedShapes = new ObservableCollection<TikzShape>();
         }
 
         public void DeleteSelection()
         {
-            foreach (Shape s in SelectedShapes)
+            foreach (TikzShape s in SelectedShapes)
             {
                 Shapes.Remove(s);
             }
 
             //FIXME: Cannot do .Clear because Clear does not convey information about old items
-            SelectedShapes = new ObservableCollection<Shape>();
+            SelectedShapes = new ObservableCollection<TikzShape>();
         }
 
         #endregion

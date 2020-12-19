@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text.Json;
 using System.Windows.Shapes;
 
@@ -28,25 +29,27 @@ namespace TikzFix.Model.FormatLoader
 
         public ICollection<Shape> ConvertMany(string data)
         {
-            List<LocalShapeData> canvasShapesData = JsonSerializer.Deserialize<List<LocalShapeData>>(data);
-            List<Shape> shapes = new List<Shape>(canvasShapesData.Count);
-            ITool currentTool;
+            throw new NotImplementedException();
 
-            foreach (LocalShapeData shapeData in canvasShapesData)
-            {
-                currentTool = toolNameToolMap[shapeData.ToolName];
+            //List<LocalShapeData> canvasShapesData = JsonSerializer.Deserialize<List<LocalShapeData>>(data);
+            //List<Shape> shapes = new List<Shape>(canvasShapesData.Count);
+            //ITool currentTool;
 
-                foreach (CanvasEventArgs canvasEventArgs in shapeData.KeyPoints)
-                {
-                    DrawingShape r = currentTool.GetShape(canvasEventArgs);
+            //foreach (LocalShapeData shapeData in canvasShapesData)
+            //{
+            //    currentTool = toolNameToolMap[shapeData.ToolName];
 
-                    if (r.ShapeState == ShapeState.FINISHED)
-                    {
-                        shapes.Add(r.Shape);
-                    }
-                }
-            }
-            return shapes;
+            //    foreach (CanvasEventArgs canvasEventArgs in shapeData.KeyPoints)
+            //    {
+            //        DrawingShape r = currentTool.GetShape(canvasEventArgs);
+
+            //        if (r.ShapeState == ShapeState.FINISHED)
+            //        {
+            //            shapes.Add(r.TikzShape);
+            //        }
+            //    }
+            //}
+            //return shapes;
         }
     }
 }

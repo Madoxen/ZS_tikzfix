@@ -26,7 +26,7 @@ namespace TikzFix
 
 
             //TODO: search for a way to avoid something like that
-            FileVM.Shapes = MainVM.Shapes;
+            //FileVM.Shapes = MainVM.Shapes;
         }
     }
 }

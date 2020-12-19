@@ -1,16 +1,17 @@
 ﻿using System.Windows.Shapes;
+using TikzFix.Model.TikzShapes;
 
 namespace TikzFix.Model.Tool
 {
     class DrawingShape
     {
-        public DrawingShape(Shape shape, ShapeState shapeState)
+        public DrawingShape(TikzShape shape, ShapeState shapeState)
         {
-            Shape = shape;
+            TikzShape = shape;
             ShapeState = shapeState;
         }
 
-        public Shape Shape
+        public TikzShape TikzShape
         {
             get; set;
         }

@@ -10,7 +10,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Effects;
 using System.Windows.Shapes;
-
+using TikzFix.Model.TikzShapes;
 using TikzFix.Utils;
 
 
@@ -42,15 +42,15 @@ namespace TikzFix.Views
         }
 
         //Shapes to be drawn on underlaying canvas
-        public ICollection<Shape> Shapes
+        public ICollection<TikzShape> Shapes
         {
-            get { return (ICollection<Shape>)GetValue(ShapesProperty); }
+            get { return (ICollection<TikzShape>)GetValue(ShapesProperty); }
             set { SetValue(ShapesProperty, value); }
         }
 
         // Using a DependencyProperty as the backing store for Children.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ShapesProperty =
-            DependencyProperty.Register("Shapes", typeof(ICollection<Shape>), typeof(CollectionCanvas), new PropertyMetadata(null, OnShapesPropertyChanged));
+            DependencyProperty.Register("Shapes", typeof(ICollection<TikzShape>), typeof(CollectionCanvas), new PropertyMetadata(null, OnShapesPropertyChanged));
 
 
         //Shapes selected by user when using selector 
@@ -151,9 +151,9 @@ namespace TikzFix.Views
             if (sender is CollectionCanvas cc)
             {
                 cc.c.Children.Clear(); //clear all children
-                foreach (Shape element in cc.Shapes)
+                foreach (TikzShape element in cc.Shapes)
                 {
-                    cc.c.Children.Add(element);
+                    cc.c.Children.Add(element.Shape);
                 }
 
                 if (cc.Shapes is INotifyCollectionChanged icc)
@@ -179,26 +179,26 @@ namespace TikzFix.Views
         /// </summary>
         private void ShapesCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            var newItems = e.NewItems?.Cast<Shape>().ToList();
-            var oldItems = e.OldItems?.Cast<Shape>().ToList();
+            var newItems = e.NewItems?.Cast<TikzShape>().ToList();
+            var oldItems = e.OldItems?.Cast<TikzShape>().ToList();
 
             switch (e.Action)
             {
                 case NotifyCollectionChangedAction.Add:
-                    foreach (Shape ele in newItems)
+                    foreach (TikzShape ele in newItems)
                     {
-                        c.Children.Add(ele);
+                        c.Children.Add(ele.Shape);
                     }
                     break;
                 case NotifyCollectionChangedAction.Remove:
-                    foreach (Shape ele in oldItems)
+                    foreach (TikzShape ele in oldItems)
                     {
-                        c.Children.Remove(ele);
+                        c.Children.Remove(ele.Shape);
                     }
                     break;
 
                 case NotifyCollectionChangedAction.Replace:
-                    c.Children[e.OldStartingIndex] = newItems[0]; //TODO: not sure if this works in all cases?
+                    c.Children[e.OldStartingIndex] = newItems[0].Shape; //TODO: not sure if this works in all cases?
                     break;
 
                 case NotifyCollectionChangedAction.Move:

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using TikzFix.Model.Styling;
+using TikzFix.Model.TikzShapes;
 using TikzFix.Model.Tool;
 using TikzFix.Utils;
 
@@ -21,48 +23,52 @@ namespace TikzFix.Model.ToolImpl
 
 
 
-        public DrawingShape GetShape(CanvasEventArgs canvasEventArgs)
+        public DrawingShape GetShape(CanvasEventArgs canvasEventArgs, TikzStyle style)
         {
-            if (canvasEventArgs.MouseState == MouseState.DOWN)
-            {
-                current = new DrawingShape(
-                new Ellipse
-                {
-                    Stroke = StrokeColor,
-                    StrokeThickness = DEF_STROKE_THICKNESS,
-                },
-                ShapeState.START
-            );
+            throw new NotImplementedException();
+            //if (canvasEventArgs.MouseState == MouseState.DOWN)
+            //{
+            //    current = new DrawingShape(
+            //        new TikzShape()
+            //    new Ellipse
+            //    {
+            //        Stroke = StrokeColor,
+            //        StrokeThickness = DEF_STROKE_THICKNESS,
+            //    },
+            //    ShapeState.START
+            //);
 
-                x1 = canvasEventArgs.X;
-                y1 = canvasEventArgs.Y;
-            }
-            else
-            {
-                UpdateCurrent(canvasEventArgs);
-            }
-            return current;
+            //    x1 = canvasEventArgs.X;
+            //    y1 = canvasEventArgs.Y;
+            //}
+            //else
+            //{
+            //    UpdateCurrent(canvasEventArgs);
+            //}
+            //return current;
         }
 
 
         private void UpdateCurrent(CanvasEventArgs canvasEventArgs)
         {
-            current.Shape.Width = Math.Abs(x1 - canvasEventArgs.X) * 2;
-            current.Shape.Height = Math.Abs(y1 - canvasEventArgs.Y) * 2;
+            throw new NotImplementedException();
 
-            current.Shape.Margin = ShapeUtils.GetMargin(
-                x1 - Math.Abs(x1 - canvasEventArgs.X),
-                y1 - Math.Abs(y1 - canvasEventArgs.Y)
-            );
+            //current.Shape.Width = Math.Abs(x1 - canvasEventArgs.X) * 2;
+            //current.Shape.Height = Math.Abs(y1 - canvasEventArgs.Y) * 2;
 
-            if (canvasEventArgs.MouseState == MouseState.UP)
-            {
-                current.ShapeState = ShapeState.FINISHED;
-            }
-            else if (canvasEventArgs.MouseState == MouseState.MOVE)
-            {
-                current.ShapeState = ShapeState.DRAWING;
-            }
+            //current.Shape.Margin = ShapeUtils.GetMargin(
+            //    x1 - Math.Abs(x1 - canvasEventArgs.X),
+            //    y1 - Math.Abs(y1 - canvasEventArgs.Y)
+            //);
+
+            //if (canvasEventArgs.MouseState == MouseState.UP)
+            //{
+            //    current.ShapeState = ShapeState.FINISHED;
+            //}
+            //else if (canvasEventArgs.MouseState == MouseState.MOVE)
+            //{
+            //    current.ShapeState = ShapeState.DRAWING;
+            //}
         }
     }
 }
