@@ -268,21 +268,6 @@ namespace TikzFix.Views
             var raycastResult = GetSelectedShapes(c, new RectangleGeometry(new Rect(Math.Min(pos.X, selectionStartPoint.X), Math.Min(pos.Y, selectionStartPoint.Y), selectionRectangle.Shape.Width, selectionRectangle.Shape.Height)));
             foreach (TikzShape s in raycastResult)
             {
-
-                Debug.WriteLine("In");
-
-                if (SelectedShapes == null)
-                {
-                    Debug.WriteLine("Null");
-                }
-                else
-                {
-                    Debug.WriteLine("NOT Null");
-                }
-
-                Debug.WriteLine(s);
-
-
                 SelectedShapes.Add(s);
             }
             c.Children.Remove(selectionRectangle.Shape);
