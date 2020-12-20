@@ -27,5 +27,18 @@ namespace TikzFix.Model.Styling
                 _ => throw new ArgumentException("LineWidth cannot be converted"),
             };
         }
+
+        public static string GetLineWidthTikz(this LineWidth lineWidth)
+        {
+            return lineWidth switch
+            {
+                LineWidth.THIN => "thin",
+                LineWidth.VERY_THIN => "very thin",
+                LineWidth.THICK => "thick",
+                LineWidth.ULTRA_THICK => "ultra thick",
+                _ => throw new ArgumentException("LineWidth cannot be converted"),
+            };
+        }
+
     }
 }

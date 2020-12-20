@@ -20,19 +20,19 @@ namespace TikzFix.Model.Styling
             get; set;
         }
 
-        public Color StrokeColor
+        public LaTexColor StrokeColor
         {
             get; set;
         }
 
-        public Color FillColor
+        public LaTexColor FillColor
         {
             get; set;
         }
 
         public TikzStyle(
-            Color strokeColor,
-            Color fillColor,
+            LaTexColor strokeColor,
+            LaTexColor fillColor,
             LineEnding lineEnding = LineEnding.NONE,
             LineWidth lineWidth = LineWidth.THIN,
             LineType lineType = LineType.SOLID
@@ -49,5 +49,7 @@ namespace TikzFix.Model.Styling
         {
             return $"{LineEnding} {LineWidth} {LineType} {StrokeColor} {FillColor}";
         }
+
+
     }
 }

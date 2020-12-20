@@ -12,6 +12,7 @@ namespace TikzFix.Model.TikzShapes
     public abstract class TikzShape
     {
         public abstract LocalShapeData GenerateLocalData();
+        public abstract string GenerateTikz();
 
         public abstract Shape Shape
         {

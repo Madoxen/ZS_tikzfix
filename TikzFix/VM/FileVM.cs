@@ -35,8 +35,8 @@ namespace TikzFix.VM
 
         private readonly List<IFormatGenerator> formatGenerators = new List<IFormatGenerator>()
         {
-            //new JsonFormatGenerator(),
-            //new TikzFormatGenerator(),
+            new JsonFormatGenerator(),
+            new TikzFormatGenerator(),
         };
 
         private int currentFormatGeneratorIndex = 0;
@@ -103,16 +103,20 @@ namespace TikzFix.VM
 
         private void Save(string fileName)
         {
-            List<LocalShapeData> localShapesData = new List<LocalShapeData>(shapes.Count);
-            foreach (TikzShape s in shapes)
-            {
-                localShapesData.Add(s.GenerateLocalData());
-            }
+            string dataString = currentFormatGenerator.ConvertMany(Shapes);
+            File.WriteAllText(fileName, dataString);
 
-            Debug.WriteLine(string.Join(", ", localShapesData));
-            var x = JsonSerializer.Serialize(localShapesData);
+            //List<LocalShapeData> localShapesData = new List<LocalShapeData>(shapes.Count);
+            //foreach (TikzShape s in shapes)
+            //{
+            //    Debug.WriteLine(s.GenerateTikz());
+            //    localShapesData.Add(s.GenerateLocalData());
+            //}
 
-            File.WriteAllText(fileName, x);
+            //Debug.WriteLine(string.Join(", ", localShapesData));
+            //var x = JsonSerializer.Serialize(localShapesData);
+
+            //File.WriteAllText(fileName, x);
         }
 
         private void Load(string fileName)

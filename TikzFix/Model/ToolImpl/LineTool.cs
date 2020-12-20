@@ -21,7 +21,7 @@ namespace TikzFix.Model.ToolImpl
 
                 var line = new Line
                 {
-                    Stroke = new SolidColorBrush(style.StrokeColor),
+                    Stroke = new SolidColorBrush(style.StrokeColor.GetColor()),
                     X1 = x1,
                     X2 = x1,
                     Y1 = y1,

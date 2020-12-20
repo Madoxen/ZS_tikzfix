@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media;
 using System.Windows.Shapes;
 using TikzFix.Model.Styling;
 using TikzFix.Model.Tool;
+using TikzFix.Utils;
 
 namespace TikzFix.Model.TikzShapes
 {
@@ -44,6 +46,11 @@ namespace TikzFix.Model.TikzShapes
                 };
 
             return new LocalShapeData("LineTool", keyPointList, TikzStyle);
+        }
+
+        public override string GenerateTikz()
+        {
+            return $"\\draw[{TikzStyle.StrokeColor.GetLaTeXColorName()}, {TikzStyle.LineWidth.GetLineWidthTikz()}, {TikzStyle.LineEnding.GetLineEndingTikz()}, {TikzStyle.LineType.GetLineTypeTikz()}] ({line.X1},{line.Y1})--({line.X2},{line.Y2});";
         }
     }
 }

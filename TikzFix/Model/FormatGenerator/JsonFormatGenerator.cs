@@ -2,62 +2,24 @@
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Windows.Shapes;
-
+using TikzFix.Model.TikzShapes;
 using TikzFix.Model.Tool;
 
 namespace TikzFix.Model.FormatGenerator
 {
-    internal class JsonFormatGenerator //: IFormatGenerator
+    internal class JsonFormatGenerator : IFormatGenerator
     {
-        //private readonly Dictionary<Type, Func<Shape, LocalShapeData>> shapeMethodMap;
-        //
-        //public JsonFormatGenerator()
-        //{
-        //    shapeMethodMap = new Dictionary<Type, Func<Shape, LocalShapeData>>()
-        //    {
-        //        [typeof(Line)] = JsonifyLine,
-        //        [typeof(Rectangle)] = JsonifyRectangle,
-        //        [typeof(Ellipse)] = JsonifyEllipse
-        //    };
-        //}
-        //
-        //private LocalShapeData Convert(Shape shape)
-        //{
-        //    if (shapeMethodMap.TryGetValue(shape.GetType(), out Func<Shape, LocalShapeData> f))
-        //    {
-        //        return f(shape);
-        //    }
-        //
-        //    return null;
-        //}
-        //
-        //public string ConvertMany(ICollection<Shape> shapes)
-        //{
-        //    List<LocalShapeData> localShapesData = new List<LocalShapeData>(shapes.Count);
-        //    foreach (Shape s in shapes)
-        //    {
-        //        localShapesData.Add(Convert(s));
-        //    }
-        //
-        //    return JsonSerializer.Serialize(localShapesData);
-        //}
-        //
-        //public LocalShapeData JsonifyLine(Shape s)
-        //{
-        //    if (s is not Line l)
-        //    {
-        //        throw new Exception($"Shape-Tool type mismatch, tool type: {GetType().Name}, expected shape type Line");
-        //    }
-        //
-        //    List<CanvasEventArgs> keyPointList = new List<CanvasEventArgs>
-        //    {
-        //        new CanvasEventArgs((int)l.X1, (int)l.Y1, MouseState.DOWN),
-        //        new CanvasEventArgs((int)l.X2, (int)l.Y2, MouseState.UP)
-        //    };
-        //
-        //    return new LocalShapeData("LineTool", keyPointList);
-        //}
-        //
+        public string ConvertMany(ICollection<TikzShape> shapes)
+        {
+            List<LocalShapeData> localShapesData = new List<LocalShapeData>(shapes.Count);
+            foreach (TikzShape s in shapes)
+            {
+                localShapesData.Add(s.GenerateLocalData());
+            }
+
+            return JsonSerializer.Serialize(localShapesData);
+        }
+
         //private LocalShapeData JsonifyRectangle(Shape s)
         //{
         //    if (s is not Rectangle r)
