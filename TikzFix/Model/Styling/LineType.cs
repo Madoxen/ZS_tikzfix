@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TikzFix.Model.Styling
 {
@@ -23,7 +19,7 @@ namespace TikzFix.Model.Styling
                 LineType.SOLID => "solid",
                 LineType.DOTTED => "dotted",
                 LineType.DASHDOTTED => "dashdotted",
-                LineType.DASHED=> "dashed",
+                LineType.DASHED => "dashed",
                 _ => throw new ArgumentException("LineType cannot be converted"),
             };
         }

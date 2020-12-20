@@ -1,7 +1,4 @@
-﻿using System.Text.Json.Serialization;
-using System.Windows.Media;
-
-namespace TikzFix.Model.Styling
+﻿namespace TikzFix.Model.Styling
 {
     public class TikzStyle
     {

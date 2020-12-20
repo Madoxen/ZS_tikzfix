@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Media;
 
 namespace TikzFix.Model.Styling
@@ -16,7 +12,6 @@ namespace TikzFix.Model.Styling
         GREEN,
         RED,
     }
-
 
     public static class LaTexColorExt
     {
@@ -43,6 +38,4 @@ namespace TikzFix.Model.Styling
             };
         }
     }
-
-
 }

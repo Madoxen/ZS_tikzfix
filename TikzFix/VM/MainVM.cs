@@ -1,20 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-
-using System.Windows;
-using System.Diagnostics;
-using System.Windows.Input;
-using System.Windows.Shapes;
 using TikzFix.Model.Tool;
 using TikzFix.Model.ToolImpl;
-using System.Linq;
-using TikzFix.Utils;
-using System;
-using System.Text.Json;
-using System.IO;
 using TikzFix.Model.Styling;
 using TikzFix.Model.TikzShapes;
-using System.Windows.Media;
 
 namespace TikzFix.VM
 {
@@ -87,8 +76,6 @@ namespace TikzFix.VM
             }
         }
 
-
-        // TODO, observe this in canvas and draw (it can be null)
         private DrawingShape currentDrawingShape;
         public DrawingShape CurrentDrawingShape
         {

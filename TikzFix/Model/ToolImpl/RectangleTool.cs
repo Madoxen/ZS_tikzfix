@@ -10,8 +10,6 @@ namespace TikzFix.Model.ToolImpl
 {
     internal class RectangleTool : ITool
     {
-
-
         private int x1, y1;
         private DrawingShape current;
 
@@ -19,7 +17,7 @@ namespace TikzFix.Model.ToolImpl
         {
             if (canvasEventArgs.MouseState == MouseState.DOWN)
             {
-                var rect = new Rectangle
+                Rectangle rect = new Rectangle
                 {
                     Stroke = new SolidColorBrush(style.StrokeColor.GetColor()),
                     StrokeThickness = style.LineWidth.GetLineWidth(),

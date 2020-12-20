@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Shapes;
 using TikzFix.Model.Styling;
 using TikzFix.Model.Tool;
@@ -39,7 +36,7 @@ namespace TikzFix.Model.TikzShapes
                 new CanvasEventArgs((int)(rectangle.Margin.Left+rectangle.Width), (int)(rectangle.Margin.Top+rectangle.Height), MouseState.UP)
             };
 
-            return new LocalShapeData("RectangleTool", keyPointList, TikzStyle);
+            return new LocalShapeData(ITool.RECTANGLE_TOOL_NAME, keyPointList, TikzStyle);
         }
 
         public override string GenerateTikz()

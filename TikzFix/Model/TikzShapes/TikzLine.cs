@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Media;
 using System.Windows.Shapes;
 using TikzFix.Model.Styling;
 using TikzFix.Model.Tool;
-using TikzFix.Utils;
 
 namespace TikzFix.Model.TikzShapes
 {
@@ -40,7 +35,7 @@ namespace TikzFix.Model.TikzShapes
                     new CanvasEventArgs((int)line.X2, (int)line.Y2, MouseState.UP)
                 };
 
-            return new LocalShapeData("LineTool", keyPointList, TikzStyle);
+            return new LocalShapeData(ITool.LINE_TOOL_NAME, keyPointList, TikzStyle);
         }
 
         public override string GenerateTikz()

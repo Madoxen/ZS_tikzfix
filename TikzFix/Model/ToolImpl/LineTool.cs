@@ -51,9 +51,7 @@ namespace TikzFix.Model.ToolImpl
                     current.ShapeState = ShapeState.DRAWING;
                 }
             }
-
             return current;
         }
-
     }
 }

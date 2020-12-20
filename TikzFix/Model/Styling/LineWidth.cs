@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TikzFix.Model.Styling
 {
@@ -30,14 +26,7 @@ namespace TikzFix.Model.Styling
 
         public static string GetLineWidthTikz(this LineWidth lineWidth)
         {
-            return lineWidth switch
-            {
-                LineWidth.THIN => "thin",
-                LineWidth.VERY_THIN => "very thin",
-                LineWidth.THICK => "thick",
-                LineWidth.ULTRA_THICK => "ultra thick",
-                _ => throw new ArgumentException("LineWidth cannot be converted"),
-            };
+            return Enum.GetName(lineWidth).ToLower().Replace("_", " ");
         }
 
     }

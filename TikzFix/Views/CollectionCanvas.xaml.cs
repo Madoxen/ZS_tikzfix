@@ -24,7 +24,7 @@ namespace TikzFix.Views
 
         private readonly Rectangle selectionRectangle;
         private Point selectionStartPoint;
-        private Effect selectionEffect = new DropShadowEffect() { Color = Colors.Aqua };
+        private readonly Effect selectionEffect = new DropShadowEffect() { Color = Colors.Aqua };
 
         public CollectionCanvas()
         {
@@ -44,8 +44,14 @@ namespace TikzFix.Views
         //Shapes to be drawn on underlaying canvas
         public ICollection<TikzShape> Shapes
         {
-            get { return (ICollection<TikzShape>)GetValue(ShapesProperty); }
-            set { SetValue(ShapesProperty, value); }
+            get
+            {
+                return (ICollection<TikzShape>)GetValue(ShapesProperty);
+            }
+            set
+            {
+                SetValue(ShapesProperty, value);
+            }
         }
 
         // Using a DependencyProperty as the backing store for Children.  This enables animation, styling, binding, etc...
@@ -56,8 +62,14 @@ namespace TikzFix.Views
         //Shapes selected by user when using selector 
         public ICollection<Shape> SelectedShapes
         {
-            get { return (ICollection<Shape>)GetValue(SelectedShapesProperty); }
-            set { SetValue(SelectedShapesProperty, value); }
+            get
+            {
+                return (ICollection<Shape>)GetValue(SelectedShapesProperty);
+            }
+            set
+            {
+                SetValue(SelectedShapesProperty, value);
+            }
         }
 
         // Using a DependencyProperty as the backing store for SelectedShapes.  This enables animation, styling, binding, etc...
@@ -124,8 +136,14 @@ namespace TikzFix.Views
 
         public bool CanvasSelectable
         {
-            get { return (bool)GetValue(CanvasSelectableProperty); }
-            set { SetValue(CanvasSelectableProperty, value); }
+            get
+            {
+                return (bool)GetValue(CanvasSelectableProperty);
+            }
+            set
+            {
+                SetValue(CanvasSelectableProperty, value);
+            }
         }
 
         // Using a DependencyProperty as the backing store for CanvasSelectable.  This enables animation, styling, binding, etc...
@@ -266,9 +284,7 @@ namespace TikzFix.Views
             VisualTreeHelper.HitTest(element, null,
                 result =>
                 {
-                    var shape = result.VisualHit as Shape;
-
-                    if (shape != null)
+                    if (result.VisualHit is Shape shape)
                     {
                         shapes.Add(shape);
                     }

@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text.Json;
-using System.Windows.Shapes;
 using TikzFix.Model.TikzShapes;
 using TikzFix.Model.Tool;
 using TikzFix.Model.ToolImpl;
@@ -20,9 +18,9 @@ namespace TikzFix.Model.FormatLoader
         {
             toolNameToolMap = new Dictionary<string, ITool>()
             {
-                ["LineTool"] = new LineTool(),
-                ["RectangleTool"] = new RectangleTool(),
-                ["EllipseTool"] = new EllipseTool(),
+                [ITool.LINE_TOOL_NAME] = new LineTool(),
+                [ITool.RECTANGLE_TOOL_NAME] = new RectangleTool(),
+                [ITool.ELLIPSE_TOOL_NAME] = new EllipseTool(),
             };
         }
 
