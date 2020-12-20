@@ -22,14 +22,14 @@ namespace TikzFix.Views
     public partial class CollectionCanvas : UserControl
     {
 
-        private readonly Rectangle selectionRectangle;
+        private readonly TikzRectangle selectionRectangle;
         private Point selectionStartPoint;
         private readonly Effect selectionEffect = new DropShadowEffect() { Color = Colors.Aqua };
 
         public CollectionCanvas()
         {
             InitializeComponent();
-            selectionRectangle = new Rectangle()
+            var rect = new Rectangle()
             {
                 Stroke = Brushes.Aqua,
                 StrokeThickness = 1,
@@ -39,6 +39,9 @@ namespace TikzFix.Views
                     Color = Colors.Aqua
                 }
             };
+
+            selectionRectangle = new TikzRectangle(rect, null); // TikzStyle not needed 
+
         }
 
         //Shapes to be drawn on underlaying canvas
@@ -60,11 +63,11 @@ namespace TikzFix.Views
 
 
         //Shapes selected by user when using selector 
-        public ICollection<Shape> SelectedShapes
+        public ICollection<TikzShape> SelectedShapes
         {
             get
             {
-                return (ICollection<Shape>)GetValue(SelectedShapesProperty);
+                return (ICollection<TikzShape>)GetValue(SelectedShapesProperty);
             }
             set
             {
@@ -74,7 +77,7 @@ namespace TikzFix.Views
 
         // Using a DependencyProperty as the backing store for SelectedShapes.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty SelectedShapesProperty =
-            DependencyProperty.Register("SelectedShapes", typeof(ICollection<Shape>), typeof(CollectionCanvas), new PropertyMetadata(null, OnShapesSelectedChanged));
+            DependencyProperty.Register("SelectedShapes", typeof(ICollection<TikzShape>), typeof(CollectionCanvas), new PropertyMetadata(null, OnShapesSelectedChanged));
 
 
         private static void OnShapesSelectedChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -89,45 +92,45 @@ namespace TikzFix.Views
                 old_icc.CollectionChanged -= cc.SelectedShapesCollectionChangedHandler;
 
 
-            if (e.OldValue is ICollection<Shape> oldShapeCollection)
+            if (e.OldValue is ICollection<TikzShape> oldShapeCollection)
             {
-                foreach (Shape s in oldShapeCollection)
+                foreach (TikzShape s in oldShapeCollection)
                 {
-                    s.Effect = null;
+                    s.Shape.Effect = null;
                 }
             }
 
-            foreach (Shape s in cc.SelectedShapes)
+            foreach (TikzShape s in cc.SelectedShapes)
             {
-                s.Effect = cc.selectionEffect;
+                s.Shape.Effect = cc.selectionEffect;
             }
         }
 
         private void SelectedShapesCollectionChangedHandler(object sender, NotifyCollectionChangedEventArgs e)
         {
-            var newItems = e.NewItems?.Cast<Shape>().ToList();
-            var oldItems = e.OldItems?.Cast<Shape>().ToList();
+            var newItems = e.NewItems?.Cast<TikzShape>().ToList();
+            var oldItems = e.OldItems?.Cast<TikzShape>().ToList();
 
 
             switch (e.Action)
             {
                 case NotifyCollectionChangedAction.Add:
-                    foreach (Shape ele in newItems)
+                    foreach (TikzShape ele in newItems)
                     {
-                        ele.Effect = selectionEffect;
+                        ele.Shape.Effect = selectionEffect;
                     }
                     break;
 
                 case NotifyCollectionChangedAction.Remove:
-                    foreach (Shape ele in oldItems)
+                    foreach (TikzShape ele in oldItems)
                     {
-                        ele.Effect = null;
+                        ele.Shape.Effect = null;
                     }
                     break;
 
                 case NotifyCollectionChangedAction.Replace:
-                    oldItems[e.OldStartingIndex].Effect = null;
-                    newItems[e.NewStartingIndex].Effect = selectionEffect;
+                    oldItems[e.OldStartingIndex].Shape.Effect = null;
+                    newItems[e.NewStartingIndex].Shape.Effect = selectionEffect;
                     break;
 
             }
@@ -234,13 +237,13 @@ namespace TikzFix.Views
         {
             if (!CanvasSelectable)
                 return; //Canvas is marked as not selectable, abort
-            if (selectionRectangle.Visibility == Visibility.Visible)
+            if (selectionRectangle.Shape.Visibility == Visibility.Visible)
                 return;
 
             Point pos = e.GetPosition(c);
             selectionStartPoint = pos;
-            selectionRectangle.Visibility = Visibility.Visible;
-            c.Children.Add(selectionRectangle);
+            selectionRectangle.Shape.Visibility = Visibility.Visible;
+            c.Children.Add(selectionRectangle.Shape);
             SelectedShapes.Clear(ResetEffect);
         }
 
@@ -250,9 +253,9 @@ namespace TikzFix.Views
                 return; //Canvas is marked as not selectable, abort
 
             Point pos = e.GetPosition(c);
-            selectionRectangle.Width = Math.Abs(pos.X - selectionStartPoint.X);
-            selectionRectangle.Height = Math.Abs(pos.Y - selectionStartPoint.Y);
-            selectionRectangle.Margin = new Thickness(Math.Min(pos.X, selectionStartPoint.X), Math.Min(pos.Y, selectionStartPoint.Y), 0, 0);
+            selectionRectangle.Shape.Width = Math.Abs(pos.X - selectionStartPoint.X);
+            selectionRectangle.Shape.Height = Math.Abs(pos.Y - selectionStartPoint.Y);
+            selectionRectangle.Shape.Margin = new Thickness(Math.Min(pos.X, selectionStartPoint.X), Math.Min(pos.Y, selectionStartPoint.Y), 0, 0);
         }
 
 
@@ -262,13 +265,28 @@ namespace TikzFix.Views
                 return; //Canvas is marked as not selectable, abort
 
             Point pos = e.GetPosition(c);
-            var raycastResult = GetSelectedShapes(c, new RectangleGeometry(new Rect(Math.Min(pos.X, selectionStartPoint.X), Math.Min(pos.Y, selectionStartPoint.Y), selectionRectangle.Width, selectionRectangle.Height)));
-            foreach (Shape s in raycastResult)
+            var raycastResult = GetSelectedShapes(c, new RectangleGeometry(new Rect(Math.Min(pos.X, selectionStartPoint.X), Math.Min(pos.Y, selectionStartPoint.Y), selectionRectangle.Shape.Width, selectionRectangle.Shape.Height)));
+            foreach (TikzShape s in raycastResult)
             {
+
+                Debug.WriteLine("In");
+
+                if (SelectedShapes == null)
+                {
+                    Debug.WriteLine("Null");
+                }
+                else
+                {
+                    Debug.WriteLine("NOT Null");
+                }
+
+                Debug.WriteLine(s);
+
+
                 SelectedShapes.Add(s);
             }
-            c.Children.Remove(selectionRectangle);
-            selectionRectangle.Visibility = Visibility.Collapsed;
+            c.Children.Remove(selectionRectangle.Shape);
+            selectionRectangle.Shape.Visibility = Visibility.Collapsed;
         }
 
         /// <summary>
@@ -277,16 +295,23 @@ namespace TikzFix.Views
         /// <param name="element">Element that contains shapes</param>
         /// <param name="geometry">Geometry of hit test (in our case a selection rectangle)</param>
         /// <returns></returns>
-        private IList<Shape> GetSelectedShapes(UIElement element, Geometry geometry)
+        private IList<TikzShape> GetSelectedShapes(UIElement element, Geometry geometry)
         {
-            var shapes = new List<Shape>();
+            var shapes = new List<TikzShape>();
 
             VisualTreeHelper.HitTest(element, null,
                 result =>
                 {
                     if (result.VisualHit is Shape shape)
                     {
-                        shapes.Add(shape);
+                        foreach (TikzShape tikzShape in Shapes)
+                        {
+                            if (tikzShape.Shape == shape)
+                            {
+                                shapes.Add(tikzShape);
+                                break;
+                            }
+                        }
                     }
 
                     return HitTestResultBehavior.Continue;
@@ -300,11 +325,11 @@ namespace TikzFix.Views
 
         #endregion
 
-        private void ResetEffect(ICollection<Shape> shapes)
+        private void ResetEffect(ICollection<TikzShape> shapes)
         {
-            foreach (Shape s in shapes)
+            foreach (TikzShape s in shapes)
             {
-                s.Effect = null;
+                s.Shape.Effect = null;
             }
         }
     }
