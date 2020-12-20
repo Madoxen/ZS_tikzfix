@@ -8,7 +8,7 @@ namespace TikzFix.Model.FormatGenerator
     internal class TikzFormatGenerator : IFormatGenerator
     {
         // y scale has to be negative, tikz is mirrored vertically
-        public const string TIKZ_MAIN = "\\begin{{tikzpicture}}[xscale=0.1, yscale=-0.1]\n{0}\n\\end{{tikzpicture}}"; 
+        public const string TIKZ_MAIN = "\\begin{{tikzpicture}}[xscale=0.01, yscale=-0.01]\n{0}\n\\end{{tikzpicture}}";
 
 
         public string ConvertMany(ICollection<TikzShape> shapes)

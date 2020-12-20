@@ -34,15 +34,10 @@ namespace TikzFix.Model.TikzShapes
 
         public override LocalShapeData GenerateLocalData()
         {
-            if (Shape is not Line l)
-            {
-                throw new Exception($"Shape-Tool type mismatch, tool type: {GetType().Name}, expected shape type Line");
-            }
-
             List<CanvasEventArgs> keyPointList = new List<CanvasEventArgs>
                 {
-                    new CanvasEventArgs((int)l.X1, (int)l.Y1, MouseState.DOWN),
-                    new CanvasEventArgs((int)l.X2, (int)l.Y2, MouseState.UP)
+                    new CanvasEventArgs((int)line.X1, (int)line.Y1, MouseState.DOWN),
+                    new CanvasEventArgs((int)line.X2, (int)line.Y2, MouseState.UP)
                 };
 
             return new LocalShapeData("LineTool", keyPointList, TikzStyle);

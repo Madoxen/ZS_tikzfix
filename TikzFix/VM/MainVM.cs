@@ -171,7 +171,7 @@ namespace TikzFix.VM
 
         private readonly TikzStyle style = new TikzStyle(
             LaTexColor.BLUE,
-            LaTexColor.GREEN,
+            LaTexColor.RED,
             LineEnding.BOTH,
             LineWidth.ULTRA_THICK,
             LineType.DASHDOTTED

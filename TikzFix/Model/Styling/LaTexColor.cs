@@ -9,6 +9,7 @@ namespace TikzFix.Model.Styling
 {
     public enum LaTexColor
     {
+        TRANSPARENT,
         BLACK,
         WHITE,
         BLUE,
@@ -21,6 +22,10 @@ namespace TikzFix.Model.Styling
     {
         public static string GetLaTeXColorName(this LaTexColor laTexColor)
         {
+            if (laTexColor == LaTexColor.TRANSPARENT)
+            {
+                return "white!0";
+            }
             return Enum.GetName(laTexColor).ToLower();
         }
 
@@ -28,6 +33,7 @@ namespace TikzFix.Model.Styling
         {
             return laTexColor switch
             {
+                LaTexColor.TRANSPARENT => Color.FromArgb(0, 0, 0, 0),
                 LaTexColor.BLACK => Color.FromRgb(0, 0, 0),
                 LaTexColor.WHITE => Color.FromRgb(255, 255, 255),
                 LaTexColor.BLUE => Color.FromRgb(0, 0, 255),

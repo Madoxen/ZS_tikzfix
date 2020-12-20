@@ -20,22 +20,6 @@ namespace TikzFix.Model.FormatGenerator
             return JsonSerializer.Serialize(localShapesData);
         }
 
-        //private LocalShapeData JsonifyRectangle(Shape s)
-        //{
-        //    if (s is not Rectangle r)
-        //    {
-        //        throw new Exception($"Shape-Tool type mismatch, tool type: {GetType().Name}, expected shape type Rectangle");
-        //    }
-        //
-        //    List<CanvasEventArgs> keyPointList = new List<CanvasEventArgs>
-        //    {
-        //        new CanvasEventArgs((int)r.Margin.Left,(int)r.Margin.Top, MouseState.DOWN),
-        //        new CanvasEventArgs((int)(r.Margin.Left+r.Width), (int)(r.Margin.Top+r.Height), MouseState.UP)
-        //    };
-        //
-        //    return new LocalShapeData("RectangleTool", keyPointList);
-        //}
-        //
         //private LocalShapeData JsonifyEllipse(Shape s)
         //{
         //    if (s is not Ellipse e)
