@@ -20,6 +20,9 @@ namespace TikzFix.Model.ToolImpl
         private Point firstPoint;
         private DrawingShape current;
 
+        private bool secondPointSelected;
+        private bool thirdPointSelected;
+
         BezierSegment bezier;
         PathFigure figure;
         Path path;
@@ -56,11 +59,11 @@ namespace TikzFix.Model.ToolImpl
                 }
                 else if (a.MouseState == MouseState.MOVE)
                 {
-                    bezier.Point3 = new System.Windows.Point(a.Point.X - firstPoint.X, a.Point.Y - firstPoint.Y);
+                    bezier.Point3 = GetPointWithMargin(firstPoint, a.Point);
                 }
                 else
                 {
-                    bezier.Point3 = new System.Windows.Point(a.Point.X - firstPoint.X, a.Point.Y - firstPoint.Y);
+                    bezier.Point3 = GetPointWithMargin(firstPoint, a.Point);
                     click++;
                 }
 
@@ -68,16 +71,60 @@ namespace TikzFix.Model.ToolImpl
             }
             else if (click == 1) // second click, select first control point
             {
+                if (a.MouseState == MouseState.DOWN)
+                {
+                    secondPointSelected = true;
+                    bezier.Point1 = GetPointWithMargin(firstPoint, a.Point);
+
+                }
+                else if (a.MouseState == MouseState.MOVE)
+                {
+                    if (secondPointSelected)
+                    {
+                        bezier.Point1 = GetPointWithMargin(firstPoint, a.Point);
+                    }
+                }
+                else
+                {
+                    bezier.Point1 = GetPointWithMargin(firstPoint, a.Point);
+                    click++;
+                }
+
                 return current;
             }
             else if (click == 2) // third click, select second control point
             {
+                if (a.MouseState == MouseState.DOWN)
+                {
+                    thirdPointSelected = true;
+                    bezier.Point2 = GetPointWithMargin(firstPoint, a.Point);
+
+                }
+                else if (a.MouseState == MouseState.MOVE)
+                {
+                    if (thirdPointSelected)
+                    {
+                        bezier.Point2 = GetPointWithMargin(firstPoint, a.Point);
+                    }
+                }
+                else
+                {
+                    current.ShapeState = ShapeState.FINISHED;
+                    click = 0;
+                    secondPointSelected = thirdPointSelected = false;
+                }
                 return current;
             }
             else
             {
                 throw new Exception("Sth went wrong, bezier line should be drawn in 3 clicks");
             }
+        }
+
+
+        private System.Windows.Point GetPointWithMargin(Point first, Point second)
+        {
+            return new System.Windows.Point(second.X - first.X, second.Y - first.Y);
         }
 
 
