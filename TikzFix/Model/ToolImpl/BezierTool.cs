@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using TikzFix.Model.Styling;
@@ -15,7 +10,7 @@ namespace TikzFix.Model.ToolImpl
 {
     class BezierTool : ITool
     {
-        private SByte click = 0;
+        private sbyte click = 0;
 
         private Point firstPoint;
         private DrawingShape current;
@@ -23,20 +18,20 @@ namespace TikzFix.Model.ToolImpl
         private bool secondPointSelected;
         private bool thirdPointSelected;
 
-        BezierSegment bezier;
-        PathFigure figure;
-        Path path;
-        PathFigure[] pf;
+        private BezierSegment bezier;
+        private PathFigure figure;
+        private Path path;
+        private PathFigure[] pf;
 
         public DrawingShape GetShape(CanvasEventArgs a, TikzStyle style)
         {
-            Debug.WriteLine(a.ToString());
-
             if (click == 0) // first click, draw a straight line
             {
 
                 if (a.MouseState == MouseState.DOWN)
                 {
+                    // small bug here, sometimes when a user clicks for the first time long line appears for a split second, noticeable but should not influence performance
+
                     firstPoint = a.Point;
 
                     bezier = new BezierSegment()
@@ -59,11 +54,11 @@ namespace TikzFix.Model.ToolImpl
                 }
                 else if (a.MouseState == MouseState.MOVE)
                 {
-                    bezier.Point3 = GetPointWithMargin(firstPoint, a.Point);
+                    bezier.Point3 = GetPointWithoutMargin(firstPoint, a.Point);
                 }
                 else
                 {
-                    bezier.Point3 = GetPointWithMargin(firstPoint, a.Point);
+                    bezier.Point3 = GetPointWithoutMargin(firstPoint, a.Point);
                     click++;
                 }
 
@@ -74,20 +69,21 @@ namespace TikzFix.Model.ToolImpl
                 if (a.MouseState == MouseState.DOWN)
                 {
                     secondPointSelected = true;
-                    bezier.Point1 = GetPointWithMargin(firstPoint, a.Point);
+                    bezier.Point1 = GetPointWithoutMargin(firstPoint, a.Point);
 
                 }
                 else if (a.MouseState == MouseState.MOVE)
                 {
                     if (secondPointSelected)
                     {
-                        bezier.Point1 = GetPointWithMargin(firstPoint, a.Point);
+                        bezier.Point1 = GetPointWithoutMargin(firstPoint, a.Point);
                     }
                 }
                 else
                 {
-                    bezier.Point1 = GetPointWithMargin(firstPoint, a.Point);
+                    bezier.Point1 = GetPointWithoutMargin(firstPoint, a.Point);
                     click++;
+
                 }
 
                 return current;
@@ -97,18 +93,19 @@ namespace TikzFix.Model.ToolImpl
                 if (a.MouseState == MouseState.DOWN)
                 {
                     thirdPointSelected = true;
-                    bezier.Point2 = GetPointWithMargin(firstPoint, a.Point);
+                    bezier.Point2 = GetPointWithoutMargin(firstPoint, a.Point);
 
                 }
                 else if (a.MouseState == MouseState.MOVE)
                 {
                     if (thirdPointSelected)
                     {
-                        bezier.Point2 = GetPointWithMargin(firstPoint, a.Point);
+                        bezier.Point2 = GetPointWithoutMargin(firstPoint, a.Point);
                     }
                 }
                 else
                 {
+                    bezier.Point2 = GetPointWithoutMargin(firstPoint, a.Point);
                     current.ShapeState = ShapeState.FINISHED;
                     click = 0;
                     secondPointSelected = thirdPointSelected = false;
@@ -122,11 +119,15 @@ namespace TikzFix.Model.ToolImpl
         }
 
 
-        private System.Windows.Point GetPointWithMargin(Point first, Point second)
+        public static System.Windows.Point GetPointWithoutMargin(Point first, Point second)
         {
             return new System.Windows.Point(second.X - first.X, second.Y - first.Y);
         }
 
+        public static System.Windows.Point GetPointWithMargin(Point first, Point second)
+        {
+            return new System.Windows.Point(second.X + first.X, second.Y + first.Y);
+        }
 
     }
 }

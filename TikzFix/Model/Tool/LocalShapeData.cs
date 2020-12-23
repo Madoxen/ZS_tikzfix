@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using TikzFix.Model.Styling;
 
 namespace TikzFix.Model.Tool

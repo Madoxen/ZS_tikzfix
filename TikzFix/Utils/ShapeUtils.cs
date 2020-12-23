@@ -25,9 +25,5 @@ namespace TikzFix.Utils
                     Math.Min(first.Y, second.Y)
                 );
         }
-
-
-
-
     }
 }

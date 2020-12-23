@@ -137,8 +137,6 @@ namespace TikzFix.VM
         }
 
 
-
-
         public MainVM()
         {
             Tools.Add(lineTool);
@@ -160,12 +158,14 @@ namespace TikzFix.VM
 
         #region Drawing
 
-        private readonly TikzStyle style = new TikzStyle(
+        // TODO make it observable and add UI, user should be able to change any prop in TikzStyle
+        // TODO add line types to canvas/tools. When ITool impl get style it should apply line type e.g. dotted
+        private readonly TikzStyle CurrentSelectedStyle = new TikzStyle(
             LaTexColor.BLUE,
             LaTexColor.RED,
-            LineEnding.BOTH,
-            LineWidth.ULTRA_THICK,
-            LineType.DASHDOTTED
+            LineEnding.NONE,
+            LineWidth.THIN,
+            LineType.SOLID
             );
 
         private void HandleDrawingShape(DrawingShape drawingShape)
@@ -203,12 +203,12 @@ namespace TikzFix.VM
 
         private void StepDrawing(CanvasEventArgs e)
         {
-            HandleDrawingShape(CurrentTool?.GetShape(e, style)); //update shape with event args.
+            HandleDrawingShape(CurrentTool?.GetShape(e, CurrentSelectedStyle)); //update shape with event args.
         }
 
         private void UpdateDrawing(CanvasEventArgs e)
         {
-            HandleDrawingShape(CurrentTool?.GetShape(e, style)); //update shape with event args.
+            HandleDrawingShape(CurrentTool?.GetShape(e, CurrentSelectedStyle)); //update shape with event args.
         }
 
         private bool CanUpdateDrawing(object _)
@@ -223,6 +223,7 @@ namespace TikzFix.VM
         #endregion
 
         #region Selection Commands
+
         public void CancelSelection()
         {
             //FIXME: Cannot do .Clear because Clear does not convey information about old items
@@ -241,7 +242,5 @@ namespace TikzFix.VM
         }
 
         #endregion
-
-
     }
 }

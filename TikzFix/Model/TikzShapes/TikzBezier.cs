@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Windows.Media;
 using System.Windows.Shapes;
 using TikzFix.Model.Styling;
 using TikzFix.Model.Tool;
+using TikzFix.Model.ToolImpl;
 
 namespace TikzFix.Model.TikzShapes
 {
@@ -29,20 +32,29 @@ namespace TikzFix.Model.TikzShapes
 
         public override LocalShapeData GenerateLocalData()
         {
-            throw new NotImplementedException();
-            //List<CanvasEventArgs> keyPointList = new List<CanvasEventArgs>
-            //    {
-            //        new CanvasEventArgs((int)line.X1, (int)line.Y1, MouseState.DOWN),
-            //        new CanvasEventArgs((int)line.X2, (int)line.Y2, MouseState.UP)
-            //    };
+            BezierSegment b = (path.Data as PathGeometry).Figures[0].Segments[0] as BezierSegment;
 
-            //return new LocalShapeData(ITool.LINE_TOOL_NAME, keyPointList, TikzStyle);
+            Point firstPoint = new Point((int)path.Margin.Left, (int)path.Margin.Top);
+
+            List<CanvasEventArgs> keyPointList = new List<CanvasEventArgs>
+                {
+                    // prob it can be done with 3 points instead of 6 but I got strange bugs
+                    new CanvasEventArgs(firstPoint, MouseState.DOWN),
+                    new CanvasEventArgs(new Point(BezierTool.GetPointWithMargin(firstPoint, new Point(b.Point3))), MouseState.UP),
+                    new CanvasEventArgs(new Point(BezierTool.GetPointWithMargin(firstPoint, new Point(b.Point1))), MouseState.DOWN),
+                    new CanvasEventArgs(new Point(BezierTool.GetPointWithMargin(firstPoint, new Point(b.Point1))), MouseState.UP),
+                    new CanvasEventArgs(new Point(BezierTool.GetPointWithMargin(firstPoint, new Point(b.Point2))), MouseState.DOWN),
+                    new CanvasEventArgs(new Point(BezierTool.GetPointWithMargin(firstPoint, new Point(b.Point2))), MouseState.UP),
+                };
+
+            return new LocalShapeData(ITool.BEZIER_TOOL_NAME, keyPointList, TikzStyle);
         }
 
         public override string GenerateTikz()
         {
-            throw new NotImplementedException();
-            //return $"\\draw[{TikzStyle.StrokeColor.GetLaTeXColorName()}, {TikzStyle.LineWidth.GetLineWidthTikz()}, {TikzStyle.LineEnding.GetLineEndingTikz()}, {TikzStyle.LineType.GetLineTypeTikz()}] ({line.X1},{line.Y1})--({line.X2},{line.Y2});";
+            BezierSegment b = (path.Data as PathGeometry).Figures[0].Segments[0] as BezierSegment;
+
+            return $"\\filldraw[color={TikzStyle.StrokeColor.GetLaTeXColorName()}, fill={TikzStyle.FillColor.GetLaTeXColorName()}, {TikzStyle.LineWidth.GetLineWidthTikz()},{TikzStyle.LineType.GetLineTypeTikz()}] ({path.Margin.Left},{path.Margin.Top}) .. controls ({b.Point1.X + path.Margin.Left},{b.Point1.Y + path.Margin.Top}) and ({b.Point2.X + path.Margin.Left},{b.Point2.Y + path.Margin.Top}) .. ({b.Point3.X + path.Margin.Left},{b.Point3.Y + path.Margin.Top});";
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using System.Windows.Shapes;
-using TikzFix.Model.TikzShapes;
+﻿using TikzFix.Model.TikzShapes;
 
 namespace TikzFix.Model.Tool
 {

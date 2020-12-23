@@ -21,6 +21,7 @@ namespace TikzFix.Model.FormatLoader
                 [ITool.LINE_TOOL_NAME] = new LineTool(),
                 [ITool.RECTANGLE_TOOL_NAME] = new RectangleTool(),
                 [ITool.ELLIPSE_TOOL_NAME] = new EllipseTool(),
+                [ITool.BEZIER_TOOL_NAME] = new BezierTool(),
             };
         }
 

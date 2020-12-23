@@ -28,5 +28,10 @@
         {
             // empty ctor needed in deserialization
         }
+
+        public override string ToString()
+        {
+            return $"{X} {Y}";
+        }
     }
 }
