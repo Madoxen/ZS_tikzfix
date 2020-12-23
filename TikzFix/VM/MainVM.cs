@@ -4,6 +4,10 @@ using TikzFix.Model.Tool;
 using TikzFix.Model.ToolImpl;
 using TikzFix.Model.Styling;
 using TikzFix.Model.TikzShapes;
+using System.Windows.Media;
+using System.Windows;
+using System.Windows.Shapes;
+using TikzFix.Utils;
 
 namespace TikzFix.VM
 {
@@ -18,6 +22,7 @@ namespace TikzFix.VM
         private readonly ITool rectangleTool = new RectangleTool();
         private readonly ITool lineTool = new LineTool();
         private readonly ITool ellipseTool = new EllipseTool();
+        private readonly ITool bezierTool = new BezierTool();
         public readonly List<ITool> Tools = new List<ITool>();
 
 
@@ -139,9 +144,9 @@ namespace TikzFix.VM
             Tools.Add(lineTool);
             Tools.Add(rectangleTool);
             Tools.Add(ellipseTool);
+            Tools.Add(bezierTool);
 
-
-            CurrentToolIndex = -1;
+            CurrentToolIndex = 3;
 
             CancelDrawingCommand = new RelayCommand(CancelDrawing);
             StepDrawingCommand = new RelayCommand<CanvasEventArgs>(StepDrawing);
@@ -151,7 +156,6 @@ namespace TikzFix.VM
 
             DeleteSelectionCommand = new RelayCommand(DeleteSelection);
             CancelSelectionCommand = new RelayCommand(CancelSelection);
-
         }
 
         #region Drawing

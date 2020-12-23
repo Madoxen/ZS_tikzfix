@@ -10,7 +10,7 @@ namespace TikzFix.Model.ToolImpl
 {
     internal class EllipseTool : ITool
     {
-        private int x1, y1;
+        private Point firstPoint;
         private DrawingShape current;
 
         public DrawingShape GetShape(CanvasEventArgs canvasEventArgs, TikzStyle style)
@@ -26,18 +26,14 @@ namespace TikzFix.Model.ToolImpl
 
                 current = new DrawingShape(new TikzEllipse(ellipse, style), ShapeState.START);
 
-                x1 = canvasEventArgs.X;
-                y1 = canvasEventArgs.Y;
+                firstPoint = canvasEventArgs.Point;
             }
             else
             {
-                current.TikzShape.Shape.Width = Math.Abs(x1 - canvasEventArgs.X) * 2;
-                current.TikzShape.Shape.Height = Math.Abs(y1 - canvasEventArgs.Y) * 2;
+                current.TikzShape.Shape.Width = Math.Abs(firstPoint.X - canvasEventArgs.Point.X) * 2;
+                current.TikzShape.Shape.Height = Math.Abs(firstPoint.Y - canvasEventArgs.Point.Y) * 2;
 
-                current.TikzShape.Shape.Margin = ShapeUtils.GetMargin(
-                    x1 - Math.Abs(x1 - canvasEventArgs.X),
-                    y1 - Math.Abs(y1 - canvasEventArgs.Y)
-                );
+                current.TikzShape.Shape.Margin = ShapeUtils.GetMarginEqual(firstPoint, canvasEventArgs.Point);
 
                 if (canvasEventArgs.MouseState == MouseState.UP)
                 {

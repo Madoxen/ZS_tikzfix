@@ -9,23 +9,22 @@ namespace TikzFix.Model.ToolImpl
 {
     internal class LineTool : ITool
     {
-        private int x1, y1;
+        private Point firstPoint;
         private DrawingShape current;
 
         public DrawingShape GetShape(CanvasEventArgs canvasEventArgs, TikzStyle style)
         {
             if (canvasEventArgs.MouseState == MouseState.DOWN)
             {
-                x1 = canvasEventArgs.X;
-                y1 = canvasEventArgs.Y;
+                firstPoint = canvasEventArgs.Point;
 
                 var line = new Line
                 {
                     Stroke = new SolidColorBrush(style.StrokeColor.GetColor()),
-                    X1 = x1,
-                    X2 = x1,
-                    Y1 = y1,
-                    Y2 = y1,
+                    X1 = firstPoint.X,
+                    X2 = firstPoint.X,
+                    Y1 = firstPoint.Y,
+                    Y2 = firstPoint.Y,
                     StrokeThickness = style.LineWidth.GetLineWidth()
                 };
 
@@ -39,8 +38,8 @@ namespace TikzFix.Model.ToolImpl
                     throw new Exception("Shape-Tool type mismatch, tool type: LineTool, expected shape type Line");
                 }
 
-                l.X2 = canvasEventArgs.X;
-                l.Y2 = canvasEventArgs.Y;
+                l.X2 = canvasEventArgs.Point.X;
+                l.Y2 = canvasEventArgs.Point.Y;
 
                 if (canvasEventArgs.MouseState == MouseState.UP)
                 {

@@ -19,18 +19,18 @@ namespace TikzFix.Views
             if (value is not MouseEventArgs e)
                 throw new Exception("Wrong value type");
 
-            Point p = e.GetPosition((IInputElement)e.Source);
+            System.Windows.Point p = e.GetPosition((IInputElement)e.Source);
 
             if (value is MouseButtonEventArgs b)
             {
                 if (b.LeftButton == MouseButtonState.Pressed)
-                    return new CanvasEventArgs((int)Math.Floor(p.X), (int)Math.Floor(p.Y), MouseState.DOWN);
+                    return new CanvasEventArgs(new Model.Tool.Point(p), MouseState.DOWN);
 
                 if (b.LeftButton == MouseButtonState.Released)
-                    return new CanvasEventArgs((int)Math.Floor(p.X), (int)Math.Floor(p.Y), MouseState.UP);
+                    return new CanvasEventArgs(new Model.Tool.Point(p), MouseState.UP);
             }
 
-            return new CanvasEventArgs((int)Math.Floor(p.X), (int)Math.Floor(p.Y), MouseState.MOVE);
+            return new CanvasEventArgs(new Model.Tool.Point(p), MouseState.MOVE);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

@@ -31,8 +31,8 @@ namespace TikzFix.Model.TikzShapes
         {
             List<CanvasEventArgs> keyPointList = new List<CanvasEventArgs>
                 {
-                    new CanvasEventArgs((int)line.X1, (int)line.Y1, MouseState.DOWN),
-                    new CanvasEventArgs((int)line.X2, (int)line.Y2, MouseState.UP)
+                    new CanvasEventArgs(new Point((int)line.X1, (int)line.Y1), MouseState.DOWN),
+                    new CanvasEventArgs(new Point((int)line.X2, (int)line.Y2), MouseState.UP)
                 };
 
             return new LocalShapeData(ITool.LINE_TOOL_NAME, keyPointList, TikzStyle);

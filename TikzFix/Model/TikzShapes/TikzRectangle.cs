@@ -32,8 +32,8 @@ namespace TikzFix.Model.TikzShapes
 
             List<CanvasEventArgs> keyPointList = new List<CanvasEventArgs>
             {
-                new CanvasEventArgs((int)rectangle.Margin.Left,(int)rectangle.Margin.Top, MouseState.DOWN),
-                new CanvasEventArgs((int)(rectangle.Margin.Left+rectangle.Width), (int)(rectangle.Margin.Top+rectangle.Height), MouseState.UP)
+                new CanvasEventArgs(new Point((int)rectangle.Margin.Left,(int)rectangle.Margin.Top), MouseState.DOWN),
+                new CanvasEventArgs(new Point((int)(rectangle.Margin.Left+rectangle.Width), (int)(rectangle.Margin.Top+rectangle.Height)), MouseState.UP)
             };
 
             return new LocalShapeData(ITool.RECTANGLE_TOOL_NAME, keyPointList, TikzStyle);

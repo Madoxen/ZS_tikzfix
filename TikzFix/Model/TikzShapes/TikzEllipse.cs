@@ -33,8 +33,8 @@ namespace TikzFix.Model.TikzShapes
 
             List<CanvasEventArgs> keyPointList = new List<CanvasEventArgs>
                 {
-                    new CanvasEventArgs(X1, Y1, MouseState.DOWN),
-                    new CanvasEventArgs(X1 + (int)(ellipse.Width / 2), (int)(Y1 + ellipse.Height / 2), MouseState.UP)
+                    new CanvasEventArgs(new Point(X1, Y1), MouseState.DOWN),
+                    new CanvasEventArgs(new Point(X1 + (int)(ellipse.Width / 2), (int)(Y1 + ellipse.Height / 2)), MouseState.UP)
                 };
 
             return new LocalShapeData("EllipseTool", keyPointList, TikzStyle);

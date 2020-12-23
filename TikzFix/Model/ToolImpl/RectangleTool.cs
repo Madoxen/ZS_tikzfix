@@ -10,7 +10,7 @@ namespace TikzFix.Model.ToolImpl
 {
     internal class RectangleTool : ITool
     {
-        private int x1, y1;
+        private Point firstPoint;
         private DrawingShape current;
 
         public virtual DrawingShape GetShape(CanvasEventArgs canvasEventArgs, TikzStyle style)
@@ -26,18 +26,14 @@ namespace TikzFix.Model.ToolImpl
 
                 current = new DrawingShape(new TikzRectangle(rect, style), ShapeState.START);
 
-                x1 = canvasEventArgs.X;
-                y1 = canvasEventArgs.Y;
+                firstPoint = canvasEventArgs.Point;
             }
             else
             {
-                current.TikzShape.Shape.Width = Math.Abs(x1 - canvasEventArgs.X);
-                current.TikzShape.Shape.Height = Math.Abs(y1 - canvasEventArgs.Y);
+                current.TikzShape.Shape.Width = Math.Abs(firstPoint.X - canvasEventArgs.Point.X);
+                current.TikzShape.Shape.Height = Math.Abs(firstPoint.Y - canvasEventArgs.Point.Y);
 
-                current.TikzShape.Shape.Margin = ShapeUtils.GetMargin(
-                    Math.Min(x1, canvasEventArgs.X),
-                    Math.Min(y1, canvasEventArgs.Y)
-                );
+                current.TikzShape.Shape.Margin = ShapeUtils.GetMarginLower(firstPoint, canvasEventArgs.Point);
 
                 if (canvasEventArgs.MouseState == MouseState.UP)
                 {
