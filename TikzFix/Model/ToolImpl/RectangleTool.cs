@@ -41,5 +41,11 @@ namespace TikzFix.Model.ToolImpl
             }
             return current;
         }
+
+        public void Reset()
+        {
+            firstPoint = null;
+            current = null;
+        }
     }
 }

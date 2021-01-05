@@ -10,5 +10,6 @@ namespace TikzFix.Model.Tool
         public const string BEZIER_TOOL_NAME = "BezierTool";
 
         DrawingShape GetShape(CanvasEventArgs canvasEventArgs, TikzStyle style);
+        void Reset(); //Brings tool to the default state
     }
 }

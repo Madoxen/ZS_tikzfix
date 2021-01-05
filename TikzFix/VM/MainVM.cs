@@ -8,6 +8,7 @@ using System.Windows.Media;
 using System.Windows;
 using System.Windows.Shapes;
 using TikzFix.Utils;
+using System.Diagnostics;
 
 namespace TikzFix.VM
 {
@@ -146,7 +147,6 @@ namespace TikzFix.VM
 
             CurrentToolIndex = 3;
 
-            CancelDrawingCommand = new RelayCommand(CancelDrawing);
             StepDrawingCommand = new RelayCommand<CanvasEventArgs>(StepDrawing);
             UpdateDrawingCommand = new RelayCommand<CanvasEventArgs>(UpdateDrawing, CanUpdateDrawing);
             ChangeToolCommand = new RelayCommand<int>(ChangeTool);
@@ -186,18 +186,15 @@ namespace TikzFix.VM
         }
 
 
-        private void CancelDrawing()
-        {
-            CurrentDrawingShape = null;
-        }
-
         private void StepDrawing(CanvasEventArgs e)
         {
+            Debug.WriteLine(e.MouseState);
             HandleDrawingShape(CurrentTool?.GetShape(e, StyleVM.CurrentStyle)); //update shape with event args.
         }
 
         private void UpdateDrawing(CanvasEventArgs e)
         {
+            Debug.WriteLine(e.MouseState);
             HandleDrawingShape(CurrentTool?.GetShape(e, StyleVM.CurrentStyle)); //update shape with event args.
         }
 
@@ -208,6 +205,8 @@ namespace TikzFix.VM
 
         private void ChangeTool(int index)
         {
+            CurrentDrawingShape = null;
+            CurrentTool?.Reset();
             CurrentToolIndex = index;
         }
         #endregion

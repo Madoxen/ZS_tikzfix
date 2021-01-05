@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Media;
 using System.Windows.Shapes;
+
 using TikzFix.Model.Styling;
 using TikzFix.Model.TikzShapes;
 using TikzFix.Model.Tool;
@@ -43,6 +44,12 @@ namespace TikzFix.Model.ToolImpl
                 }
             }
             return current;
+        }
+
+        public void Reset()
+        {
+            firstPoint = null;
+            current = null;
         }
     }
 }

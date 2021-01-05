@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Media;
 using System.Windows.Shapes;
+
 using TikzFix.Model.Styling;
 using TikzFix.Model.TikzShapes;
 using TikzFix.Model.Tool;
@@ -41,7 +42,7 @@ namespace TikzFix.Model.ToolImpl
                     figure = new PathFigure();
                     figure.Segments.Add(bezier);
                     path = new Path();
-                    
+
                     path.SetStyle(style);
                     path.Margin = ShapeUtils.GetMargin(firstPoint.X, firstPoint.Y);
 
@@ -130,5 +131,21 @@ namespace TikzFix.Model.ToolImpl
             return new System.Windows.Point(second.X + first.X, second.Y + first.Y);
         }
 
+        public void Reset()
+        {
+            click = 0;
+
+            firstPoint = null;
+            current = null;
+
+            secondPointSelected = false;
+            thirdPointSelected = false;
+
+            bezier = null;
+            figure = null;
+            path = null;
+            pf = null;
+        }
     }
 }
+
