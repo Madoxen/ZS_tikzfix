@@ -106,7 +106,16 @@
                     <Image
                         Source="/Resources/ellipse.bmp" />
                 </Button>
-                <Button></Button>
+                <Button
+                    Command="{Binding ChangeToolCommand}"
+                    ToolTip="Bezier Curve">
+                    <Button.CommandParameter>
+                        <sys:Int32>3</sys:Int32>
+                    </Button.CommandParameter>
+
+                    <Image
+                        Source="/Resources/curve.bmp" />
+                </Button>
             </ToolBar>
         </ToolBarTray>
 
