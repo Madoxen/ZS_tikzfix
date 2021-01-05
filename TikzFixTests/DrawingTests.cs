@@ -8,6 +8,7 @@ namespace TikzFix.Tests
 
     using System.Windows.Shapes;
 
+    using TikzFix.Model.Styling;
     using TikzFix.Model.Tool;
     using TikzFix.Model.ToolImpl;
 
@@ -43,14 +44,15 @@ namespace TikzFix.Tests
             ITool CurrentTool = new LineTool();
 
             // user clicked on point [1,1]
-            CurrentTool.GetShape(new CanvasEventArgs(1, 1, MouseState.DOWN));
+            CurrentTool.GetShape(new CanvasEventArgs(new Point(1, 1), MouseState.DOWN), new TikzStyle());
+
 
             // user hold mouse and move
-            CurrentTool.GetShape(new CanvasEventArgs(20, 20, MouseState.MOVE));
-            CurrentTool.GetShape(new CanvasEventArgs(30, 30, MouseState.MOVE));
+            CurrentTool.GetShape(new CanvasEventArgs(new Point(20, 20), MouseState.MOVE), new TikzStyle());
+            CurrentTool.GetShape(new CanvasEventArgs(new Point(30, 30), MouseState.MOVE), new TikzStyle());
            
             // user release mouse
-            Line l = (Line)CurrentTool.GetShape(new CanvasEventArgs(50, 50, MouseState.UP)).TikzShape;
+            Line l = (Line)CurrentTool.GetShape(new CanvasEventArgs(new Point(50, 50), MouseState.UP), new TikzStyle()).TikzShape.Shape;
 
             Assert.AreEqual(1, l.X1);
             Assert.AreEqual(50, l.X2);
@@ -64,14 +66,14 @@ namespace TikzFix.Tests
         {
             ITool CurrentTool = new RectangleTool();
             // user clicked on point [100,200]
-            CurrentTool.GetShape(new CanvasEventArgs(100, 200, MouseState.DOWN));
+            CurrentTool.GetShape(new CanvasEventArgs(new Point(100, 200), MouseState.DOWN), new TikzStyle());
 
             // user hold mouse and move, this should update current rectangle on canvas
-            CurrentTool.GetShape(new CanvasEventArgs(80, 170, MouseState.MOVE));
-            CurrentTool.GetShape(new CanvasEventArgs(60, 100, MouseState.MOVE));
+            CurrentTool.GetShape(new CanvasEventArgs(new Point(80, 170), MouseState.MOVE), new TikzStyle());
+            CurrentTool.GetShape(new CanvasEventArgs(new Point(60, 100), MouseState.MOVE), new TikzStyle());
 
             // user release mouse, at this point rectangle shouldn't be modified by any mouse action
-            Rectangle r = (Rectangle)CurrentTool.GetShape(new CanvasEventArgs(40, 40, MouseState.UP)).TikzShape;
+            Rectangle r = (Rectangle)CurrentTool.GetShape(new CanvasEventArgs(new Point(40, 40), MouseState.UP), new TikzStyle()).TikzShape.Shape;
 
             Assert.AreEqual(60, r.Width);
             Assert.AreEqual(160, r.Height);
@@ -84,15 +86,15 @@ namespace TikzFix.Tests
 
             ITool CurrentTool = new EllipseTool();
             // user clicked on point [50,50]
-            CurrentTool.GetShape(new CanvasEventArgs(50, 50, MouseState.DOWN));
+            CurrentTool.GetShape(new CanvasEventArgs(new Point(50, 50), MouseState.DOWN), new TikzStyle());
 
 
             // user hold mouse and move, this should update current ellipse on canvas
-            CurrentTool.GetShape(new CanvasEventArgs(80, 170, MouseState.MOVE));
-            CurrentTool.GetShape(new CanvasEventArgs(60, 100, MouseState.MOVE));
+            CurrentTool.GetShape(new CanvasEventArgs(new Point(80, 170), MouseState.MOVE), new TikzStyle());
+            CurrentTool.GetShape(new CanvasEventArgs(new Point(60, 100), MouseState.MOVE), new TikzStyle());
 
             // user release mouse, at this point ellipse shouldn't be modified by any mouse action
-            Ellipse e = (Ellipse)CurrentTool.GetShape(new CanvasEventArgs(0, 25, MouseState.UP)).TikzShape;
+            Ellipse e = (Ellipse)CurrentTool.GetShape(new CanvasEventArgs(new Point(0, 25), MouseState.UP), new TikzStyle()).TikzShape.Shape;
 
 
             Assert.AreEqual(50, e.Width);
