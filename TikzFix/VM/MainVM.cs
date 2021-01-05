@@ -158,16 +158,6 @@ namespace TikzFix.VM
 
         #region Drawing
 
-        // TODO make it observable and add UI, user should be able to change any prop in TikzStyle
-        // TODO add line types to canvas/tools. When ITool impl get style it should apply line type e.g. dotted
-        private readonly TikzStyle CurrentSelectedStyle = new TikzStyle(
-            LaTexColor.BLUE,
-            LaTexColor.RED,
-            LineEnding.NONE,
-            LineWidth.THIN,
-            LineType.SOLID
-            );
-
         private void HandleDrawingShape(DrawingShape drawingShape)
         {
             if (drawingShape == null)
@@ -203,12 +193,12 @@ namespace TikzFix.VM
 
         private void StepDrawing(CanvasEventArgs e)
         {
-            HandleDrawingShape(CurrentTool?.GetShape(e, CurrentSelectedStyle)); //update shape with event args.
+            HandleDrawingShape(CurrentTool?.GetShape(e, StyleVM.CurrentStyle)); //update shape with event args.
         }
 
         private void UpdateDrawing(CanvasEventArgs e)
         {
-            HandleDrawingShape(CurrentTool?.GetShape(e, CurrentSelectedStyle)); //update shape with event args.
+            HandleDrawingShape(CurrentTool?.GetShape(e, StyleVM.CurrentStyle)); //update shape with event args.
         }
 
         private bool CanUpdateDrawing(object _)

@@ -1,5 +1,9 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Media;
+using System.Windows.Shapes;
+
+using TikzFix.Model.Styling;
 
 namespace TikzFix.Utils
 {
@@ -24,6 +28,18 @@ namespace TikzFix.Utils
                     Math.Min(first.X, second.X),
                     Math.Min(first.Y, second.Y)
                 );
+        }
+
+
+        public static void SetStyle(this Shape s, TikzStyle style)
+        {
+            s.Stroke = new SolidColorBrush(style.StrokeColor.GetColor());
+            s.Fill = new SolidColorBrush(style.FillColor.GetColor());
+            s.StrokeThickness = style.LineWidth.GetLineWidth();
+            s.StrokeDashArray = style.LineType.GetDashArray();
+            s.StrokeStartLineCap = style.LineEnding.GetLineCaps()[0];
+            s.StrokeEndLineCap = style.LineEnding.GetLineCaps()[1];
+            s.StrokeDashCap = style.LineEnding.GetLineCaps()[2];
         }
     }
 }

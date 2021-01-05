@@ -41,7 +41,8 @@ namespace TikzFix.Model.ToolImpl
                     figure = new PathFigure();
                     figure.Segments.Add(bezier);
                     path = new Path();
-                    path.ApplyStyle(style);
+                    
+                    path.SetStyle(style);
                     path.Margin = ShapeUtils.GetMargin(firstPoint.X, firstPoint.Y);
 
                     pf = new PathFigure[] { figure };

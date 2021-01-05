@@ -8,6 +8,7 @@
     xmlns:local="clr-namespace:TikzFix"
     xmlns:views="clr-namespace:TikzFix.Views"
     xmlns:vm="clr-namespace:TikzFix.VM"
+    xmlns:models_styles="clr-namespace:TikzFix.Model.Styling"
     xmlns:resx="clr-namespace:TikzFix.Properties"
     xmlns:sys="clr-namespace:System;assembly=mscorlib"
     mc:Ignorable="d"
@@ -116,6 +117,14 @@
                     <Image
                         Source="/Resources/curve.bmp" />
                 </Button>
+            </ToolBar>
+            <ToolBar>
+                <ToolBar.DataContext>
+                    <vm:StyleVM x:Name="StyleVM" />
+                </ToolBar.DataContext>
+                <ComboBox ItemsSource="{Binding Source={views:EnumBindingSource {x:Type models_styles:LineEnding}}}" SelectedItem="{Binding LineEnding}"/>
+                <ComboBox ItemsSource="{Binding Source={views:EnumBindingSource {x:Type models_styles:LineType}}}" SelectedItem="{Binding LineType}"/>
+                <ComboBox ItemsSource="{Binding Source={views:EnumBindingSource {x:Type models_styles:LineWidth}}}" SelectedItem="{Binding LineWidth}"/>
             </ToolBar>
         </ToolBarTray>
 

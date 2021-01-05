@@ -19,13 +19,11 @@ namespace TikzFix.Model.ToolImpl
             {
                 Ellipse ellipse = new Ellipse
                 {
-                    Stroke = new SolidColorBrush(style.StrokeColor.GetColor()),
                     StrokeThickness = style.LineWidth.GetLineWidth(),
-                    Fill = new SolidColorBrush(style.FillColor.GetColor()),
                 };
 
+                ellipse.SetStyle(style);
                 current = new DrawingShape(new TikzEllipse(ellipse, style), ShapeState.START);
-
                 firstPoint = canvasEventArgs.Point;
             }
             else

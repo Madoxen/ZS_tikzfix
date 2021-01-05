@@ -1,4 +1,6 @@
-﻿namespace TikzFix.Model.Styling
+﻿using System.Windows.Media;
+
+namespace TikzFix.Model.Styling
 {
     public class TikzStyle
     {
@@ -28,8 +30,8 @@
         }
 
         public TikzStyle(
-            LaTexColor strokeColor,
-            LaTexColor fillColor,
+            LaTexColor strokeColor = LaTexColor.BLACK,
+            LaTexColor fillColor = LaTexColor.TRANSPARENT,
             LineEnding lineEnding = LineEnding.NONE,
             LineWidth lineWidth = LineWidth.THIN,
             LineType lineType = LineType.SOLID

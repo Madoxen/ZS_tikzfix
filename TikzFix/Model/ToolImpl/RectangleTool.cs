@@ -17,13 +17,8 @@ namespace TikzFix.Model.ToolImpl
         {
             if (canvasEventArgs.MouseState == MouseState.DOWN)
             {
-                Rectangle rect = new Rectangle
-                {
-                    Stroke = new SolidColorBrush(style.StrokeColor.GetColor()),
-                    StrokeThickness = style.LineWidth.GetLineWidth(),
-                    Fill = new SolidColorBrush(style.FillColor.GetColor()),
-                };
-
+                Rectangle rect = new Rectangle();
+                rect.SetStyle(style);
                 current = new DrawingShape(new TikzRectangle(rect, style), ShapeState.START);
 
                 firstPoint = canvasEventArgs.Point;

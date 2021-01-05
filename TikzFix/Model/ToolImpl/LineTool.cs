@@ -4,6 +4,7 @@ using System.Windows.Shapes;
 using TikzFix.Model.Styling;
 using TikzFix.Model.TikzShapes;
 using TikzFix.Model.Tool;
+using TikzFix.Utils;
 
 namespace TikzFix.Model.ToolImpl
 {
@@ -20,16 +21,15 @@ namespace TikzFix.Model.ToolImpl
 
                 var line = new Line
                 {
-                    Stroke = new SolidColorBrush(style.StrokeColor.GetColor()),
                     X1 = firstPoint.X,
                     X2 = firstPoint.X,
                     Y1 = firstPoint.Y,
                     Y2 = firstPoint.Y,
-                    StrokeThickness = style.LineWidth.GetLineWidth()
                 };
 
+                line.SetStyle(style);
                 current = new DrawingShape(new TikzLine(line, style), ShapeState.START);
-
+               
             }
             else
             {
