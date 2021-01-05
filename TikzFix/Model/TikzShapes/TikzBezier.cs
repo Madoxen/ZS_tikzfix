@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows.Media;
 using System.Windows.Shapes;
+
+using TikzFix.Model.Shapes;
 using TikzFix.Model.Styling;
 using TikzFix.Model.Tool;
 using TikzFix.Model.ToolImpl;
@@ -11,18 +13,18 @@ namespace TikzFix.Model.TikzShapes
 {
     class TikzBezier : TikzShape
     {
-        public TikzBezier(Path path, TikzStyle tikzStyle) : base(path, tikzStyle)
+        public TikzBezier(ArrowPath path, TikzStyle tikzStyle) : base(path, tikzStyle)
         {
 
         }
 
-        private Path path;
+        private ArrowPath path;
         public override Shape Shape
         {
             get => path;
             set
             {
-                if (value is not Path p)
+                if (value is not ArrowPath p)
                 {
                     throw new ArgumentException("TikzBezier Shape has to be Path");
                 }

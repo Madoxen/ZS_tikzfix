@@ -180,12 +180,6 @@
 
             </b:Interaction.Triggers>
         </views:CollectionCanvas>
-
-
-        <Canvas>
-            <shapes:ArrowLine X1="100" Y1="100" Y2="200" X2="200" Stroke="Black"></shapes:ArrowLine>
-        </Canvas>
-        
     </Grid>
 </Window>
     
