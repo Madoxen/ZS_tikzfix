@@ -40,6 +40,9 @@ namespace TikzFix.Utils
             s.StrokeStartLineCap = style.LineEnding.GetLineCaps()[0];
             s.StrokeEndLineCap = style.LineEnding.GetLineCaps()[1];
             s.StrokeDashCap = style.LineEnding.GetLineCaps()[2];
+
+
+            
         }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Shapes;
+
+using TikzFix.Model.Shapes;
 using TikzFix.Model.Styling;
 using TikzFix.Model.Tool;
 
@@ -8,18 +10,18 @@ namespace TikzFix.Model.TikzShapes
 {
     class TikzLine : TikzShape
     {
-        public TikzLine(Line line, TikzStyle tikzStyle) : base(line, tikzStyle)
+        public TikzLine(ArrowLine line, TikzStyle tikzStyle) : base(line, tikzStyle)
         {
 
         }
-
-        private Line line;
+        
+        private ArrowLine line;
         public override Shape Shape
         {
             get => line;
             set
             {
-                if (value is not Line l)
+                if (value is not ArrowLine l)
                 {
                     throw new ArgumentException("TikzLine Shape has to be Line");
                 }

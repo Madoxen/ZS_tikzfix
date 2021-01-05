@@ -28,7 +28,6 @@ namespace TikzFix.Model.ToolImpl
         {
             if (click == 0) // first click, draw a straight line
             {
-
                 if (a.MouseState == MouseState.DOWN)
                 {
                     // small bug here, sometimes when a user clicks for the first time long line appears for a split second, noticeable but should not influence performance

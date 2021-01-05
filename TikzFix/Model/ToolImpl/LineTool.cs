@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Windows.Media;
 using System.Windows.Shapes;
+
+using TikzFix.Model.Shapes;
 using TikzFix.Model.Styling;
 using TikzFix.Model.TikzShapes;
 using TikzFix.Model.Tool;
@@ -19,7 +21,7 @@ namespace TikzFix.Model.ToolImpl
             {
                 firstPoint = canvasEventArgs.Point;
 
-                var line = new Line
+                var line = new ArrowLine
                 {
                     X1 = firstPoint.X,
                     X2 = firstPoint.X,
@@ -33,7 +35,7 @@ namespace TikzFix.Model.ToolImpl
             }
             else
             {
-                if (current.TikzShape.Shape is not Line l)
+                if (current.TikzShape.Shape is not ArrowLine l)
                 {
                     throw new Exception("Shape-Tool type mismatch, tool type: LineTool, expected shape type Line");
                 }

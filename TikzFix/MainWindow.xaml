@@ -10,7 +10,7 @@
     xmlns:vm="clr-namespace:TikzFix.VM"
     xmlns:models_styles="clr-namespace:TikzFix.Model.Styling"
     xmlns:resx="clr-namespace:TikzFix.Properties"
-    xmlns:sys="clr-namespace:System;assembly=mscorlib" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" xmlns:shapes="clr-namespace:TikzFix.Model.Shapes"
     mc:Ignorable="d"
     Title="TikZFix"
     Height="450"
@@ -181,6 +181,11 @@
             </b:Interaction.Triggers>
         </views:CollectionCanvas>
 
+
+        <Canvas>
+            <shapes:ArrowLine X1="100" Y1="100" Y2="200" X2="200" Stroke="Black"></shapes:ArrowLine>
+        </Canvas>
+        
     </Grid>
 </Window>
     
