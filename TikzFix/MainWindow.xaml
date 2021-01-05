@@ -10,7 +10,7 @@
     xmlns:vm="clr-namespace:TikzFix.VM"
     xmlns:models_styles="clr-namespace:TikzFix.Model.Styling"
     xmlns:resx="clr-namespace:TikzFix.Properties"
-    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
     mc:Ignorable="d"
     Title="TikZFix"
     Height="450"
@@ -125,6 +125,8 @@
                 <ComboBox ItemsSource="{Binding Source={views:EnumBindingSource {x:Type models_styles:LineEnding}}}" SelectedItem="{Binding LineEnding}"/>
                 <ComboBox ItemsSource="{Binding Source={views:EnumBindingSource {x:Type models_styles:LineType}}}" SelectedItem="{Binding LineType}"/>
                 <ComboBox ItemsSource="{Binding Source={views:EnumBindingSource {x:Type models_styles:LineWidth}}}" SelectedItem="{Binding LineWidth}"/>
+                <xctk:ColorPicker SelectedColor="{Binding StrokeColor}"></xctk:ColorPicker>
+                <xctk:ColorPicker SelectedColor="{Binding FillColor}"></xctk:ColorPicker>
             </ToolBar>
         </ToolBarTray>
 
@@ -181,3 +183,4 @@
 
     </Grid>
 </Window>
+    

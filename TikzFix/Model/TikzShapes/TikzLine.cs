@@ -40,7 +40,7 @@ namespace TikzFix.Model.TikzShapes
 
         public override string GenerateTikz()
         {
-            return $"\\draw[{TikzStyle.StrokeColor.GetLaTeXColorName()}, {TikzStyle.LineWidth.GetLineWidthTikz()}, {TikzStyle.LineEnding.GetLineEndingTikz()}, {TikzStyle.LineType.GetLineTypeTikz()}] ({line.X1},{line.Y1})--({line.X2},{line.Y2});";
+            return $"\\draw[{TikzStyle.StrokeColor.GetLaTeXColorString()}, {TikzStyle.LineWidth.GetLineWidthTikz()}, fill opacity={TikzStyle.FillColor.A / 255.0}, draw opacity={TikzStyle.StrokeColor.A / 255.0}, {TikzStyle.LineEnding.GetLineEndingTikz()}, {TikzStyle.LineType.GetLineTypeTikz()}] ({line.X1},{line.Y1})--({line.X2},{line.Y2});";
         }
     }
 }

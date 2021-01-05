@@ -33,8 +33,8 @@ namespace TikzFix.Utils
 
         public static void SetStyle(this Shape s, TikzStyle style)
         {
-            s.Stroke = new SolidColorBrush(style.StrokeColor.GetColor());
-            s.Fill = new SolidColorBrush(style.FillColor.GetColor());
+            s.Stroke = new SolidColorBrush(style.StrokeColor);
+            s.Fill = new SolidColorBrush(style.FillColor);
             s.StrokeThickness = style.LineWidth.GetLineWidth();
             s.StrokeDashArray = style.LineType.GetDashArray();
             s.StrokeStartLineCap = style.LineEnding.GetLineCaps()[0];

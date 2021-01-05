@@ -54,7 +54,7 @@ namespace TikzFix.Model.TikzShapes
         {
             BezierSegment b = (path.Data as PathGeometry).Figures[0].Segments[0] as BezierSegment;
 
-            return $"\\filldraw[color={TikzStyle.StrokeColor.GetLaTeXColorName()}, fill={TikzStyle.FillColor.GetLaTeXColorName()}, {TikzStyle.LineWidth.GetLineWidthTikz()},{TikzStyle.LineType.GetLineTypeTikz()}] ({path.Margin.Left},{path.Margin.Top}) .. controls ({b.Point1.X + path.Margin.Left},{b.Point1.Y + path.Margin.Top}) and ({b.Point2.X + path.Margin.Left},{b.Point2.Y + path.Margin.Top}) .. ({b.Point3.X + path.Margin.Left},{b.Point3.Y + path.Margin.Top});";
+            return $"\\filldraw[color={TikzStyle.StrokeColor.GetLaTeXColorString()}, fill={TikzStyle.FillColor.GetLaTeXColorString()}, fill opacity={(double)TikzStyle.FillColor.A / 255.0}, draw opacity={TikzStyle.StrokeColor.A / 255.0}, {TikzStyle.LineWidth.GetLineWidthTikz()},{TikzStyle.LineType.GetLineTypeTikz()}] ({path.Margin.Left},{path.Margin.Top}) .. controls ({b.Point1.X + path.Margin.Left},{b.Point1.Y + path.Margin.Top}) and ({b.Point2.X + path.Margin.Left},{b.Point2.Y + path.Margin.Top}) .. ({b.Point3.X + path.Margin.Left},{b.Point3.Y + path.Margin.Top});";
         }
     }
 }

@@ -19,19 +19,20 @@ namespace TikzFix.Model.Styling
             get; set;
         }
 
-        public LaTexColor StrokeColor
+        public Color StrokeColor
         {
             get; set;
         }
 
-        public LaTexColor FillColor
+        public Color FillColor
         {
             get; set;
         }
+
 
         public TikzStyle(
-            LaTexColor strokeColor = LaTexColor.BLACK,
-            LaTexColor fillColor = LaTexColor.TRANSPARENT,
+            Color strokeColor,
+            Color fillColor,
             LineEnding lineEnding = LineEnding.NONE,
             LineWidth lineWidth = LineWidth.THIN,
             LineType lineType = LineType.SOLID

@@ -42,7 +42,7 @@ namespace TikzFix.Model.TikzShapes
 
         public override string GenerateTikz()
         {
-            return $"\\filldraw[color={TikzStyle.StrokeColor.GetLaTeXColorName()}, fill={TikzStyle.FillColor.GetLaTeXColorName()}, {TikzStyle.LineWidth.GetLineWidthTikz()},{TikzStyle.LineType.GetLineTypeTikz()}] ({(int)(ellipse.Margin.Left + ellipse.Width / 2)},{(int)(ellipse.Margin.Top + ellipse.Height / 2)}) ellipse ({(int)(ellipse.Width / 2)} and {(int)(ellipse.Height / 2)});";
+            return $"\\filldraw[color={TikzStyle.StrokeColor.GetLaTeXColorString()}, fill={TikzStyle.FillColor.GetLaTeXColorString()}, fill opacity={TikzStyle.FillColor.A / 255.0}, draw opacity={TikzStyle.StrokeColor.A / 255.0}, {TikzStyle.LineWidth.GetLineWidthTikz()},{TikzStyle.LineType.GetLineTypeTikz()}] ({(int)(ellipse.Margin.Left + ellipse.Width / 2)},{(int)(ellipse.Margin.Top + ellipse.Height / 2)}) ellipse ({(int)(ellipse.Width / 2)} and {(int)(ellipse.Height / 2)});";
         }
     }
 }

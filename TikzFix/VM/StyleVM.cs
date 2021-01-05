@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows.Media;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,8 +21,8 @@ namespace TikzFix.VM
             get; private set;
         }
 
-        private LaTexColor strokeColor = LaTexColor.BLACK;
-        public LaTexColor StrokeColor
+        private Color strokeColor = Color.FromRgb(0,0,0);
+        public Color StrokeColor
         {
             get { return strokeColor; }
             set
@@ -31,8 +32,8 @@ namespace TikzFix.VM
             }
         }
 
-        private LaTexColor fillColor = LaTexColor.TRANSPARENT;
-        public LaTexColor FillColor
+        private Color fillColor = Color.FromArgb(0,0,0,0);
+        public Color FillColor
         {
             get { return fillColor; }
             set
@@ -80,7 +81,6 @@ namespace TikzFix.VM
         {
             RebuildStyle();
         }
-
 
         private void RebuildStyle()
         {
