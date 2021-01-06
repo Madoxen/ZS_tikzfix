@@ -77,8 +77,14 @@ namespace TikzFix.VM
 
         private void OpenSave(int formatGeneratorIndex)
         {
+            String fileExtFilter = formatGeneratorIndex switch
+            {
+                1 => "Tikzfix drawing file | *.tikzfix",
+                0 => "JSON file | *.json"
+            };
             currentFormatGeneratorIndex = formatGeneratorIndex;
             SaveFileDialog dialog = new SaveFileDialog(); //this will make that method untestable
+            dialog.Filter = fileExtFilter;
             bool? result = dialog.ShowDialog(); //this will block the thread until dialog is closed 
 
             // Get the selected file name
@@ -91,8 +97,9 @@ namespace TikzFix.VM
         private void OpenLoad()
         {
             OpenFileDialog dialog = new OpenFileDialog(); //this will make that method untestable
+            dialog.Filter = "Tikzfix drawing file | *.tikzfix";
             bool? result = dialog.ShowDialog(); //this will block the thread until dialog is closed 
-
+            
             // Get the selected file name
             if (result == true)
             {
