@@ -4,6 +4,8 @@ namespace TikzFix.Model.Styling
 {
     public class TikzStyle
     {
+        public static TikzStyle SelectionStyle = new TikzStyle(Colors.Aqua, Colors.Aqua, lineWidth: LineWidth.VERY_THIN);
+
         public LineEnding LineEnding
         {
             get; set;

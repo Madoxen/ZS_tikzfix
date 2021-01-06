@@ -11,6 +11,7 @@
     <None Remove="Resources\ellipse.bmp" />
     <None Remove="Resources\line.bmp" />
     <None Remove="Resources\rectangle.bmp" />
+    <None Remove="Resources\select.bmp" />
   </ItemGroup>
 
   <ItemGroup>
@@ -22,6 +23,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Resources\select.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\curve.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>

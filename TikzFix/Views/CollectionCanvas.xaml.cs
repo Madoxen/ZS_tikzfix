@@ -22,26 +22,13 @@ namespace TikzFix.Views
     public partial class CollectionCanvas : UserControl
     {
 
-        private readonly TikzRectangle selectionRectangle;
+        private Rect selectionRaycastBox;
         private Point selectionStartPoint;
         private readonly Effect selectionEffect = new DropShadowEffect() { Color = Colors.Aqua };
 
         public CollectionCanvas()
         {
             InitializeComponent();
-            var rect = new Rectangle()
-            {
-                Stroke = Brushes.Aqua,
-                StrokeThickness = 1,
-                Fill = new SolidColorBrush()
-                {
-                    Opacity = 0.5,
-                    Color = Colors.Aqua
-                }
-            };
-
-            selectionRectangle = new TikzRectangle(rect, null); // TikzStyle not needed 
-
         }
 
         //Shapes to be drawn on underlaying canvas
@@ -237,13 +224,9 @@ namespace TikzFix.Views
         {
             if (!CanvasSelectable)
                 return; //Canvas is marked as not selectable, abort
-            if (selectionRectangle.Shape.Visibility == Visibility.Visible)
-                return;
 
             Point pos = e.GetPosition(c);
             selectionStartPoint = pos;
-            selectionRectangle.Shape.Visibility = Visibility.Visible;
-            c.Children.Add(selectionRectangle.Shape);
             SelectedShapes.Clear(ResetEffect);
         }
 
@@ -253,9 +236,8 @@ namespace TikzFix.Views
                 return; //Canvas is marked as not selectable, abort
 
             Point pos = e.GetPosition(c);
-            selectionRectangle.Shape.Width = Math.Abs(pos.X - selectionStartPoint.X);
-            selectionRectangle.Shape.Height = Math.Abs(pos.Y - selectionStartPoint.Y);
-            selectionRectangle.Shape.Margin = new Thickness(Math.Min(pos.X, selectionStartPoint.X), Math.Min(pos.Y, selectionStartPoint.Y), 0, 0);
+            selectionRaycastBox.Width = Math.Abs(pos.X - selectionStartPoint.X);
+            selectionRaycastBox.Height = Math.Abs(pos.Y - selectionStartPoint.Y);
         }
 
 
@@ -265,13 +247,11 @@ namespace TikzFix.Views
                 return; //Canvas is marked as not selectable, abort
 
             Point pos = e.GetPosition(c);
-            var raycastResult = GetSelectedShapes(c, new RectangleGeometry(new Rect(Math.Min(pos.X, selectionStartPoint.X), Math.Min(pos.Y, selectionStartPoint.Y), selectionRectangle.Shape.Width, selectionRectangle.Shape.Height)));
+            var raycastResult = GetSelectedShapes(c, new RectangleGeometry(new Rect(Math.Min(pos.X, selectionStartPoint.X), Math.Min(pos.Y, selectionStartPoint.Y), selectionRaycastBox.Width, selectionRaycastBox.Height)));
             foreach (TikzShape s in raycastResult)
             {
                 SelectedShapes.Add(s);
             }
-            c.Children.Remove(selectionRectangle.Shape);
-            selectionRectangle.Shape.Visibility = Visibility.Collapsed;
         }
 
         /// <summary>
@@ -303,8 +283,6 @@ namespace TikzFix.Views
                 },
                 new GeometryHitTestParameters(geometry));
 
-
-            shapes.Remove(selectionRectangle);
             return shapes;
         }
 

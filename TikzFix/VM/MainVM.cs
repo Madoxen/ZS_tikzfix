@@ -24,6 +24,7 @@ namespace TikzFix.VM
         private readonly ITool lineTool = new LineTool();
         private readonly ITool ellipseTool = new EllipseTool();
         private readonly ITool bezierTool = new BezierTool();
+        private readonly ITool selectionRectTool = new SelectionRectangleTool();
         public readonly List<ITool> Tools = new List<ITool>();
 
 
@@ -37,7 +38,7 @@ namespace TikzFix.VM
             set
             {
                 SetProperty(ref currentToolIndex, value);
-                CanvasSelectable = value < 0;
+                CanvasSelectable = value == 4;
             }
         }
 
@@ -144,6 +145,7 @@ namespace TikzFix.VM
             Tools.Add(rectangleTool);
             Tools.Add(ellipseTool);
             Tools.Add(bezierTool);
+            Tools.Add(selectionRectTool);
 
             CurrentToolIndex = 3;
 
@@ -180,7 +182,8 @@ namespace TikzFix.VM
                 case ShapeState.FINISHED:
                     // drawing shape is finished, add to list
                     CurrentDrawingShape = null;
-                    Shapes.Add(drawingShape.TikzShape);
+                    if (!drawingShape.RemoveOnFinish)
+                        Shapes.Add(drawingShape.TikzShape);
                     break;
             }
         }
