@@ -137,8 +137,8 @@ namespace TikzFix.Model.Shapes
                 //Add arrows at both ends
                 if (StrokeStartLineCap == PenLineCap.Triangle)
                 {
-                    Geometry a11 = new LineGeometry(new Point(X1, Y1), (VectorUtils.Rotate(dir, ArrowAngle) * ArrowLength) + new Point(X1, Y1));
-                    Geometry a12 = new LineGeometry(new Point(X1, Y1), (VectorUtils.Rotate(dir, -ArrowAngle) * ArrowLength) + new Point(X1, Y1));
+                    Geometry a11 = new LineGeometry(new Point(X1, Y1), (VectorUtils.Rotate(-dir, ArrowAngle) * ArrowLength) + new Point(X1, Y1));
+                    Geometry a12 = new LineGeometry(new Point(X1, Y1), (VectorUtils.Rotate(-dir, -ArrowAngle) * ArrowLength) + new Point(X1, Y1));
                     g.AddGeometry(a11);
                     g.AddGeometry(a12);
                 }
