@@ -97,7 +97,7 @@ namespace TikzFix.VM
         private void OpenLoad()
         {
             OpenFileDialog dialog = new OpenFileDialog(); //this will make that method untestable
-            dialog.Filter = "Tikzfix drawing file | *.tikzfix";
+            dialog.Filter = "JSON file | *.json";
             bool? result = dialog.ShowDialog(); //this will block the thread until dialog is closed 
             
             // Get the selected file name
@@ -123,4 +123,5 @@ namespace TikzFix.VM
             }
         }
     }
+
 }
