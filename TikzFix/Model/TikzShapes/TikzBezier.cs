@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows.Media;
 using System.Windows.Shapes;
+
+using TikzFix.Model.Shapes;
 using TikzFix.Model.Styling;
 using TikzFix.Model.Tool;
 using TikzFix.Model.ToolImpl;
@@ -11,18 +13,18 @@ namespace TikzFix.Model.TikzShapes
 {
     class TikzBezier : TikzShape
     {
-        public TikzBezier(Path path, TikzStyle tikzStyle) : base(path, tikzStyle)
+        public TikzBezier(ArrowPath path, TikzStyle tikzStyle) : base(path, tikzStyle)
         {
 
         }
 
-        private Path path;
+        private ArrowPath path;
         public override Shape Shape
         {
             get => path;
             set
             {
-                if (value is not Path p)
+                if (value is not ArrowPath p)
                 {
                     throw new ArgumentException("TikzBezier Shape has to be Path");
                 }
@@ -54,7 +56,7 @@ namespace TikzFix.Model.TikzShapes
         {
             BezierSegment b = (path.Data as PathGeometry).Figures[0].Segments[0] as BezierSegment;
 
-            return $"\\filldraw[color={TikzStyle.StrokeColor.GetLaTeXColorString()}, fill={TikzStyle.FillColor.GetLaTeXColorString()}, fill opacity={(double)TikzStyle.FillColor.A / 255.0}, draw opacity={TikzStyle.StrokeColor.A / 255.0}, {TikzStyle.LineWidth.GetLineWidthTikz()},{TikzStyle.LineType.GetLineTypeTikz()}] ({path.Margin.Left},{path.Margin.Top}) .. controls ({b.Point1.X + path.Margin.Left},{b.Point1.Y + path.Margin.Top}) and ({b.Point2.X + path.Margin.Left},{b.Point2.Y + path.Margin.Top}) .. ({b.Point3.X + path.Margin.Left},{b.Point3.Y + path.Margin.Top});";
+            return $"\\filldraw[color={TikzStyle.StrokeColor.GetLaTeXColorString()}, {TikzStyle.LineEnding.GetLineEndingTikz()} ,fill={TikzStyle.FillColor.GetLaTeXColorString()}, fill opacity={(double)TikzStyle.FillColor.A / 255.0}, draw opacity={TikzStyle.StrokeColor.A / 255.0}, {TikzStyle.LineWidth.GetLineWidthTikz()},{TikzStyle.LineType.GetLineTypeTikz()}] ({path.Margin.Left},{path.Margin.Top}) .. controls ({b.Point1.X + path.Margin.Left},{b.Point1.Y + path.Margin.Top}) and ({b.Point2.X + path.Margin.Left},{b.Point2.Y + path.Margin.Top}) .. ({b.Point3.X + path.Margin.Left},{b.Point3.Y + path.Margin.Top});";
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Windows.Media;
 using System.Windows.Shapes;
 
+using TikzFix.Model.Shapes;
 using TikzFix.Model.Styling;
 using TikzFix.Model.TikzShapes;
 using TikzFix.Model.Tool;
@@ -21,17 +22,16 @@ namespace TikzFix.Model.ToolImpl
 
         private BezierSegment bezier;
         private PathFigure figure;
-        private Path path;
+        private ArrowPath path;
         private PathFigure[] pf;
 
         public DrawingShape GetShape(CanvasEventArgs a, TikzStyle style)
         {
             if (click == 0) // first click, draw a straight line
             {
-
                 if (a.MouseState == MouseState.DOWN)
                 {
-                    // small bug here, sometimes when a user clicks for the first time long line appears for a split second, noticeable but should not influence performance
+                    //FIXME: small bug here, sometimes when a user clicks for the first time long line appears for a split second, noticeable but should not influence performance
 
                     firstPoint = a.Point;
 
@@ -41,7 +41,7 @@ namespace TikzFix.Model.ToolImpl
                     };
                     figure = new PathFigure();
                     figure.Segments.Add(bezier);
-                    path = new Path();
+                    path = new ArrowPath();
 
                     path.SetStyle(style);
                     path.Margin = ShapeUtils.GetMargin(firstPoint.X, firstPoint.Y);

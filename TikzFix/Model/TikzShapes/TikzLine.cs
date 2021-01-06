@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Shapes;
+
+using TikzFix.Model.Shapes;
 using TikzFix.Model.Styling;
 using TikzFix.Model.Tool;
 
@@ -8,18 +10,18 @@ namespace TikzFix.Model.TikzShapes
 {
     class TikzLine : TikzShape
     {
-        public TikzLine(Line line, TikzStyle tikzStyle) : base(line, tikzStyle)
+        public TikzLine(ArrowLine line, TikzStyle tikzStyle) : base(line, tikzStyle)
         {
 
         }
-
-        private Line line;
+        
+        private ArrowLine line;
         public override Shape Shape
         {
             get => line;
             set
             {
-                if (value is not Line l)
+                if (value is not ArrowLine l)
                 {
                     throw new ArgumentException("TikzLine Shape has to be Line");
                 }
@@ -40,7 +42,7 @@ namespace TikzFix.Model.TikzShapes
 
         public override string GenerateTikz()
         {
-            return $"\\draw[{TikzStyle.StrokeColor.GetLaTeXColorString()}, {TikzStyle.LineWidth.GetLineWidthTikz()}, fill opacity={TikzStyle.FillColor.A / 255.0}, draw opacity={TikzStyle.StrokeColor.A / 255.0}, {TikzStyle.LineEnding.GetLineEndingTikz()}, {TikzStyle.LineType.GetLineTypeTikz()}] ({line.X1},{line.Y1})--({line.X2},{line.Y2});";
+            return $"\\draw[color={TikzStyle.StrokeColor.GetLaTeXColorString()}, {TikzStyle.LineWidth.GetLineWidthTikz()}, fill opacity={TikzStyle.FillColor.A / 255.0}, draw opacity={TikzStyle.StrokeColor.A / 255.0}, {TikzStyle.LineEnding.GetLineEndingTikz()}, {TikzStyle.LineType.GetLineTypeTikz()}] ({line.X1},{line.Y1})--({line.X2},{line.Y2});";
         }
     }
 }
