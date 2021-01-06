@@ -103,7 +103,7 @@ namespace TikzFix.VM
             // Get the selected file name
             if (result == true)
             {
-                Load(dialog.FileName);
+                Load(dialog.FileName); 
             }
         }
 
