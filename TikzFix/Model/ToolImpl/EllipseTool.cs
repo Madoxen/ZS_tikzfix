@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
@@ -33,6 +34,8 @@ namespace TikzFix.Model.ToolImpl
                 current.TikzShape.Shape.Height = Math.Abs(firstPoint.Y - canvasEventArgs.Point.Y) * 2;
 
                 current.TikzShape.Shape.Margin = ShapeUtils.GetMarginEqual(firstPoint, canvasEventArgs.Point);
+                Canvas.SetLeft(current.TikzShape.Shape, 0);
+                Canvas.SetTop(current.TikzShape.Shape, 0);
 
                 if (canvasEventArgs.MouseState == MouseState.UP)
                 {

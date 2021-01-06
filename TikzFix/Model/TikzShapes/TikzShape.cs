@@ -1,4 +1,5 @@
-﻿using System.Windows.Shapes;
+﻿using System;
+using System.Windows.Shapes;
 using TikzFix.Model.Styling;
 using TikzFix.Model.Tool;
 
@@ -8,6 +9,8 @@ namespace TikzFix.Model.TikzShapes
     {
         public abstract LocalShapeData GenerateLocalData();
         public abstract string GenerateTikz();
+
+        public Guid Id = Guid.NewGuid();
 
         public abstract Shape Shape
         {

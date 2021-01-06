@@ -9,6 +9,8 @@ using System.Windows;
 using System.Windows.Shapes;
 using TikzFix.Utils;
 using System.Diagnostics;
+using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace TikzFix.VM
 {
@@ -25,6 +27,7 @@ namespace TikzFix.VM
         private readonly ITool ellipseTool = new EllipseTool();
         private readonly ITool bezierTool = new BezierTool();
         private readonly ITool selectionRectTool = new SelectionRectangleTool();
+        private readonly ITool canvasMovingTool = new CanvasMovingTool();
         public readonly List<ITool> Tools = new List<ITool>();
 
 
@@ -39,6 +42,11 @@ namespace TikzFix.VM
             {
                 SetProperty(ref currentToolIndex, value);
                 CanvasSelectable = value == 4;
+
+                if (value == 5)
+                    Mouse.OverrideCursor = Cursors.SizeAll;
+                else
+                    Mouse.OverrideCursor = Cursors.Arrow;
             }
         }
 
@@ -82,6 +90,20 @@ namespace TikzFix.VM
                 SetProperty(ref canvasSelectable, value);
             }
         }
+
+        private bool canvasMovable = false;
+        public bool CanvasMovable
+        {
+            get
+            {
+                return canvasMovable;
+            }
+            set
+            {
+                SetProperty(ref canvasMovable, value);
+            }
+        }
+
 
         private DrawingShape currentDrawingShape;
         public DrawingShape CurrentDrawingShape
@@ -146,13 +168,13 @@ namespace TikzFix.VM
             Tools.Add(ellipseTool);
             Tools.Add(bezierTool);
             Tools.Add(selectionRectTool);
+            Tools.Add(canvasMovingTool);
 
-            CurrentToolIndex = 3;
+            CurrentToolIndex = 0;
 
             StepDrawingCommand = new RelayCommand<CanvasEventArgs>(StepDrawing);
             UpdateDrawingCommand = new RelayCommand<CanvasEventArgs>(UpdateDrawing, CanUpdateDrawing);
             ChangeToolCommand = new RelayCommand<int>(ChangeTool);
-
 
             DeleteSelectionCommand = new RelayCommand(DeleteSelection);
             CancelSelectionCommand = new RelayCommand(CancelSelection);
@@ -171,12 +193,14 @@ namespace TikzFix.VM
                     // do nothing, ShapeCannot be drawn yet
                     // CurrentDrawingShape = null;
                     CurrentDrawingShape = drawingShape;
+
                     break;
 
                 case ShapeState.DRAWING:
                     // shape drawing isn't finished
                     // draw shape but do not add it to list
                     CurrentDrawingShape = drawingShape;
+
                     break;
 
                 case ShapeState.FINISHED:
@@ -191,13 +215,18 @@ namespace TikzFix.VM
 
         private void StepDrawing(CanvasEventArgs e)
         {
-            Debug.WriteLine(e.MouseState);
+            CanvasMovable = currentToolIndex == 5 && e.MouseState == MouseState.DOWN;
+            if (CanvasMovable)
+                return;
+            //Debug.WriteLine(e.MouseState);
             HandleDrawingShape(CurrentTool?.GetShape(e, StyleVM.CurrentStyle)); //update shape with event args.
         }
 
         private void UpdateDrawing(CanvasEventArgs e)
         {
-            Debug.WriteLine(e.MouseState);
+            //Debug.WriteLine(e.MouseState);
+            if (CanvasMovable)
+                return;
             HandleDrawingShape(CurrentTool?.GetShape(e, StyleVM.CurrentStyle)); //update shape with event args.
         }
 

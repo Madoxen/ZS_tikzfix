@@ -9,9 +9,10 @@
   <ItemGroup>
     <None Remove="Resources\curve.bmp" />
     <None Remove="Resources\ellipse.bmp" />
+    <None Remove="Resources\hand.bmp" />
     <None Remove="Resources\line.bmp" />
     <None Remove="Resources\rectangle.bmp" />
-    <None Remove="Resources\select.bmp" />
+    <None Remove="Resources\selection.bmp" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,9 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Resources\select.bmp">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
+    <Resource Include="Resources\hand.bmp" />
     <Resource Include="Resources\curve.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
@@ -38,6 +37,7 @@
     <Resource Include="Resources\rectangle.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Resources\selection.bmp" />
   </ItemGroup>
 
   <ItemGroup>

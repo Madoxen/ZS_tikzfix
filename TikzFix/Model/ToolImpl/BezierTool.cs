@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
@@ -111,7 +112,12 @@ namespace TikzFix.Model.ToolImpl
                     current.ShapeState = ShapeState.FINISHED;
                     click = 0;
                     secondPointSelected = thirdPointSelected = false;
+
                 }
+
+                Canvas.SetLeft(current.TikzShape.Shape, 0);
+                Canvas.SetTop(current.TikzShape.Shape, 0);
+
                 return current;
             }
             else

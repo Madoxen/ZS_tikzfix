@@ -125,7 +125,17 @@
                         <sys:Int32>4</sys:Int32>
                     </Button.CommandParameter>
                     <Image
-                        Source="/Resources/select.bmp" />
+                        Source="/Resources/selection.bmp" />
+                </Button>
+
+                <Button
+                    Command="{Binding ChangeToolCommand}"
+                    ToolTip="Move">
+                    <Button.CommandParameter>
+                        <sys:Int32>5</sys:Int32>
+                    </Button.CommandParameter>
+                    <Image
+                        Source="/Resources/hand.bmp" />
                 </Button>
             </ToolBar>
             <ToolBar>
@@ -146,6 +156,7 @@
             Shapes="{Binding Shapes, Mode=OneWay}"
             Background="Transparent"
             CanvasSelectable="{Binding CanvasSelectable}"
+            CanvasMovable="{Binding CanvasMovable}"
             SelectedShapes="{Binding SelectedShapes}"
             Grid.Row="2">
 
