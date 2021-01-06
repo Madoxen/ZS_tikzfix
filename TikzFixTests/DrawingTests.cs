@@ -8,7 +8,7 @@ namespace TikzFix.Tests
 
     using System.Windows.Media;
     using System.Windows.Shapes;
-
+    using TikzFix.Model.Shapes;
     using TikzFix.Model.Styling;
     using TikzFix.Model.Tool;
     using TikzFix.Model.ToolImpl;
@@ -55,7 +55,7 @@ namespace TikzFix.Tests
             CurrentTool.GetShape(new CanvasEventArgs(new Point(30, 30), MouseState.MOVE), style);
 
             // user release mouse
-            Line l = (Line)CurrentTool.GetShape(new CanvasEventArgs(new Point(50, 50), MouseState.UP), style).TikzShape.Shape;
+            ArrowLine l = (ArrowLine)CurrentTool.GetShape(new CanvasEventArgs(new Point(50, 50), MouseState.UP), style).TikzShape.Shape;
 
             Assert.AreEqual(1, l.X1);
             Assert.AreEqual(50, l.X2);
@@ -100,8 +100,8 @@ namespace TikzFix.Tests
             Ellipse e = (Ellipse)CurrentTool.GetShape(new CanvasEventArgs(new Point(0, 25), MouseState.UP), style).TikzShape.Shape;
 
 
-            Assert.AreEqual(50, e.Width);
-            Assert.AreEqual(25, e.Height);
+            Assert.AreEqual(100, e.Width);
+            Assert.AreEqual(50, e.Height);
         }
     }
 }
