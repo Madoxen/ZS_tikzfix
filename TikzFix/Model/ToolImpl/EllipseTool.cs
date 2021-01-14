@@ -30,12 +30,37 @@ namespace TikzFix.Model.ToolImpl
             }
             else
             {
-                current.TikzShape.Shape.Width = Math.Abs(firstPoint.X - canvasEventArgs.Point.X) * 2;
-                current.TikzShape.Shape.Height = Math.Abs(firstPoint.Y - canvasEventArgs.Point.Y) * 2;
+                double x = Math.Min(canvasEventArgs.Point.X, firstPoint.X);
+                double y = Math.Min(canvasEventArgs.Point.Y, firstPoint.Y);
 
-                current.TikzShape.Shape.Margin = ShapeUtils.GetMarginEqual(firstPoint, canvasEventArgs.Point);
-                Canvas.SetLeft(current.TikzShape.Shape, 0);
-                Canvas.SetTop(current.TikzShape.Shape, 0);
+                double w = Math.Max(canvasEventArgs.Point.X, firstPoint.X) - x;
+                double h = Math.Max(canvasEventArgs.Point.Y, firstPoint.Y) - y;
+
+                if (canvasEventArgs.ModKey)
+                {
+                    if (canvasEventArgs.Point.X > firstPoint.X)
+                    {
+                        w = h;
+                    }
+                    else if (canvasEventArgs.Point.Y > firstPoint.Y)
+                    {
+                        h = w;
+                    }
+                    else
+                    {
+                        var b = Math.Min(firstPoint.X - canvasEventArgs.Point.X, firstPoint.Y - canvasEventArgs.Point.Y);
+                        w = b;
+                        h = b;
+                        x = firstPoint.X - b;
+                        y = firstPoint.Y - b;
+                    }
+                }
+
+                Canvas.SetLeft(current.TikzShape.Shape, x);
+                Canvas.SetTop(current.TikzShape.Shape, y);
+
+                current.TikzShape.Shape.Width = w;
+                current.TikzShape.Shape.Height = h;
 
                 if (canvasEventArgs.MouseState == MouseState.UP)
                 {

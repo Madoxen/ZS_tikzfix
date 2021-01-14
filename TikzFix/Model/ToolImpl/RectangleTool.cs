@@ -60,10 +60,6 @@ namespace TikzFix.Model.ToolImpl
                 current.TikzShape.Shape.Width = w;
                 current.TikzShape.Shape.Height = h;
 
-                Debug.WriteLine(
-                "| X: " + Canvas.GetLeft(current.TikzShape.Shape) + "| Y: "+ 
-                Canvas.GetTop(current.TikzShape.Shape) + "| W: " + current.TikzShape.Shape.Width + "| H: " + current.TikzShape.Shape.Height + "| CEAX: " + canvasEventArgs.Point.X + "| CEAY: " + canvasEventArgs.Point.Y + "| FPX " + firstPoint.X + "| FPY: " + firstPoint.Y);
-
                 if (canvasEventArgs.MouseState == MouseState.UP)
                 {
                     current.ShapeState = ShapeState.FINISHED;
