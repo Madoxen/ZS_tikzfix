@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
@@ -15,12 +16,12 @@ namespace TikzFix.Model.ToolImpl
         private Point firstPoint;
         private DrawingShape current;
 
+
         public DrawingShape GetShape(CanvasEventArgs canvasEventArgs, TikzStyle style)
         {
             if (canvasEventArgs.MouseState == MouseState.DOWN)
             {
                 firstPoint = canvasEventArgs.Point;
-
                 var line = new ArrowLine
                 {
                     X1 = firstPoint.X,
@@ -31,7 +32,7 @@ namespace TikzFix.Model.ToolImpl
 
                 line.SetStyle(style);
                 current = new DrawingShape(new TikzLine(line, style), ShapeState.START);
-               
+
             }
             else
             {
@@ -42,6 +43,39 @@ namespace TikzFix.Model.ToolImpl
 
                 l.X2 = canvasEventArgs.Point.X;
                 l.Y2 = canvasEventArgs.Point.Y;
+
+                if (canvasEventArgs.ModKey)
+                {
+                    //Snap mode, from start to one of axis contraints
+                    //Axis constraints are divided by 45deg angles
+
+                    //Get angle between start point and mouse pointer
+                    //origin Axis X 
+                    double angle = Math.Atan2(l.Y2 - l.Y1, l.X2 - l.X1); //rads
+
+                    //Determine constraint axis based on angle between X axis and current line
+                    //22.5 -> pi/8
+
+                    //X AXIS -> 0
+                    //45 -> PI/4
+                    //90 -> PI/2
+                    //135 -> PI/2 + PI/4 = 3PI/4
+                    //180 -> PI
+                    //180 -> -PI
+                    //225 -> -3PI/4
+                    //270 -> -PI/2
+                    //360 -> 0 
+
+                    double snapAngle = Math.Ceiling(angle / (Math.PI / 8.0)) * (Math.PI / 8.0);
+                    //calculate new points based on snapAngle
+
+                    double maxDim = Math.Max(Math.Abs(l.X2 - l.X1), Math.Abs(l.Y2 - l.Y1));
+                    l.X2 = l.X1 + Math.Cos(snapAngle) * maxDim;
+                    l.Y2 = l.Y1 + Math.Sin(snapAngle) * maxDim;
+                }
+
+
+
 
                 if (canvasEventArgs.MouseState == MouseState.UP)
                 {
@@ -62,3 +96,4 @@ namespace TikzFix.Model.ToolImpl
         }
     }
 }
+

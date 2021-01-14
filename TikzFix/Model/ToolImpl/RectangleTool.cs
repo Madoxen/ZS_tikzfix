@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
+
 using TikzFix.Model.Styling;
 using TikzFix.Model.TikzShapes;
 using TikzFix.Model.Tool;
@@ -26,12 +28,38 @@ namespace TikzFix.Model.ToolImpl
             }
             else
             {
-                current.TikzShape.Shape.Width = Math.Abs(firstPoint.X - canvasEventArgs.Point.X);
-                current.TikzShape.Shape.Height = Math.Abs(firstPoint.Y - canvasEventArgs.Point.Y);
+                double x = Math.Min(canvasEventArgs.Point.X, firstPoint.X);
+                double y = Math.Min(canvasEventArgs.Point.Y, firstPoint.Y);
 
-                current.TikzShape.Shape.Margin = ShapeUtils.GetMarginLower(firstPoint, canvasEventArgs.Point);
-                Canvas.SetLeft(current.TikzShape.Shape, 0);
-                Canvas.SetTop(current.TikzShape.Shape, 0);
+                double w = Math.Max(canvasEventArgs.Point.X, firstPoint.X) - x;
+                double h = Math.Max(canvasEventArgs.Point.Y, firstPoint.Y) - y;
+
+                if (canvasEventArgs.ModKey)
+                {
+                    if (canvasEventArgs.Point.X > firstPoint.X)
+                    {
+                        w = h;
+                    }
+                    else if (canvasEventArgs.Point.Y > firstPoint.Y)
+                    {
+                        h = w;
+                    }
+                    else
+                    {
+                        var b = Math.Min(firstPoint.X - canvasEventArgs.Point.X, firstPoint.Y - canvasEventArgs.Point.Y);
+                        w = b;
+                        h = b;
+                        x = firstPoint.X - b;
+                        y = firstPoint.Y - b;
+                    }
+                }
+
+                Canvas.SetLeft(current.TikzShape.Shape, x);
+                Canvas.SetTop(current.TikzShape.Shape, y);
+
+                current.TikzShape.Shape.Width = w;
+                current.TikzShape.Shape.Height = h;
+
                 if (canvasEventArgs.MouseState == MouseState.UP)
                 {
                     current.ShapeState = ShapeState.FINISHED;

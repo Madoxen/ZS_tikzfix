@@ -100,8 +100,8 @@ namespace TikzFix.Tests
             Ellipse e = (Ellipse)CurrentTool.GetShape(new CanvasEventArgs(new Point(0, 25), MouseState.UP), style).TikzShape.Shape;
 
 
-            Assert.AreEqual(100, e.Width);
-            Assert.AreEqual(50, e.Height);
+            Assert.AreEqual(50, e.Width);
+            Assert.AreEqual(25, e.Height);
         }
     }
 }
