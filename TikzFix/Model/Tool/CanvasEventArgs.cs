@@ -1,20 +1,14 @@
 ﻿namespace TikzFix.Model.Tool
 {
-    class CanvasEventArgs
+    public class CanvasEventArgs
     {
-        public CanvasEventArgs(int x, int y, MouseState mouseState)
+        public CanvasEventArgs(Point point, MouseState mouseState)
         {
-            X = x;
-            Y = y;
+            Point = point;
             MouseState = mouseState;
         }
 
-        public int X
-        {
-            get;
-        }
-
-        public int Y
+        public Point Point
         {
             get;
         }
@@ -26,7 +20,7 @@
 
         public override string ToString()
         {
-            return $"X: {X}. Y: {Y}. {MouseState}";
+            return $"Point {Point}. {MouseState}";
         }
     }
 }

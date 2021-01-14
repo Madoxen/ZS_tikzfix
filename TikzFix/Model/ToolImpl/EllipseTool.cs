@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
+
+using TikzFix.Model.Styling;
+using TikzFix.Model.TikzShapes;
 using TikzFix.Model.Tool;
 using TikzFix.Utils;
 
@@ -8,61 +12,47 @@ namespace TikzFix.Model.ToolImpl
 {
     internal class EllipseTool : ITool
     {
-        private const int DEF_STROKE_THICKNESS = 2;
-
-        public SolidColorBrush StrokeColor
-        {
-            get; set;
-        } = Brushes.Black;
-
-
-        private int x1, y1;
+        private Point firstPoint;
         private DrawingShape current;
 
-
-
-        public DrawingShape GetShape(CanvasEventArgs canvasEventArgs)
+        public DrawingShape GetShape(CanvasEventArgs canvasEventArgs, TikzStyle style)
         {
             if (canvasEventArgs.MouseState == MouseState.DOWN)
             {
-                current = new DrawingShape(
-                new Ellipse
+                Ellipse ellipse = new Ellipse
                 {
-                    Stroke = StrokeColor,
-                    StrokeThickness = DEF_STROKE_THICKNESS,
-                },
-                ShapeState.START
-            );
+                    StrokeThickness = style.LineWidth.GetLineWidth(),
+                };
 
-                x1 = canvasEventArgs.X;
-                y1 = canvasEventArgs.Y;
+                ellipse.SetStyle(style);
+                current = new DrawingShape(new TikzEllipse(ellipse, style), ShapeState.START);
+                firstPoint = canvasEventArgs.Point;
             }
             else
             {
-                UpdateCurrent(canvasEventArgs);
+                current.TikzShape.Shape.Width = Math.Abs(firstPoint.X - canvasEventArgs.Point.X) * 2;
+                current.TikzShape.Shape.Height = Math.Abs(firstPoint.Y - canvasEventArgs.Point.Y) * 2;
+
+                current.TikzShape.Shape.Margin = ShapeUtils.GetMarginEqual(firstPoint, canvasEventArgs.Point);
+                Canvas.SetLeft(current.TikzShape.Shape, 0);
+                Canvas.SetTop(current.TikzShape.Shape, 0);
+
+                if (canvasEventArgs.MouseState == MouseState.UP)
+                {
+                    current.ShapeState = ShapeState.FINISHED;
+                }
+                else if (canvasEventArgs.MouseState == MouseState.MOVE)
+                {
+                    current.ShapeState = ShapeState.DRAWING;
+                }
             }
             return current;
         }
 
-
-        private void UpdateCurrent(CanvasEventArgs canvasEventArgs)
+        public void Reset()
         {
-            current.Shape.Width = Math.Abs(x1 - canvasEventArgs.X) * 2;
-            current.Shape.Height = Math.Abs(y1 - canvasEventArgs.Y) * 2;
-
-            current.Shape.Margin = ShapeUtils.GetMargin(
-                x1 - Math.Abs(x1 - canvasEventArgs.X),
-                y1 - Math.Abs(y1 - canvasEventArgs.Y)
-            );
-
-            if (canvasEventArgs.MouseState == MouseState.UP)
-            {
-                current.ShapeState = ShapeState.FINISHED;
-            }
-            else if (canvasEventArgs.MouseState == MouseState.MOVE)
-            {
-                current.ShapeState = ShapeState.DRAWING;
-            }
+            firstPoint = null;
+            current = null;
         }
     }
 }

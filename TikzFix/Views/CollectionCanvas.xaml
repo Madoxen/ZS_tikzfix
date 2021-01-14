@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Canvas x:Name="c" MouseDown="HandleSelectionBegin" MouseUp="HandleSelectionEnded" MouseMove="HandleSelectionMoved" Background="White">
-        
+
     </Canvas>
     
 </UserControl>

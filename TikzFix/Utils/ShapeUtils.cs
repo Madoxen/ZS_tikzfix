@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Media;
 using System.Windows.Shapes;
+
+using TikzFix.Model.Styling;
 
 namespace TikzFix.Utils
 {
@@ -11,16 +14,35 @@ namespace TikzFix.Utils
             return new Thickness(left, top, 0, 0);
         }
 
-        public static string MapShapeWithTool(this Shape shape)
+        public static Thickness GetMarginEqual(Model.Tool.Point first, Model.Tool.Point second)
         {
-            if (shape is Line)
-                return "LineTool";
-            else if (shape is Ellipse)
-                return "EllipseTool";
-            else if (shape is Rectangle)
-                return "RectangleTool";
+            return GetMargin(
+                    first.X - Math.Abs(first.X - second.X),
+                    first.Y - Math.Abs(first.Y - second.Y)
+                );
+        }
 
-            throw new Exception("Unsuported shape type. Currently suppoerted: [Line, Ellipse, Rectangle]");
+        public static Thickness GetMarginLower(Model.Tool.Point first, Model.Tool.Point second)
+        {
+            return GetMargin(
+                    Math.Min(first.X, second.X),
+                    Math.Min(first.Y, second.Y)
+                );
+        }
+
+
+        public static void SetStyle(this Shape s, TikzStyle style)
+        {
+            s.Stroke = new SolidColorBrush(style.StrokeColor);
+            s.Fill = new SolidColorBrush(style.FillColor);
+            s.StrokeThickness = style.LineWidth.GetLineWidth();
+            s.StrokeDashArray = style.LineType.GetDashArray();
+            s.StrokeStartLineCap = style.LineEnding.GetLineCaps()[0];
+            s.StrokeEndLineCap = style.LineEnding.GetLineCaps()[1];
+            s.StrokeDashCap = style.LineEnding.GetLineCaps()[2];
+
+
+            
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json;
-using System.Windows.Shapes;
-
+using TikzFix.Model.TikzShapes;
 using TikzFix.Model.Tool;
 using TikzFix.Model.ToolImpl;
 
@@ -19,17 +18,19 @@ namespace TikzFix.Model.FormatLoader
         {
             toolNameToolMap = new Dictionary<string, ITool>()
             {
-                ["LineTool"] = new LineTool(),
-                ["RectangleTool"] = new RectangleTool(),
-                ["EllipseTool"] = new EllipseTool(),
+                [ITool.LINE_TOOL_NAME] = new LineTool(),
+                [ITool.RECTANGLE_TOOL_NAME] = new RectangleTool(),
+                [ITool.ELLIPSE_TOOL_NAME] = new EllipseTool(),
+                [ITool.BEZIER_TOOL_NAME] = new BezierTool(),
             };
         }
 
 
-        public ICollection<Shape> ConvertMany(string data)
+        public ICollection<TikzShape> ConvertMany(string data)
         {
             List<LocalShapeData> canvasShapesData = JsonSerializer.Deserialize<List<LocalShapeData>>(data);
-            List<Shape> shapes = new List<Shape>(canvasShapesData.Count);
+            List<TikzShape> shapes = new List<TikzShape>();
+
             ITool currentTool;
 
             foreach (LocalShapeData shapeData in canvasShapesData)
@@ -38,11 +39,11 @@ namespace TikzFix.Model.FormatLoader
 
                 foreach (CanvasEventArgs canvasEventArgs in shapeData.KeyPoints)
                 {
-                    DrawingShape r = currentTool.GetShape(canvasEventArgs);
+                    DrawingShape r = currentTool.GetShape(canvasEventArgs, shapeData.Style);
 
                     if (r.ShapeState == ShapeState.FINISHED)
                     {
-                        shapes.Add(r.Shape);
+                        shapes.Add(r.TikzShape);
                     }
                 }
             }

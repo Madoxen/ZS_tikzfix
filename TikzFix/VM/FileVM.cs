@@ -12,7 +12,7 @@ using System.Windows.Shapes;
 
 using TikzFix.Model.FormatGenerator;
 using TikzFix.Model.FormatLoader;
-using TikzFix.Model.Tool;
+using TikzFix.Model.TikzShapes;
 
 namespace TikzFix.VM
 {
@@ -39,7 +39,7 @@ namespace TikzFix.VM
         };
 
         private int currentFormatGeneratorIndex = 0;
-        public IFormatGenerator currentFormatGenerator => currentFormatGeneratorIndex >= 0 ? formatGenerators[currentFormatGeneratorIndex] : null;
+        public IFormatGenerator CurrentFormatGenerator => currentFormatGeneratorIndex >= 0 ? formatGenerators[currentFormatGeneratorIndex] : null;
 
 
         private readonly List<IFormatLoader> formatLoaders = new List<IFormatLoader>()
@@ -48,14 +48,20 @@ namespace TikzFix.VM
         };
 
         private int currentFormatLoaderIndex = 0;
-        public IFormatLoader currentFormatLoader => currentFormatLoaderIndex >= 0 ? formatLoaders[currentFormatLoaderIndex] : null;
+        public IFormatLoader CurrentFormatLoader => currentFormatLoaderIndex >= 0 ? formatLoaders[currentFormatLoaderIndex] : null;
 
 
-        private ICollection<Shape> shapes;
-        public ICollection<Shape> Shapes
+        private ICollection<TikzShape> shapes;
+        public ICollection<TikzShape> Shapes
         {
-            get { return shapes; }
-            set { SetProperty(ref shapes, value); }
+            get
+            {
+                return shapes;
+            }
+            set
+            {
+                SetProperty(ref shapes, value);
+            }
         }
 
         public RelayCommand<int> SaveCommand
@@ -71,8 +77,14 @@ namespace TikzFix.VM
 
         private void OpenSave(int formatGeneratorIndex)
         {
+            String fileExtFilter = formatGeneratorIndex switch
+            {
+                1 => "Tikzfix drawing file | *.tikzfix",
+                0 => "JSON file | *.json"
+            };
             currentFormatGeneratorIndex = formatGeneratorIndex;
             SaveFileDialog dialog = new SaveFileDialog(); //this will make that method untestable
+            dialog.Filter = fileExtFilter;
             bool? result = dialog.ShowDialog(); //this will block the thread until dialog is closed 
 
             // Get the selected file name
@@ -85,18 +97,19 @@ namespace TikzFix.VM
         private void OpenLoad()
         {
             OpenFileDialog dialog = new OpenFileDialog(); //this will make that method untestable
+            dialog.Filter = "JSON file | *.json";
             bool? result = dialog.ShowDialog(); //this will block the thread until dialog is closed 
-
+            
             // Get the selected file name
             if (result == true)
             {
-                Load(dialog.FileName);
+                Load(dialog.FileName); 
             }
         }
 
         private void Save(string fileName)
         {
-            string dataString = currentFormatGenerator.ConvertMany(Shapes);
+            string dataString = CurrentFormatGenerator.ConvertMany(Shapes);
             File.WriteAllText(fileName, dataString);
         }
 
@@ -104,10 +117,11 @@ namespace TikzFix.VM
         {
             string dataString = File.ReadAllText(fileName);
             shapes.Clear();
-            foreach (Shape s in currentFormatLoader.ConvertMany(dataString))
+            foreach (TikzShape s in CurrentFormatLoader.ConvertMany(dataString))
             {
                 shapes.Add(s);
             }
         }
     }
+
 }

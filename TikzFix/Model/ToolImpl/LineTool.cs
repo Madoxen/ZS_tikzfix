@@ -2,50 +2,46 @@
 using System.Windows.Media;
 using System.Windows.Shapes;
 
+using TikzFix.Model.Shapes;
+using TikzFix.Model.Styling;
+using TikzFix.Model.TikzShapes;
 using TikzFix.Model.Tool;
+using TikzFix.Utils;
 
 namespace TikzFix.Model.ToolImpl
 {
     internal class LineTool : ITool
     {
-        private const int DEF_STROKE_THICKNESS = 2;
-
-        public SolidColorBrush StrokeColor
-        {
-            get; set;
-        } = Brushes.Black;
-
-
-        private int x1, y1;
+        private Point firstPoint;
         private DrawingShape current;
 
-        public DrawingShape GetShape(CanvasEventArgs canvasEventArgs)
+        public DrawingShape GetShape(CanvasEventArgs canvasEventArgs, TikzStyle style)
         {
             if (canvasEventArgs.MouseState == MouseState.DOWN)
             {
-                x1 = canvasEventArgs.X;
-                y1 = canvasEventArgs.Y;
+                firstPoint = canvasEventArgs.Point;
 
-                current = new DrawingShape(
-                new Line
+                var line = new ArrowLine
                 {
-                    Stroke = StrokeColor,
-                    X1 = x1,
-                    X2 = x1,
-                    Y1 = y1,
-                    Y2 = y1,
-                    StrokeThickness = DEF_STROKE_THICKNESS
-                }, ShapeState.START);
+                    X1 = firstPoint.X,
+                    X2 = firstPoint.X,
+                    Y1 = firstPoint.Y,
+                    Y2 = firstPoint.Y,
+                };
+
+                line.SetStyle(style);
+                current = new DrawingShape(new TikzLine(line, style), ShapeState.START);
+               
             }
             else
             {
-                if (current.Shape is not Line l)
+                if (current.TikzShape.Shape is not ArrowLine l)
                 {
                     throw new Exception("Shape-Tool type mismatch, tool type: LineTool, expected shape type Line");
                 }
 
-                l.X2 = canvasEventArgs.X;
-                l.Y2 = canvasEventArgs.Y;
+                l.X2 = canvasEventArgs.Point.X;
+                l.Y2 = canvasEventArgs.Point.Y;
 
                 if (canvasEventArgs.MouseState == MouseState.UP)
                 {
@@ -56,9 +52,13 @@ namespace TikzFix.Model.ToolImpl
                     current.ShapeState = ShapeState.DRAWING;
                 }
             }
-
             return current;
         }
 
+        public void Reset()
+        {
+            current = null;
+            firstPoint = null;
+        }
     }
 }

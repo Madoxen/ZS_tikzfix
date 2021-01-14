@@ -8,8 +8,9 @@
     xmlns:local="clr-namespace:TikzFix"
     xmlns:views="clr-namespace:TikzFix.Views"
     xmlns:vm="clr-namespace:TikzFix.VM"
+    xmlns:models_styles="clr-namespace:TikzFix.Model.Styling"
     xmlns:resx="clr-namespace:TikzFix.Properties"
-    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" xmlns:shapes="clr-namespace:TikzFix.Model.Shapes"
     mc:Ignorable="d"
     Title="TikZFix"
     Height="450"
@@ -106,7 +107,46 @@
                     <Image
                         Source="/Resources/ellipse.bmp" />
                 </Button>
-                <Button></Button>
+                <Button
+                    Command="{Binding ChangeToolCommand}"
+                    ToolTip="Bezier Curve">
+                    <Button.CommandParameter>
+                        <sys:Int32>3</sys:Int32>
+                    </Button.CommandParameter>
+
+                    <Image
+                        Source="/Resources/curve.bmp" />
+                </Button>
+
+                <Button
+                    Command="{Binding ChangeToolCommand}"
+                    ToolTip="Select">
+                    <Button.CommandParameter>
+                        <sys:Int32>4</sys:Int32>
+                    </Button.CommandParameter>
+                    <Image
+                        Source="/Resources/selection.bmp" />
+                </Button>
+
+                <Button
+                    Command="{Binding ChangeToolCommand}"
+                    ToolTip="Move">
+                    <Button.CommandParameter>
+                        <sys:Int32>5</sys:Int32>
+                    </Button.CommandParameter>
+                    <Image
+                        Source="/Resources/hand.bmp" />
+                </Button>
+            </ToolBar>
+            <ToolBar>
+                <ToolBar.DataContext>
+                    <vm:StyleVM x:Name="StyleVM" />
+                </ToolBar.DataContext>
+                <ComboBox ItemsSource="{Binding Source={views:EnumBindingSource {x:Type models_styles:LineEnding}}}" SelectedItem="{Binding LineEnding}"/>
+                <ComboBox ItemsSource="{Binding Source={views:EnumBindingSource {x:Type models_styles:LineType}}}" SelectedItem="{Binding LineType}"/>
+                <ComboBox ItemsSource="{Binding Source={views:EnumBindingSource {x:Type models_styles:LineWidth}}}" SelectedItem="{Binding LineWidth}"/>
+                <xctk:ColorPicker SelectedColor="{Binding StrokeColor}"></xctk:ColorPicker>
+                <xctk:ColorPicker SelectedColor="{Binding FillColor}"></xctk:ColorPicker>
             </ToolBar>
         </ToolBarTray>
 
@@ -116,8 +156,10 @@
             Shapes="{Binding Shapes, Mode=OneWay}"
             Background="Transparent"
             CanvasSelectable="{Binding CanvasSelectable}"
+            CanvasMovable="{Binding CanvasMovable}"
             SelectedShapes="{Binding SelectedShapes}"
             Grid.Row="2">
+
             <b:Interaction.Triggers>
                 <b:EventTrigger
                     EventName="MouseLeftButtonDown">
@@ -139,6 +181,7 @@
                         Command="{Binding UpdateDrawingCommand}"
                         EventArgsConverter="{StaticResource MouseEventConverter}"></b:InvokeCommandAction>
                 </b:EventTrigger>
+                
 
                 <b:KeyTrigger
                     Key="Delete">
@@ -150,16 +193,10 @@
                     Key="Esc">
                     <b:InvokeCommandAction
                         Command="{Binding CancelSelectionCommand}"></b:InvokeCommandAction>
-                    <b:InvokeCommandAction
-                        Command="{Binding ChangeToolCommand}">
-                        <b:InvokeCommandAction.CommandParameter>
-                            <sys:Int32>-1</sys:Int32>
-                        </b:InvokeCommandAction.CommandParameter>
-                    </b:InvokeCommandAction>
                 </b:KeyTrigger>
 
             </b:Interaction.Triggers>
         </views:CollectionCanvas>
-
     </Grid>
 </Window>
+    

@@ -1,17 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-
-using System.Windows;
-using System.Diagnostics;
-using System.Windows.Input;
-using System.Windows.Shapes;
 using TikzFix.Model.Tool;
 using TikzFix.Model.ToolImpl;
-using System.Linq;
+using TikzFix.Model.Styling;
+using TikzFix.Model.TikzShapes;
+using System.Windows.Media;
+using System.Windows;
+using System.Windows.Shapes;
 using TikzFix.Utils;
-using System;
-using System.Text.Json;
-using System.IO;
+using System.Diagnostics;
+using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace TikzFix.VM
 {
@@ -26,6 +25,9 @@ namespace TikzFix.VM
         private readonly ITool rectangleTool = new RectangleTool();
         private readonly ITool lineTool = new LineTool();
         private readonly ITool ellipseTool = new EllipseTool();
+        private readonly ITool bezierTool = new BezierTool();
+        private readonly ITool selectionRectTool = new SelectionRectangleTool();
+        private readonly ITool canvasMovingTool = new CanvasMovingTool();
         public readonly List<ITool> Tools = new List<ITool>();
 
 
@@ -39,7 +41,12 @@ namespace TikzFix.VM
             set
             {
                 SetProperty(ref currentToolIndex, value);
-                CanvasSelectable = value < 0;
+                CanvasSelectable = value == 4;
+
+                if (value == 5)
+                    Mouse.OverrideCursor = Cursors.SizeAll;
+                else
+                    Mouse.OverrideCursor = Cursors.Arrow;
             }
         }
 
@@ -48,8 +55,8 @@ namespace TikzFix.VM
         #endregion
 
 
-        private readonly ObservableCollection<Shape> shapes = new ObservableCollection<Shape>();
-        public ICollection<Shape> Shapes
+        private readonly ObservableCollection<TikzShape> shapes = new ObservableCollection<TikzShape>();
+        public ICollection<TikzShape> Shapes
         {
             get
             {
@@ -58,8 +65,8 @@ namespace TikzFix.VM
         }
 
 
-        private ObservableCollection<Shape> selectedShapes = new ObservableCollection<Shape>();
-        public ObservableCollection<Shape> SelectedShapes
+        private ObservableCollection<TikzShape> selectedShapes = new ObservableCollection<TikzShape>();
+        public ObservableCollection<TikzShape> SelectedShapes
         {
             get
             {
@@ -84,8 +91,20 @@ namespace TikzFix.VM
             }
         }
 
+        private bool canvasMovable = false;
+        public bool CanvasMovable
+        {
+            get
+            {
+                return canvasMovable;
+            }
+            set
+            {
+                SetProperty(ref canvasMovable, value);
+            }
+        }
 
-        // TODO, observe this in canvas and draw (it can be null)
+
         private DrawingShape currentDrawingShape;
         public DrawingShape CurrentDrawingShape
         {
@@ -94,10 +113,10 @@ namespace TikzFix.VM
             {
                 if (value != currentDrawingShape)
                 {
-                    Shapes.Remove(currentDrawingShape?.Shape); // remove shape to stop drawing it
+                    Shapes.Remove(currentDrawingShape?.TikzShape); // remove shape to stop drawing it
                     if (value != null)
                     {
-                        Shapes.Add(value.Shape); // remove shape to stop drawing it
+                        Shapes.Add(value.TikzShape); // remove shape to stop drawing it
                     }
                 }
                 SetProperty(ref currentDrawingShape, value);
@@ -142,29 +161,27 @@ namespace TikzFix.VM
         }
 
 
-
-
         public MainVM()
         {
             Tools.Add(lineTool);
             Tools.Add(rectangleTool);
             Tools.Add(ellipseTool);
+            Tools.Add(bezierTool);
+            Tools.Add(selectionRectTool);
+            Tools.Add(canvasMovingTool);
 
+            CurrentToolIndex = 0;
 
-            CurrentToolIndex = -1;
-
-            CancelDrawingCommand = new RelayCommand(CancelDrawing);
             StepDrawingCommand = new RelayCommand<CanvasEventArgs>(StepDrawing);
             UpdateDrawingCommand = new RelayCommand<CanvasEventArgs>(UpdateDrawing, CanUpdateDrawing);
             ChangeToolCommand = new RelayCommand<int>(ChangeTool);
 
-
             DeleteSelectionCommand = new RelayCommand(DeleteSelection);
             CancelSelectionCommand = new RelayCommand(CancelSelection);
-
         }
 
         #region Drawing
+
         private void HandleDrawingShape(DrawingShape drawingShape)
         {
             if (drawingShape == null)
@@ -176,69 +193,75 @@ namespace TikzFix.VM
                     // do nothing, ShapeCannot be drawn yet
                     // CurrentDrawingShape = null;
                     CurrentDrawingShape = drawingShape;
+
                     break;
 
                 case ShapeState.DRAWING:
                     // shape drawing isn't finished
                     // draw shape but do not add it to list
                     CurrentDrawingShape = drawingShape;
+
                     break;
 
                 case ShapeState.FINISHED:
                     // drawing shape is finished, add to list
                     CurrentDrawingShape = null;
-                    Shapes.Add(drawingShape.Shape);
+                    if (!drawingShape.RemoveOnFinish)
+                        Shapes.Add(drawingShape.TikzShape);
                     break;
             }
         }
 
 
-        private void CancelDrawing()
-        {
-            CurrentDrawingShape = null;
-        }
-
         private void StepDrawing(CanvasEventArgs e)
         {
-            HandleDrawingShape(CurrentTool?.GetShape(e)); //update shape with event args.
+            CanvasMovable = currentToolIndex == 5 && e.MouseState == MouseState.DOWN;
+            if (CanvasMovable)
+                return;
+            //Debug.WriteLine(e.MouseState);
+            HandleDrawingShape(CurrentTool?.GetShape(e, StyleVM.CurrentStyle)); //update shape with event args.
         }
 
         private void UpdateDrawing(CanvasEventArgs e)
         {
-            HandleDrawingShape(CurrentTool?.GetShape(e)); //update shape with event args.
+            //Debug.WriteLine(e.MouseState);
+            if (CanvasMovable)
+                return;
+            HandleDrawingShape(CurrentTool?.GetShape(e, StyleVM.CurrentStyle)); //update shape with event args.
         }
 
         private bool CanUpdateDrawing(object _)
         {
-            return CurrentDrawingShape?.Shape != null;
+            return CurrentDrawingShape?.TikzShape != null;
         }
 
         private void ChangeTool(int index)
         {
+            CurrentDrawingShape = null;
+            CurrentTool?.Reset();
             CurrentToolIndex = index;
         }
         #endregion
 
         #region Selection Commands
+
         public void CancelSelection()
         {
             //FIXME: Cannot do .Clear because Clear does not convey information about old items
-            SelectedShapes = new ObservableCollection<Shape>();
+            SelectedShapes = new ObservableCollection<TikzShape>();
         }
 
         public void DeleteSelection()
         {
-            foreach (Shape s in SelectedShapes)
+            foreach (TikzShape s in SelectedShapes)
             {
                 Shapes.Remove(s);
             }
 
             //FIXME: Cannot do .Clear because Clear does not convey information about old items
-            SelectedShapes = new ObservableCollection<Shape>();
+            SelectedShapes = new ObservableCollection<TikzShape>();
         }
 
         #endregion
-
-
     }
 }
