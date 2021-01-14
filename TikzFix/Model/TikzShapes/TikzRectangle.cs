@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows.Controls;
 using System.Windows.Shapes;
 using TikzFix.Model.Styling;
 using TikzFix.Model.Tool;
@@ -32,8 +33,8 @@ namespace TikzFix.Model.TikzShapes
 
             List<CanvasEventArgs> keyPointList = new List<CanvasEventArgs>
             {
-                new CanvasEventArgs(new Point((int)rectangle.Margin.Left,(int)rectangle.Margin.Top), MouseState.DOWN),
-                new CanvasEventArgs(new Point((int)(rectangle.Margin.Left+rectangle.Width), (int)(rectangle.Margin.Top+rectangle.Height)), MouseState.UP)
+                new CanvasEventArgs(new Point((int)Canvas.GetLeft(rectangle),(int)Canvas.GetTop(rectangle)), MouseState.DOWN),
+                new CanvasEventArgs(new Point((int)(Canvas.GetLeft(rectangle)+rectangle.Width), (int)(Canvas.GetTop(rectangle)+rectangle.Height)), MouseState.UP)
             };
 
             return new LocalShapeData(ITool.RECTANGLE_TOOL_NAME, keyPointList, TikzStyle);
@@ -41,7 +42,7 @@ namespace TikzFix.Model.TikzShapes
 
         public override string GenerateTikz()
         {
-            return $"\\filldraw[color={TikzStyle.StrokeColor.GetLaTeXColorString()}, fill={TikzStyle.FillColor.GetLaTeXColorString()}, fill opacity={TikzStyle.FillColor.A / 255.0}, draw opacity={TikzStyle.StrokeColor.A / 255.0}, {TikzStyle.LineWidth.GetLineWidthTikz()},{TikzStyle.LineType.GetLineTypeTikz()}] ({(int)rectangle.Margin.Left},{(int)rectangle.Margin.Top}) rectangle ({(int)(rectangle.Width + rectangle.Margin.Left)},{(int)(rectangle.Height + rectangle.Margin.Top)});";
+            return $"\\filldraw[color={TikzStyle.StrokeColor.GetLaTeXColorString()}, fill={TikzStyle.FillColor.GetLaTeXColorString()}, fill opacity={TikzStyle.FillColor.A / 255.0}, draw opacity={TikzStyle.StrokeColor.A / 255.0}, {TikzStyle.LineWidth.GetLineWidthTikz()},{TikzStyle.LineType.GetLineTypeTikz()}] ({(int)Canvas.GetLeft(rectangle)},{(int)Canvas.GetTop(rectangle)}) rectangle ({(int)(rectangle.Width + Canvas.GetLeft(rectangle))},{(int)(rectangle.Height + Canvas.GetTop(rectangle))});";
         }
     }
 }
