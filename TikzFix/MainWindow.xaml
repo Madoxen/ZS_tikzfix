@@ -150,7 +150,7 @@
 
                     <TextBlock
                         Margin="4,0,0,0"
-                        Text="Ending" />
+                        Text="{Binding Source={x:Static resx:Resources.ending}}" />
 
                     <ComboBox
                         Margin="0,4,0,0"
@@ -169,7 +169,7 @@
 
                     <TextBlock
                         Margin="4,0,0,0"
-                        Text="Width" />
+                        Text="{Binding Source={x:Static resx:Resources.width}}" />
 
                     <ComboBox
                         Margin="0,4,0,0"
@@ -188,7 +188,7 @@
 
                     <TextBlock
                         Margin="4,0,0,0"
-                        Text="Line type" />
+                        Text="{Binding Source={x:Static resx:Resources.line_type}}" />
 
                     <ComboBox
                         Margin="0,4,0,0"
@@ -207,7 +207,7 @@
 
                     <TextBlock
                         Margin="4,0,0,0"
-                        Text="Stroke color" />
+                        Text="{Binding Source={x:Static resx:Resources.stroke_color}}" />
 
                     <xctk:ColorPicker
                         Margin="0,4,0,0"
@@ -224,7 +224,7 @@
 
                     <TextBlock
                         Margin="4,0,0,0"
-                        Text="Fill color" />
+                        Text="{Binding Source={x:Static resx:Resources.fill_color}}" />
 
                     <xctk:ColorPicker
                         Margin="0,4,0,0"
