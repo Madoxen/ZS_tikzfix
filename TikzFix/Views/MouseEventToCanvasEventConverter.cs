@@ -20,17 +20,18 @@ namespace TikzFix.Views
                 throw new Exception("Wrong value type");
 
             System.Windows.Point p = e.GetPosition((IInputElement)e.Source);
+            var modKey = Keyboard.Modifiers.HasFlag(ModifierKeys.Shift);
 
             if (value is MouseButtonEventArgs b)
-            {
+            {                
                 if (b.LeftButton == MouseButtonState.Pressed)
-                    return new CanvasEventArgs(new Model.Tool.Point(p), MouseState.DOWN);
+                    return new CanvasEventArgs(new Model.Tool.Point(p), MouseState.DOWN, modKey);
 
                 if (b.LeftButton == MouseButtonState.Released)
-                    return new CanvasEventArgs(new Model.Tool.Point(p), MouseState.UP);
+                    return new CanvasEventArgs(new Model.Tool.Point(p), MouseState.UP, modKey);
             }
 
-            return new CanvasEventArgs(new Model.Tool.Point(p), MouseState.MOVE);
+            return new CanvasEventArgs(new Model.Tool.Point(p), MouseState.MOVE, modKey);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

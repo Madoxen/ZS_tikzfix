@@ -2,10 +2,11 @@
 {
     public class CanvasEventArgs
     {
-        public CanvasEventArgs(Point point, MouseState mouseState)
+        public CanvasEventArgs(Point point, MouseState mouseState, bool modKey = false)
         {
             Point = point;
             MouseState = mouseState;
+            ModKey = modKey;
         }
 
         public Point Point
@@ -14,6 +15,11 @@
         }
 
         public MouseState MouseState
+        {
+            get;
+        }
+
+        public bool ModKey
         {
             get;
         }
