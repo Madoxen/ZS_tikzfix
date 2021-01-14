@@ -5,19 +5,19 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
-    xmlns:local="clr-namespace:TikzFix"
     xmlns:views="clr-namespace:TikzFix.Views"
     xmlns:vm="clr-namespace:TikzFix.VM"
-    xmlns:models_styles="clr-namespace:TikzFix.Model.Styling"
     xmlns:resx="clr-namespace:TikzFix.Properties"
-    xmlns:sys="clr-namespace:System;assembly=mscorlib" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" xmlns:shapes="clr-namespace:TikzFix.Model.Shapes"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
     mc:Ignorable="d"
     Title="TikZFix"
     Height="450"
     Width="800">
 
     <Window.DataContext>
-        <vm:MainVM x:Name="MainVM" />
+        <vm:MainVM
+            x:Name="MainVM" />
     </Window.DataContext>
 
     <Window.Resources>
@@ -36,27 +36,26 @@
         <Menu
             Grid.Row="0">
             <Menu.DataContext>
-                <vm:FileVM x:Name="FileVM"/>
+                <vm:FileVM
+                    x:Name="FileVM" />
             </Menu.DataContext>
             <MenuItem
                 Header="{Binding Source={x:Static resx:Resources.menu_file}}">
                 <MenuItem
                     Header="{Binding Source={x:Static resx:Resources.menu_file_saveas}}">
 
-
                     <MenuItem
-                    Header="{Binding Source={x:Static resx:Resources.menu_file_saveas_json}}"
-                    Command="{Binding SaveCommand}" >
+                        Header="{Binding Source={x:Static resx:Resources.menu_file_saveas_json}}"
+                        Command="{Binding SaveCommand}">
 
                         <MenuItem.CommandParameter>
                             <sys:Int32>0</sys:Int32>
                         </MenuItem.CommandParameter>
                     </MenuItem>
 
-
                     <MenuItem
-                    Header="{Binding Source={x:Static resx:Resources.menu_file_saveas_tikz}}"
-                    Command="{Binding SaveCommand}">
+                        Header="{Binding Source={x:Static resx:Resources.menu_file_saveas_tikz}}"
+                        Command="{Binding SaveCommand}">
                         <MenuItem.CommandParameter>
                             <sys:Int32>1</sys:Int32>
                         </MenuItem.CommandParameter>
@@ -140,13 +139,101 @@
             </ToolBar>
             <ToolBar>
                 <ToolBar.DataContext>
-                    <vm:StyleVM x:Name="StyleVM" />
+                    <vm:StyleVM
+                        x:Name="StyleVM" />
                 </ToolBar.DataContext>
-                <ComboBox ItemsSource="{Binding Source={views:EnumBindingSource {x:Type models_styles:LineEnding}}}" SelectedItem="{Binding LineEnding}"/>
-                <ComboBox ItemsSource="{Binding Source={views:EnumBindingSource {x:Type models_styles:LineType}}}" SelectedItem="{Binding LineType}"/>
-                <ComboBox ItemsSource="{Binding Source={views:EnumBindingSource {x:Type models_styles:LineWidth}}}" SelectedItem="{Binding LineWidth}"/>
-                <xctk:ColorPicker SelectedColor="{Binding StrokeColor}"></xctk:ColorPicker>
-                <xctk:ColorPicker SelectedColor="{Binding FillColor}"></xctk:ColorPicker>
+
+                <StackPanel
+                    Margin="4,0,0,0"
+                    Width="60"
+                    Orientation="Vertical">
+
+                    <TextBlock
+                        Margin="4,0,0,0"
+                        Text="Ending" />
+
+                    <ComboBox
+                        Margin="0,4,0,0"
+                        Width="60"
+                        ItemsSource="{Binding Path=LineEnding, Converter={views:EnumToCollectionConverter}, Mode=OneTime}"
+                        SelectedValuePath="Value"
+                        DisplayMemberPath="Description"
+                        SelectedValue="{Binding Path=LineEnding}" />
+
+                </StackPanel>
+
+                <StackPanel
+                    Margin="4,0,0,0"
+                    Width="90"
+                    Orientation="Vertical">
+
+                    <TextBlock
+                        Margin="4,0,0,0"
+                        Text="Width" />
+
+                    <ComboBox
+                        Margin="0,4,0,0"
+                        Width="90"
+                        ItemsSource="{Binding Path=LineWidth, Converter={views:EnumToCollectionConverter}, Mode=OneTime}"
+                        SelectedValuePath="Value"
+                        DisplayMemberPath="Description"
+                        SelectedValue="{Binding Path=LineWidth}" />
+
+                </StackPanel>
+
+                <StackPanel
+                    Margin="4,0,0,0"
+                    Width="95"
+                    Orientation="Vertical">
+
+                    <TextBlock
+                        Margin="4,0,0,0"
+                        Text="Line type" />
+
+                    <ComboBox
+                        Margin="0,4,0,0"
+                        Width="95"
+                        ItemsSource="{Binding Path=LineType, Converter={views:EnumToCollectionConverter}, Mode=OneTime}"
+                        SelectedValuePath="Value"
+                        DisplayMemberPath="Description"
+                        SelectedValue="{Binding Path=LineType}" />
+
+                </StackPanel>
+
+                <StackPanel
+                    Margin="4,0,0,0"
+                    Width="100"
+                    Orientation="Vertical">
+
+                    <TextBlock
+                        Margin="4,0,0,0"
+                        Text="Stroke color" />
+
+                    <xctk:ColorPicker
+                        Margin="0,4,0,0"
+                        Height="25"
+                        Width="100"
+                        SelectedColor="{Binding StrokeColor}" />
+
+                </StackPanel>
+
+                <StackPanel
+                    Margin="4,0,0,0"
+                    Width="100"
+                    Orientation="Vertical">
+
+                    <TextBlock
+                        Margin="4,0,0,0"
+                        Text="Fill color" />
+
+                    <xctk:ColorPicker
+                        Margin="0,4,0,0"
+                        Height="25"
+                        Width="100"
+                        SelectedColor="{Binding FillColor}" />
+
+                </StackPanel>
+
             </ToolBar>
         </ToolBarTray>
 

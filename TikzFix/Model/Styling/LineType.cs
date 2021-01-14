@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Windows.Media;
 
 namespace TikzFix.Model.Styling
@@ -8,6 +9,7 @@ namespace TikzFix.Model.Styling
         SOLID,
         DOTTED,
         DASHED,
+        [Description("Dash dotted")]
         DASHDOTTED
     }
 
