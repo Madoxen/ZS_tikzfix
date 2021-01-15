@@ -35,12 +35,15 @@
 
         <Menu
             Grid.Row="0">
-            <Menu.DataContext>
-                <vm:FileVM
-                    x:Name="FileVM" />
-            </Menu.DataContext>
+
             <MenuItem
                 Header="{Binding Source={x:Static resx:Resources.menu_file}}">
+
+                <MenuItem.DataContext>
+                    <vm:FileVM
+                        x:Name="FileVM" />
+                </MenuItem.DataContext>
+
                 <MenuItem
                     Header="{Binding Source={x:Static resx:Resources.menu_file_saveas}}">
 
@@ -67,9 +70,17 @@
                     Header="{Binding Source={x:Static resx:Resources.menu_file_load}}"
                     Command="{Binding LoadCommand}">
                 </MenuItem>
+
                 <MenuItem
                     Header="{Binding Source={x:Static resx:Resources.menu_file_exit}}"></MenuItem>
             </MenuItem>
+
+            <MenuItem
+                Header="{Binding Source={x:Static resx:Resources.clear}}"
+                Command="{Binding ClearCommand}">
+
+            </MenuItem>
+
         </Menu>
 
         <!--TODO: Automate this ?-->
