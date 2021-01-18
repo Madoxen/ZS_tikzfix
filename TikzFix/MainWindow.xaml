@@ -33,7 +33,7 @@
             <RowDefinition />
         </Grid.RowDefinitions>
 
-        <Menu
+        <Menu Background="#8d8d8d"
             Grid.Row="0">
 
             <MenuItem
@@ -85,8 +85,23 @@
 
         <!--TODO: Automate this ?-->
         <ToolBarTray
-            Grid.Row="1">
+            Grid.Row="1" IsLocked="True" Background="#bdbdbd">
             <ToolBar>
+                <ToolBar.Style>
+                    <Style TargetType="ToolBar">
+                        <!-- Not Dropdown Button -->
+                        <Setter Property="ToolBarTray.IsLocked" Value="True"/>
+                        <!-- Not Overflow Button -->
+                        <Setter Property="OverflowMode" Value="Never"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type ToolBar}">
+                                    <ToolBarPanel IsItemsHost="True" Background="#bdbdbd"/>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ToolBar.Style>
                 <Button
                     Command="{Binding ChangeToolCommand}"
                     ToolTip="Line">
@@ -149,6 +164,21 @@
                 </Button>
             </ToolBar>
             <ToolBar>
+                <ToolBar.Style>
+                    <Style TargetType="ToolBar">
+                        <!-- Not Dropdown Button -->
+                        <Setter Property="ToolBarTray.IsLocked" Value="True"/>
+                        <!-- Not Overflow Button -->
+                        <Setter Property="OverflowMode" Value="Never"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type ToolBar}">
+                                    <ToolBarPanel IsItemsHost="True" Background="#bdbdbd"/>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ToolBar.Style>
                 <ToolBar.DataContext>
                     <vm:StyleVM
                         x:Name="StyleVM" />

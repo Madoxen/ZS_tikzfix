@@ -25,7 +25,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Resources\hand.bmp" />
+    <Resource Include="Resources\hand.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\curve.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
@@ -38,7 +40,9 @@
     <Resource Include="Resources\rectangle.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\selection.bmp" />
+    <Resource Include="Resources\selection.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
   <ItemGroup>
