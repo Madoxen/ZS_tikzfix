@@ -61,6 +61,42 @@ namespace TikzFix.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Clear.
+        /// </summary>
+        public static string clear {
+            get {
+                return ResourceManager.GetString("clear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ending.
+        /// </summary>
+        public static string ending {
+            get {
+                return ResourceManager.GetString("ending", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fill color.
+        /// </summary>
+        public static string fill_color {
+            get {
+                return ResourceManager.GetString("fill_color", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Line type.
+        /// </summary>
+        public static string line_type {
+            get {
+                return ResourceManager.GetString("line_type", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to File.
         /// </summary>
         public static string menu_file {
@@ -120,6 +156,24 @@ namespace TikzFix.Properties {
         public static string menu_file_saveas_tikz {
             get {
                 return ResourceManager.GetString("menu_file_saveas_tikz", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stroke color.
+        /// </summary>
+        public static string stroke_color {
+            get {
+                return ResourceManager.GetString("stroke_color", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Width.
+        /// </summary>
+        public static string width {
+            get {
+                return ResourceManager.GetString("width", resourceCulture);
             }
         }
     }

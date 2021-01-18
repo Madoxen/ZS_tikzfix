@@ -2,14 +2,8 @@
 using System.Collections.ObjectModel;
 using TikzFix.Model.Tool;
 using TikzFix.Model.ToolImpl;
-using TikzFix.Model.Styling;
 using TikzFix.Model.TikzShapes;
-using System.Windows.Media;
-using System.Windows;
-using System.Windows.Shapes;
-using TikzFix.Utils;
 using System.Diagnostics;
-using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace TikzFix.VM
@@ -56,13 +50,7 @@ namespace TikzFix.VM
 
 
         private readonly ObservableCollection<TikzShape> shapes = new ObservableCollection<TikzShape>();
-        public ICollection<TikzShape> Shapes
-        {
-            get
-            {
-                return shapes;
-            }
-        }
+        public ICollection<TikzShape> Shapes => shapes;
 
 
         private ObservableCollection<TikzShape> selectedShapes = new ObservableCollection<TikzShape>();
@@ -160,6 +148,10 @@ namespace TikzFix.VM
             get;
         }
 
+        public RelayCommand ClearCommand
+        {
+            get;
+        }
 
         public MainVM()
         {
@@ -178,9 +170,21 @@ namespace TikzFix.VM
 
             DeleteSelectionCommand = new RelayCommand(DeleteSelection);
             CancelSelectionCommand = new RelayCommand(CancelSelection);
+
+            ClearCommand = new RelayCommand(Clear);
         }
 
         #region Drawing
+
+        private void Clear()
+        {
+            Debug.WriteLine("Clear shapes");
+            CurrentDrawingShape = null;
+            CurrentTool?.Reset();
+            CancelSelection();
+
+            Shapes.Clear();
+        }
 
         private void HandleDrawingShape(DrawingShape drawingShape)
         {

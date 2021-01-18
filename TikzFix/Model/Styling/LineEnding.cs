@@ -1,10 +1,12 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Windows.Media;
 
 namespace TikzFix.Model.Styling
 {
     public enum LineEnding
     {
+        [Description("None")] // This doesn't have to be used when enum name is the same as we want in app. If we want to add localization `EnumHelper.Desrtption` has to be changed
         NONE,
         START,
         END,
@@ -15,6 +17,8 @@ namespace TikzFix.Model.Styling
     {
         public static string GetLineEndingTikz(this LineEnding lineEnding)
         {
+
+
             return lineEnding switch
             {
                 LineEnding.NONE => "-",
