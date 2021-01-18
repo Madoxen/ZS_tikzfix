@@ -42,7 +42,7 @@ namespace TikzFix.Model.TikzShapes
 
         public override string GenerateTikz()
         {
-            return $"\\filldraw[color={TikzStyle.StrokeColor.GetLaTeXColorString()}, fill={TikzStyle.FillColor.GetLaTeXColorString()}, fill opacity={TikzStyle.FillColor.A / 255.0}, draw opacity={TikzStyle.StrokeColor.A / 255.0}, {TikzStyle.LineWidth.GetLineWidthTikz()},{TikzStyle.LineType.GetLineTypeTikz()}] ({(int)Canvas.GetLeft(rectangle)},{(int)Canvas.GetTop(rectangle)}) rectangle ({(int)(rectangle.Width + Canvas.GetLeft(rectangle))},{(int)(rectangle.Height + Canvas.GetTop(rectangle))});";
+            return $"\\filldraw[color={TikzStyle.StrokeColor.GetLaTeXColorString()}, fill={TikzStyle.FillColor.GetLaTeXColorString()}, fill opacity={TikzStyle.FillColor.A / 255.0}, draw opacity={TikzStyle.StrokeColor.A / 255.0}, {TikzStyle.LineWidth.GetLineWidthTikz()},{TikzStyle.LineType.GetLineTypeTikz()}] ({(int)Canvas.GetLeft(rectangle)}pt,{(int)Canvas.GetTop(rectangle)}pt) rectangle ({(int)(rectangle.Width + Canvas.GetLeft(rectangle))}pt,{(int)(rectangle.Height + Canvas.GetTop(rectangle))}pt);";
         }
     }
 }
