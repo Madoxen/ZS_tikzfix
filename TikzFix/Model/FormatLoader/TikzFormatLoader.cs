@@ -45,6 +45,8 @@ namespace TikzFix.Model.FormatLoader
                 latex.StartInfo.FileName = "latex";
                 latex.StartInfo.Arguments = "-shell-escape -quiet job.txt";
                 latex.StartInfo.UseShellExecute = true;
+                latex.StartInfo.CreateNoWindow = true;
+                latex.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
                 latex.Start();
                 bool latexSuccess = latex.WaitForExit(10000); //wait 10s before terminating 
                 if (latexSuccess == false)
@@ -56,7 +58,9 @@ namespace TikzFix.Model.FormatLoader
                 dvi2svg.StartInfo.WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory;
                 dvi2svg.StartInfo.FileName = "dvisvgm";
                 dvi2svg.StartInfo.Arguments = "-n -v 0 job.dvi";
+                dvi2svg.StartInfo.CreateNoWindow = true;
                 dvi2svg.StartInfo.UseShellExecute = true;
+                dvi2svg.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
                 dvi2svg.Start();
                 bool dviSuccess = dvi2svg.WaitForExit(10000); //wait 10s before terminating 
                 if (dviSuccess == false)
