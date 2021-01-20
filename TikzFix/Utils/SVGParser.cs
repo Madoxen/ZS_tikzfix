@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Windows.Media;
 
 using TikzFix.Model.Styling;
@@ -113,7 +114,6 @@ namespace TikzFix.Utils
                 return LineType.DASHED;
 
             return LineType.SOLID;
-
         }
 
 

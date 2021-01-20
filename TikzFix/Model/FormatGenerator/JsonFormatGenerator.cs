@@ -3,6 +3,8 @@ using System.Text.Json;
 using TikzFix.Model.TikzShapes;
 using TikzFix.Model.Tool;
 using System.Linq;
+using System.Windows.Controls;
+using System.Text.RegularExpressions;
 
 namespace TikzFix.Model.FormatGenerator
 {
@@ -17,7 +19,12 @@ namespace TikzFix.Model.FormatGenerator
             {
                 if (s is TikzPath p)
                 {
-                    d.svgRawData.Add(p.RawData);
+                    //Prepare path data
+                    Point move = new Point((int)Canvas.GetLeft(p.Shape), (int)Canvas.GetTop(p.Shape));
+                    //Modify move data
+                    
+
+                      d.svgRawData.Add(p.RawData);
                     continue;
                 }
                d.localShapeData.Add(s.GenerateLocalData());

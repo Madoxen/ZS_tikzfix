@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
@@ -32,7 +33,6 @@ namespace TikzFix.Model.ToolImpl
 
                 line.SetStyle(style);
                 current = new DrawingShape(new TikzLine(line, style), ShapeState.START);
-
             }
             else
             {
@@ -85,7 +85,13 @@ namespace TikzFix.Model.ToolImpl
                 {
                     current.ShapeState = ShapeState.DRAWING;
                 }
+
+
+           
             }
+
+           
+
             return current;
         }
 

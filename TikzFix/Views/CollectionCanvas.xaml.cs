@@ -281,7 +281,6 @@ namespace TikzFix.Views
 
                     Canvas.SetLeft(shape, _initialShapesPositions.Single(s => s.ShapeId == child.Id).Left + (e.GetPosition((IInputElement)e.Source).X - movingStartPoint.Value.X));
                     Canvas.SetTop(shape, _initialShapesPositions.Single(s => s.ShapeId == child.Id).Top + (e.GetPosition((IInputElement)e.Source).Y - movingStartPoint.Value.Y));
-
                     //Debug.WriteLine($"{e.GetPosition((IInputElement)e.Source).X - movingStartPoint.Value.X} ");
 
                 }
