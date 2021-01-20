@@ -12,14 +12,16 @@ namespace TikzFix.Model.TikzShapes
 {
     class TikzPath : TikzShape
     {
-        public TikzPath(Path path, TikzStyle style, string rawData) : base(path, style) {
+        public TikzPath(Path path, TikzStyle style, string rawData) : base(path, style)
+        {
             this.path = path;
             this.rawData = rawData;
         }
 
         private string rawData;
         private Path path;
-        public override Shape Shape {
+        public override Shape Shape
+        {
             get => path;
             set
             {
@@ -29,6 +31,11 @@ namespace TikzFix.Model.TikzShapes
                 }
                 path = p;
             }
+        }
+
+        public string RawData
+        {
+            get => rawData;
         }
 
         public override LocalShapeData GenerateLocalData()
