@@ -56,7 +56,7 @@ namespace TikzFix.Utils
         /// <param name="data"></param>
         /// <param name="property"></param>
         /// <returns>property data or empty if property does not exist</returns>
-        private static string GetSVGProperty(string data, string property)
+        public static string GetSVGProperty(string data, string property)
         {
             try
             {
@@ -71,7 +71,7 @@ namespace TikzFix.Utils
 
 
         //Parses SVG hex color
-        private static Color parseSVGColor(string rawColor, double opacity = 1.0)
+        public static Color parseSVGColor(string rawColor, double opacity = 1.0)
         {
             if (rawColor == "none" || String.IsNullOrEmpty(rawColor))
                 return Colors.Transparent;
@@ -79,7 +79,7 @@ namespace TikzFix.Utils
             return Color.FromArgb((byte)Math.Round(opacity * 255), c.R, c.G, c.B);
         }
 
-        private static LineWidth praseSVGStrokeWidth(string rawWidth)
+        public static LineWidth praseSVGStrokeWidth(string rawWidth)
         {
             if (string.IsNullOrEmpty(rawWidth))
                 return LineWidth.THIN;
@@ -94,7 +94,7 @@ namespace TikzFix.Utils
             return LineWidth.ULTRA_THICK;
         }
 
-        private static LineType parseSVGDashArray(string rawDashArray)
+        public static LineType parseSVGDashArray(string rawDashArray)
         {
             //Dotted -> first value different then second value
             //Dashed -> first and second values are the same
