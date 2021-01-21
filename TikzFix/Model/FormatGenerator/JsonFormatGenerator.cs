@@ -2,6 +2,9 @@
 using System.Text.Json;
 using TikzFix.Model.TikzShapes;
 using TikzFix.Model.Tool;
+using System.Linq;
+using System.Windows.Controls;
+using System.Text.RegularExpressions;
 
 namespace TikzFix.Model.FormatGenerator
 {
@@ -9,13 +12,25 @@ namespace TikzFix.Model.FormatGenerator
     {
         public string ConvertMany(ICollection<TikzShape> shapes)
         {
-            List<LocalShapeData> localShapesData = new List<LocalShapeData>(shapes.Count);
+            SaveData d = new SaveData();
+            d.svgRawData = new List<SvgData>();
+            d.localShapeData = new List<LocalShapeData>();
             foreach (TikzShape s in shapes)
             {
-                localShapesData.Add(s.GenerateLocalData());
+                if (s is TikzPath p)
+                {
+                    //Prepare path data
+                    Point move = new Point((int)Canvas.GetLeft(p.Shape), (int)Canvas.GetTop(p.Shape));
+                    //Modify move data
+                    
+
+                    d.svgRawData.Add(new SvgData() { data = p.RawData, translate = move});
+                    continue;
+                }
+               d.localShapeData.Add(s.GenerateLocalData());
             }
 
-            return JsonSerializer.Serialize(localShapesData);
+            return JsonSerializer.Serialize(d);
         }
     }
 }

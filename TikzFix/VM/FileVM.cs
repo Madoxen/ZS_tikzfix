@@ -45,6 +45,7 @@ namespace TikzFix.VM
         private readonly List<IFormatLoader> formatLoaders = new List<IFormatLoader>()
         {
             new JsonFormatLoader(),
+            new TikzFormatLoader()
         };
 
         private int currentFormatLoaderIndex = 0;
@@ -97,7 +98,7 @@ namespace TikzFix.VM
         private void OpenLoad()
         {
             OpenFileDialog dialog = new OpenFileDialog(); //this will make that method untestable
-            dialog.Filter = "JSON file | *.json";
+            dialog.Filter = "Supported formats | *.json; *.tex";
             bool? result = dialog.ShowDialog(); //this will block the thread until dialog is closed 
             
             // Get the selected file name
@@ -115,6 +116,25 @@ namespace TikzFix.VM
 
         private void Load(string fileName)
         {
+            string ext = System.IO.Path.GetExtension(fileName);
+            Debug.WriteLine(ext);
+            if (ext == null)
+            {
+                currentFormatLoaderIndex = 0;
+            }
+            else
+            {
+                switch (ext)
+                {
+                    case ".json":
+                        currentFormatLoaderIndex = 0;
+                        break;
+                    case ".tex":
+                        currentFormatLoaderIndex = 1;
+                        break;
+                }
+            }
+            
             string dataString = File.ReadAllText(fileName);
             shapes.Clear();
             foreach (TikzShape s in CurrentFormatLoader.ConvertMany(dataString))

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
@@ -36,7 +37,8 @@ namespace TikzFix.Model.TikzShapes
         {
             BezierSegment b = (path.Data as PathGeometry).Figures[0].Segments[0] as BezierSegment;
 
-            Point firstPoint = new Point((int)path.Margin.Left, (int)path.Margin.Top);
+            Point firstPoint = new Point((int)Canvas.GetLeft(path) + (int)path.Margin.Left, (int)Canvas.GetTop(path) + (int)path.Margin.Top);
+
 
             List<CanvasEventArgs> keyPointList = new List<CanvasEventArgs>
                 {
@@ -56,7 +58,7 @@ namespace TikzFix.Model.TikzShapes
         {
             BezierSegment b = (path.Data as PathGeometry).Figures[0].Segments[0] as BezierSegment;
 
-            return $"\\filldraw[color={TikzStyle.StrokeColor.GetLaTeXColorString()}, {TikzStyle.LineEnding.GetLineEndingTikz()} ,fill={TikzStyle.FillColor.GetLaTeXColorString()}, fill opacity={(double)TikzStyle.FillColor.A / 255.0}, draw opacity={TikzStyle.StrokeColor.A / 255.0}, {TikzStyle.LineWidth.GetLineWidthTikz()},{TikzStyle.LineType.GetLineTypeTikz()}] ({path.Margin.Left}pt,{path.Margin.Top}pt) .. controls ({b.Point1.X + path.Margin.Left}pt,{b.Point1.Y + path.Margin.Top}pt) and ({b.Point2.X + path.Margin.Left}pt,{b.Point2.Y + path.Margin.Top}pt) .. ({b.Point3.X + path.Margin.Left}pt,{b.Point3.Y + path.Margin.Top}pt);";
+            return $"\\filldraw[color={TikzStyle.StrokeColor.GetLaTeXColorString()}, {TikzStyle.LineEnding.GetLineEndingTikz()}, fill={TikzStyle.FillColor.GetLaTeXColorString()}, fill opacity={(double)TikzStyle.FillColor.A / 255.0}, draw opacity={TikzStyle.StrokeColor.A / 255.0}, {TikzStyle.LineWidth.GetLineWidthTikz()},{TikzStyle.LineType.GetLineTypeTikz()}] ({Canvas.GetLeft(path) + path.Margin.Left}pt,{Canvas.GetTop(path) + path.Margin.Top}pt) .. controls ({b.Point1.X + Canvas.GetLeft(path) + path.Margin.Left}pt,{b.Point1.Y + Canvas.GetTop(path) + path.Margin.Top}pt) and ({b.Point2.X + Canvas.GetLeft(path) + path.Margin.Left}pt,{b.Point2.Y + Canvas.GetTop(path) + path.Margin.Top}pt) .. ({b.Point3.X + Canvas.GetLeft(path) + path.Margin.Left}pt,{b.Point3.Y + Canvas.GetTop(path) + path.Margin.Top}pt);";
         }
     }
 }

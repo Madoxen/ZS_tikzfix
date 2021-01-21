@@ -29,13 +29,13 @@ namespace TikzFix.Model.TikzShapes
         }
         public override LocalShapeData GenerateLocalData()
         {
-            int X1 = (int)(Canvas.GetLeft(ellipse) + ellipse.Width / 2);
-            int Y1 = (int)(Canvas.GetTop(ellipse) + ellipse.Height / 2);
+            int X1 = (int)(Canvas.GetLeft(ellipse));
+            int Y1 = (int)(Canvas.GetTop(ellipse));
 
             List<CanvasEventArgs> keyPointList = new List<CanvasEventArgs>
                 {
                     new CanvasEventArgs(new Point(X1, Y1), MouseState.DOWN),
-                    new CanvasEventArgs(new Point(X1 + (int)(ellipse.Width / 2), (int)(Y1 + ellipse.Height / 2)), MouseState.UP)
+                    new CanvasEventArgs(new Point(X1 + (int)(ellipse.Width ), (int)(Y1 + ellipse.Height )), MouseState.UP)
                 };
 
             return new LocalShapeData("EllipseTool", keyPointList, TikzStyle);

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Windows.Controls;
 using System.Windows.Shapes;
 
 using TikzFix.Model.Shapes;
@@ -33,8 +35,8 @@ namespace TikzFix.Model.TikzShapes
         {
             List<CanvasEventArgs> keyPointList = new List<CanvasEventArgs>
                 {
-                    new CanvasEventArgs(new Point((int)line.X1, (int)line.Y1), MouseState.DOWN),
-                    new CanvasEventArgs(new Point((int)line.X2, (int)line.Y2), MouseState.UP)
+                    new CanvasEventArgs(new Point((int)line.X1 + (int)Canvas.GetLeft(line), (int)line.Y1 + (int)Canvas.GetTop(line)), MouseState.DOWN),
+                    new CanvasEventArgs(new Point((int)line.X2 + (int)Canvas.GetLeft(line), (int)line.Y2 + (int)Canvas.GetTop(line)), MouseState.UP)
                 };
 
             return new LocalShapeData(ITool.LINE_TOOL_NAME, keyPointList, TikzStyle);
@@ -42,7 +44,7 @@ namespace TikzFix.Model.TikzShapes
 
         public override string GenerateTikz()
         {
-            return $"\\draw[color={TikzStyle.StrokeColor.GetLaTeXColorString()}, {TikzStyle.LineWidth.GetLineWidthTikz()}, fill opacity={TikzStyle.FillColor.A / 255.0}, draw opacity={TikzStyle.StrokeColor.A / 255.0}, {TikzStyle.LineEnding.GetLineEndingTikz()}, {TikzStyle.LineType.GetLineTypeTikz()}] ({line.X1}pt,{line.Y1}pt)--({line.X2}pt,{line.Y2}pt);";
+            return $"\\draw[color={TikzStyle.StrokeColor.GetLaTeXColorString()}, {TikzStyle.LineWidth.GetLineWidthTikz()}, fill opacity={TikzStyle.FillColor.A / 255.0}, draw opacity={TikzStyle.StrokeColor.A / 255.0}, {TikzStyle.LineEnding.GetLineEndingTikz()}, {TikzStyle.LineType.GetLineTypeTikz()}] ({line.X1 + (int)Canvas.GetLeft(line)}pt,{line.Y1 + (int)Canvas.GetTop(line)}pt)--({line.X2 + (int)Canvas.GetLeft(line)}pt,{line.Y2 + (int)Canvas.GetTop(line)}pt);";
         }
     }
 }

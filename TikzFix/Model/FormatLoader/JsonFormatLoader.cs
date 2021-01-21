@@ -1,8 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json;
+using System.Windows.Controls;
+
+using TikzFix.Model.FormatGenerator;
 using TikzFix.Model.TikzShapes;
 using TikzFix.Model.Tool;
 using TikzFix.Model.ToolImpl;
+using TikzFix.Utils;
 
 namespace TikzFix.Model.FormatLoader
 {
@@ -28,12 +32,12 @@ namespace TikzFix.Model.FormatLoader
 
         public ICollection<TikzShape> ConvertMany(string data)
         {
-            List<LocalShapeData> canvasShapesData = JsonSerializer.Deserialize<List<LocalShapeData>>(data);
-            List<TikzShape> shapes = new List<TikzShape>();
+            SaveData d = JsonSerializer.Deserialize<SaveData>(data);
+            List<TikzShape> result = new List<TikzShape>();
 
             ITool currentTool;
 
-            foreach (LocalShapeData shapeData in canvasShapesData)
+            foreach (LocalShapeData shapeData in d.localShapeData)
             {
                 currentTool = toolNameToolMap[shapeData.ToolName];
 
@@ -43,11 +47,24 @@ namespace TikzFix.Model.FormatLoader
 
                     if (r.ShapeState == ShapeState.FINISHED)
                     {
-                        shapes.Add(r.TikzShape);
+                        result.Add(r.TikzShape);
                     }
                 }
             }
-            return shapes;
+
+            foreach (SvgData raw in d.svgRawData)
+            {
+                var c = SVGParser.Parse(raw.data);
+                foreach (var s in c)
+                {
+                    Canvas.SetLeft(s.Shape, raw.translate.X);
+                    Canvas.SetTop(s.Shape, raw.translate.Y);
+                }
+
+                result.AddRange(c);
+            }
+
+            return result;
         }
     }
 }

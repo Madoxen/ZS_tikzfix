@@ -54,6 +54,9 @@ namespace TikzFix.Model.ToolImpl
                         new TikzBezier(path, style),
                         ShapeState.START
                     );
+
+
+
                 }
                 else if (a.MouseState == MouseState.MOVE)
                 {
@@ -112,11 +115,10 @@ namespace TikzFix.Model.ToolImpl
                     current.ShapeState = ShapeState.FINISHED;
                     click = 0;
                     secondPointSelected = thirdPointSelected = false;
-
+                    Canvas.SetLeft(current.TikzShape.Shape, 0);
+                    Canvas.SetTop(current.TikzShape.Shape, 0);
                 }
 
-                Canvas.SetLeft(current.TikzShape.Shape, 0);
-                Canvas.SetTop(current.TikzShape.Shape, 0);
 
                 return current;
             }

@@ -39,10 +39,7 @@ namespace TikzFix.Utils
             s.StrokeDashArray = style.LineType.GetDashArray();
             s.StrokeStartLineCap = style.LineEnding.GetLineCaps()[0];
             s.StrokeEndLineCap = style.LineEnding.GetLineCaps()[1];
-            s.StrokeDashCap = style.LineEnding.GetLineCaps()[2];
-
-
-            
+            s.StrokeDashCap = style.LineEnding.GetLineCaps()[2];   
         }
     }
 }
