@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json;
+using System.Windows.Controls;
 
 using TikzFix.Model.FormatGenerator;
 using TikzFix.Model.TikzShapes;
@@ -51,9 +52,16 @@ namespace TikzFix.Model.FormatLoader
                 }
             }
 
-            foreach (string raw in d.svgRawData)
+            foreach (SvgData raw in d.svgRawData)
             {
-                result.AddRange(SVGParser.Parse(raw));
+                var c = SVGParser.Parse(raw.data);
+                foreach (var s in c)
+                {
+                    Canvas.SetLeft(s.Shape, raw.translate.X);
+                    Canvas.SetTop(s.Shape, raw.translate.Y);
+                }
+
+                result.AddRange(c);
             }
 
             return result;

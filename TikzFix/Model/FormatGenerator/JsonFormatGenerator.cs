@@ -13,7 +13,7 @@ namespace TikzFix.Model.FormatGenerator
         public string ConvertMany(ICollection<TikzShape> shapes)
         {
             SaveData d = new SaveData();
-            d.svgRawData = new List<string>();
+            d.svgRawData = new List<SvgData>();
             d.localShapeData = new List<LocalShapeData>();
             foreach (TikzShape s in shapes)
             {
@@ -24,7 +24,7 @@ namespace TikzFix.Model.FormatGenerator
                     //Modify move data
                     
 
-                      d.svgRawData.Add(p.RawData);
+                    d.svgRawData.Add(new SvgData() { data = p.RawData, translate = move});
                     continue;
                 }
                d.localShapeData.Add(s.GenerateLocalData());

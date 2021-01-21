@@ -80,14 +80,12 @@ namespace TikzFix.Model.ToolImpl
                 if (canvasEventArgs.MouseState == MouseState.UP)
                 {
                     current.ShapeState = ShapeState.FINISHED;
+
                 }
                 else if (canvasEventArgs.MouseState == MouseState.MOVE)
                 {
                     current.ShapeState = ShapeState.DRAWING;
                 }
-
-
-           
             }
 
            
