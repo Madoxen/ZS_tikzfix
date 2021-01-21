@@ -27,6 +27,8 @@ namespace TikzFix
 
             //TODO: search for a way to avoid something like that
             FileVM.Shapes = MainVM.Shapes;
+            StyleVM.NewStyle += MainVM.ApplyStyle;
+
         }
     }
 }
