@@ -1,4 +1,5 @@
-﻿using System.Windows.Media;
+﻿using System;
+using System.Windows.Media;
 
 using TikzFix.Model.Styling;
 
@@ -13,6 +14,8 @@ namespace TikzFix.VM
         {
             get; private set;
         }
+
+        public event Action<TikzStyle> NewStyle;
 
         private Color strokeColor = Color.FromRgb(0, 0, 0);
         public Color StrokeColor
@@ -93,6 +96,7 @@ namespace TikzFix.VM
         private void RebuildStyle()
         {
             CurrentStyle = new TikzStyle(StrokeColor, FillColor, LineEnding, LineWidth, LineType);
+            NewStyle?.Invoke(CurrentStyle);
         }
     }
 }

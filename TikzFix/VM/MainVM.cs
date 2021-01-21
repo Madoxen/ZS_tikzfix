@@ -5,6 +5,9 @@ using TikzFix.Model.ToolImpl;
 using TikzFix.Model.TikzShapes;
 using System.Diagnostics;
 using System.Windows.Input;
+using System;
+using TikzFix.Model.Styling;
+using TikzFix.Utils;
 
 namespace TikzFix.VM
 {
@@ -21,6 +24,7 @@ namespace TikzFix.VM
         private readonly ITool ellipseTool = new EllipseTool();
         private readonly ITool bezierTool = new BezierTool();
         private readonly ITool selectionRectTool = new SelectionRectangleTool();
+
         private readonly ITool canvasMovingTool = new CanvasMovingTool();
         public readonly List<ITool> Tools = new List<ITool>();
 
@@ -175,6 +179,25 @@ namespace TikzFix.VM
         }
 
         #region Drawing
+
+        public void ApplyStyle(TikzStyle style)
+        {
+            Debug.WriteLine("Style changed");
+
+            if (SelectedShapes.Count > 0)
+            {
+                Debug.WriteLine($"New style schould be applied. Count {SelectedShapes.Count}");
+                foreach (TikzShape s in SelectedShapes)
+                {
+                    s.Shape.SetStyle(style);
+                }
+
+            }
+            else
+            {
+                Debug.WriteLine("There are not any selected shapes");
+            }
+        }
 
         private void Clear()
         {
