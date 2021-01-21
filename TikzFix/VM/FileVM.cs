@@ -1,14 +1,8 @@
 ﻿using Microsoft.Win32;
 
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
-using System.Windows.Shapes;
 
 using TikzFix.Model.FormatGenerator;
 using TikzFix.Model.FormatLoader;
@@ -19,7 +13,7 @@ namespace TikzFix.VM
     /// <summary>
     /// Contains commands that operate on files
     /// </summary>
-    class FileVM : BaseVM
+    internal class FileVM : BaseVM
     {
 
         /// <summary>
@@ -55,14 +49,8 @@ namespace TikzFix.VM
         private ICollection<TikzShape> shapes;
         public ICollection<TikzShape> Shapes
         {
-            get
-            {
-                return shapes;
-            }
-            set
-            {
-                SetProperty(ref shapes, value);
-            }
+            get => shapes;
+            set => SetProperty(ref shapes, value);
         }
 
         public RelayCommand<int> SaveCommand
@@ -78,14 +66,16 @@ namespace TikzFix.VM
 
         private void OpenSave(int formatGeneratorIndex)
         {
-            String fileExtFilter = formatGeneratorIndex switch
+            string fileExtFilter = formatGeneratorIndex switch
             {
                 1 => "Tikzfix drawing file | *.tikzfix",
                 0 => "JSON file | *.json"
             };
             currentFormatGeneratorIndex = formatGeneratorIndex;
-            SaveFileDialog dialog = new SaveFileDialog(); //this will make that method untestable
-            dialog.Filter = fileExtFilter;
+            SaveFileDialog dialog = new SaveFileDialog
+            {
+                Filter = fileExtFilter
+            }; //this will make that method untestable
             bool? result = dialog.ShowDialog(); //this will block the thread until dialog is closed 
 
             // Get the selected file name
@@ -97,14 +87,16 @@ namespace TikzFix.VM
 
         private void OpenLoad()
         {
-            OpenFileDialog dialog = new OpenFileDialog(); //this will make that method untestable
-            dialog.Filter = "Supported formats | *.json; *.tex";
+            OpenFileDialog dialog = new OpenFileDialog
+            {
+                Filter = "Supported formats | *.json; *.tex"
+            }; //this will make that method untestable
             bool? result = dialog.ShowDialog(); //this will block the thread until dialog is closed 
-            
+
             // Get the selected file name
             if (result == true)
             {
-                Load(dialog.FileName); 
+                Load(dialog.FileName);
             }
         }
 
@@ -134,7 +126,7 @@ namespace TikzFix.VM
                         break;
                 }
             }
-            
+
             string dataString = File.ReadAllText(fileName);
             shapes.Clear();
             foreach (TikzShape s in CurrentFormatLoader.ConvertMany(dataString))

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -10,6 +8,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Effects;
 using System.Windows.Shapes;
+
 using TikzFix.Model.TikzShapes;
 using TikzFix.Utils;
 
@@ -34,14 +33,8 @@ namespace TikzFix.Views
         //Shapes to be drawn on underlaying canvas
         public ICollection<TikzShape> Shapes
         {
-            get
-            {
-                return (ICollection<TikzShape>)GetValue(ShapesProperty);
-            }
-            set
-            {
-                SetValue(ShapesProperty, value);
-            }
+            get => (ICollection<TikzShape>)GetValue(ShapesProperty);
+            set => SetValue(ShapesProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for Children.  This enables animation, styling, binding, etc...
@@ -52,14 +45,8 @@ namespace TikzFix.Views
         //Shapes selected by user when using selector 
         public ICollection<TikzShape> SelectedShapes
         {
-            get
-            {
-                return (ICollection<TikzShape>)GetValue(SelectedShapesProperty);
-            }
-            set
-            {
-                SetValue(SelectedShapesProperty, value);
-            }
+            get => (ICollection<TikzShape>)GetValue(SelectedShapesProperty);
+            set => SetValue(SelectedShapesProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for SelectedShapes.  This enables animation, styling, binding, etc...
@@ -70,14 +57,19 @@ namespace TikzFix.Views
         private static void OnShapesSelectedChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (d is not CollectionCanvas cc)
+            {
                 throw new ArgumentException("Value type mismatch: is " + d.GetType().Name + " required " + typeof(CollectionCanvas));
+            }
 
             if (cc.SelectedShapes is INotifyCollectionChanged new_icc)
+            {
                 new_icc.CollectionChanged += cc.SelectedShapesCollectionChangedHandler;
+            }
 
             if (e.OldValue is INotifyCollectionChanged old_icc)
+            {
                 old_icc.CollectionChanged -= cc.SelectedShapesCollectionChangedHandler;
-
+            }
 
             if (e.OldValue is ICollection<TikzShape> oldShapeCollection)
             {
@@ -95,8 +87,8 @@ namespace TikzFix.Views
 
         private void SelectedShapesCollectionChangedHandler(object sender, NotifyCollectionChangedEventArgs e)
         {
-            var newItems = e.NewItems?.Cast<TikzShape>().ToList();
-            var oldItems = e.OldItems?.Cast<TikzShape>().ToList();
+            List<TikzShape> newItems = e.NewItems?.Cast<TikzShape>().ToList();
+            List<TikzShape> oldItems = e.OldItems?.Cast<TikzShape>().ToList();
 
 
             switch (e.Action)
@@ -126,14 +118,8 @@ namespace TikzFix.Views
 
         public bool CanvasSelectable
         {
-            get
-            {
-                return (bool)GetValue(CanvasSelectableProperty);
-            }
-            set
-            {
-                SetValue(CanvasSelectableProperty, value);
-            }
+            get => (bool)GetValue(CanvasSelectableProperty);
+            set => SetValue(CanvasSelectableProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for CanvasSelectable.  This enables animation, styling, binding, etc...
@@ -144,22 +130,20 @@ namespace TikzFix.Views
         private static void OnCanvasSelectableChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (d is not CollectionCanvas cc)
+            {
                 throw new ArgumentException("Value type mismatch: is " + d.GetType().Name + " required " + typeof(CollectionCanvas));
+            }
 
             if (cc.CanvasSelectable == false)
+            {
                 cc.SelectedShapes?.Clear();
+            }
         }
 
         public bool CanvasMovable
         {
-            get
-            {
-                return (bool)GetValue(CanvasMovableProperty);
-            }
-            set
-            {
-                SetValue(CanvasMovableProperty, value);
-            }
+            get => (bool)GetValue(CanvasMovableProperty);
+            set => SetValue(CanvasMovableProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for CanvasSelectable.  This enables animation, styling, binding, etc...
@@ -169,7 +153,9 @@ namespace TikzFix.Views
         private static void OnCanvasMovableChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (d is not CollectionCanvas cc)
+            {
                 throw new ArgumentException("Value type mismatch: is " + d.GetType().Name + " required " + typeof(CollectionCanvas));
+            }
         }
 
 
@@ -209,8 +195,8 @@ namespace TikzFix.Views
         /// </summary>
         private void ShapesCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            var newItems = e.NewItems?.Cast<TikzShape>().ToList();
-            var oldItems = e.OldItems?.Cast<TikzShape>().ToList();
+            List<TikzShape> newItems = e.NewItems?.Cast<TikzShape>().ToList();
+            List<TikzShape> oldItems = e.OldItems?.Cast<TikzShape>().ToList();
 
             switch (e.Action)
             {
@@ -241,18 +227,20 @@ namespace TikzFix.Views
         }
 
         #region Selection handling
-        Point? movingStartPoint;
+        private Point? movingStartPoint;
         private void HandleSelectionBegin(object sender, MouseButtonEventArgs e)
         {
             if (!CanvasSelectable)
+            {
                 return; //Canvas is marked as not selectable, abort
+            }
 
             Point pos = e.GetPosition(c);
             selectionStartPoint = pos;
             SelectedShapes.Clear(ResetEffect);
         }
 
-        private List<(Guid ShapeId, Double Left, Double Top)> _initialShapesPositions;
+        private List<(Guid ShapeId, double Left, double Top)> _initialShapesPositions;
 
         private void HandleSelectionMoved(object sender, MouseEventArgs e)
         {
@@ -261,23 +249,30 @@ namespace TikzFix.Views
                 if (_initialShapesPositions == null)
                 {
                     _initialShapesPositions = new List<(Guid ShapeId, double Left, double Top)>();
-                    foreach (var shape in Shapes)
+                    foreach (TikzShape shape in Shapes)
                     {
-                        if (Double.IsNaN(Canvas.GetLeft(shape.Shape)))
+                        if (double.IsNaN(Canvas.GetLeft(shape.Shape)))
+                        {
                             Canvas.SetLeft(shape.Shape, shape.Shape.Margin.Left);
-                        if (Double.IsNaN(Canvas.GetTop(shape.Shape)))
+                        }
+
+                        if (double.IsNaN(Canvas.GetTop(shape.Shape)))
+                        {
                             Canvas.SetTop(shape.Shape, shape.Shape.Margin.Top);
+                        }
 
                         _initialShapesPositions.Add((shape.Id, Canvas.GetLeft(shape.Shape), Canvas.GetTop(shape.Shape)));
                     }
                 }
 
                 if (!movingStartPoint.HasValue)
-                    movingStartPoint = e.GetPosition((IInputElement)e.Source);
-
-                foreach (var child in Shapes)
                 {
-                    Shape shape = child.Shape as Shape;
+                    movingStartPoint = e.GetPosition((IInputElement)e.Source);
+                }
+
+                foreach (TikzShape child in Shapes)
+                {
+                    Shape shape = child.Shape;
 
                     Canvas.SetLeft(shape, _initialShapesPositions.Single(s => s.ShapeId == child.Id).Left + (e.GetPosition((IInputElement)e.Source).X - movingStartPoint.Value.X));
                     Canvas.SetTop(shape, _initialShapesPositions.Single(s => s.ShapeId == child.Id).Top + (e.GetPosition((IInputElement)e.Source).Y - movingStartPoint.Value.Y));
@@ -287,7 +282,9 @@ namespace TikzFix.Views
             }
 
             if (!CanvasSelectable)
+            {
                 return; //Canvas is marked as not selectable, abort
+            }
 
             Point pos = e.GetPosition(c);
             selectionRaycastBox.Width = Math.Abs(pos.X - selectionStartPoint.X);
@@ -298,7 +295,9 @@ namespace TikzFix.Views
         private void HandleSelectionEnded(object sender, MouseButtonEventArgs e)
         {
             if (movingStartPoint != null)
+            {
                 movingStartPoint = null;
+            }
 
             if (_initialShapesPositions != null)
             {
@@ -306,10 +305,12 @@ namespace TikzFix.Views
             }
 
             if (!CanvasSelectable)
+            {
                 return; //Canvas is marked as not selectable, abort
+            }
 
             Point pos = e.GetPosition(c);
-            var raycastResult = GetSelectedShapes(c, new RectangleGeometry(new Rect(Math.Min(pos.X, selectionStartPoint.X), Math.Min(pos.Y, selectionStartPoint.Y), selectionRaycastBox.Width, selectionRaycastBox.Height)));
+            IList<TikzShape> raycastResult = GetSelectedShapes(c, new RectangleGeometry(new Rect(Math.Min(pos.X, selectionStartPoint.X), Math.Min(pos.Y, selectionStartPoint.Y), selectionRaycastBox.Width, selectionRaycastBox.Height)));
             foreach (TikzShape s in raycastResult)
             {
                 SelectedShapes.Add(s);
@@ -324,7 +325,7 @@ namespace TikzFix.Views
         /// <returns></returns>
         private IList<TikzShape> GetSelectedShapes(UIElement element, Geometry geometry)
         {
-            var shapes = new List<TikzShape>();
+            List<TikzShape> shapes = new List<TikzShape>();
 
             VisualTreeHelper.HitTest(element, null,
                 result =>

@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Windows.Controls;
 using System.Windows.Shapes;
+
 using TikzFix.Model.Styling;
 using TikzFix.Model.Tool;
 
 namespace TikzFix.Model.TikzShapes
 {
-    class TikzRectangle : TikzShape
+    internal class TikzRectangle : TikzShape
     {
         public TikzRectangle(Rectangle rectangle, TikzStyle tikzStyle) : base(rectangle, tikzStyle)
         {

@@ -1,11 +1,5 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Media;
-using System.Windows.Shapes;
-using TikzFix.Model.Styling;
-using TikzFix.Model.TikzShapes;
+﻿using TikzFix.Model.Styling;
 using TikzFix.Model.Tool;
-using TikzFix.Utils;
 
 namespace TikzFix.Model.ToolImpl
 {

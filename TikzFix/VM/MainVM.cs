@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using TikzFix.Model.Tool;
-using TikzFix.Model.ToolImpl;
-using TikzFix.Model.TikzShapes;
 using System.Diagnostics;
 using System.Windows.Input;
-using System;
+
 using TikzFix.Model.Styling;
+using TikzFix.Model.TikzShapes;
+using TikzFix.Model.Tool;
+using TikzFix.Model.ToolImpl;
 using TikzFix.Utils;
 
 namespace TikzFix.VM
@@ -15,7 +15,7 @@ namespace TikzFix.VM
     /// Main window VM, maintains main shape collection that is shown to the user by canvas
     /// also maintains all available tools and selection functionality
     /// </summary>
-    class MainVM : BaseVM
+    internal class MainVM : BaseVM
     {
         #region Tools
 
@@ -32,19 +32,20 @@ namespace TikzFix.VM
         private int currentToolIndex;
         public int CurrentToolIndex
         {
-            get
-            {
-                return currentToolIndex;
-            }
+            get => currentToolIndex;
             set
             {
                 SetProperty(ref currentToolIndex, value);
                 CanvasSelectable = value == 4;
 
                 if (value == 5)
+                {
                     Mouse.OverrideCursor = Cursors.SizeAll;
+                }
                 else
+                {
                     Mouse.OverrideCursor = Cursors.Arrow;
+                }
             }
         }
 
@@ -60,40 +61,22 @@ namespace TikzFix.VM
         private ObservableCollection<TikzShape> selectedShapes = new ObservableCollection<TikzShape>();
         public ObservableCollection<TikzShape> SelectedShapes
         {
-            get
-            {
-                return selectedShapes;
-            }
-            set
-            {
-                SetProperty(ref selectedShapes, value);
-            }
+            get => selectedShapes;
+            set => SetProperty(ref selectedShapes, value);
         }
 
         private bool canvasSelectable = false;
         public bool CanvasSelectable
         {
-            get
-            {
-                return canvasSelectable;
-            }
-            set
-            {
-                SetProperty(ref canvasSelectable, value);
-            }
+            get => canvasSelectable;
+            set => SetProperty(ref canvasSelectable, value);
         }
 
         private bool canvasMovable = false;
         public bool CanvasMovable
         {
-            get
-            {
-                return canvasMovable;
-            }
-            set
-            {
-                SetProperty(ref canvasMovable, value);
-            }
+            get => canvasMovable;
+            set => SetProperty(ref canvasMovable, value);
         }
 
 
@@ -212,7 +195,9 @@ namespace TikzFix.VM
         private void HandleDrawingShape(DrawingShape drawingShape)
         {
             if (drawingShape == null)
+            {
                 return;
+            }
 
             switch (drawingShape.ShapeState)
             {
@@ -234,7 +219,10 @@ namespace TikzFix.VM
                     // drawing shape is finished, add to list
                     CurrentDrawingShape = null;
                     if (!drawingShape.RemoveOnFinish)
+                    {
                         Shapes.Add(drawingShape.TikzShape);
+                    }
+
                     break;
             }
         }
@@ -244,7 +232,9 @@ namespace TikzFix.VM
         {
             CanvasMovable = currentToolIndex == 5 && e.MouseState == MouseState.DOWN;
             if (CanvasMovable)
+            {
                 return;
+            }
             //Debug.WriteLine(e.MouseState);
             HandleDrawingShape(CurrentTool?.GetShape(e, StyleVM.CurrentStyle)); //update shape with event args.
         }
@@ -253,7 +243,10 @@ namespace TikzFix.VM
         {
             Debug.WriteLine(e.Point);
             if (CanvasMovable)
+            {
                 return;
+            }
+
             HandleDrawingShape(CurrentTool?.GetShape(e, StyleVM.CurrentStyle)); //update shape with event args.
 
 

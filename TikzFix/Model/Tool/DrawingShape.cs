@@ -1,9 +1,8 @@
-﻿using System;
-using TikzFix.Model.TikzShapes;
+﻿using TikzFix.Model.TikzShapes;
 
 namespace TikzFix.Model.Tool
 {
-    class DrawingShape
+    internal class DrawingShape
     {
         public DrawingShape(TikzShape shape, ShapeState shapeState)
         {
@@ -11,7 +10,7 @@ namespace TikzFix.Model.Tool
             ShapeState = shapeState;
         }
 
-        public Boolean RemoveOnFinish
+        public bool RemoveOnFinish
         {
             get; set;
         }

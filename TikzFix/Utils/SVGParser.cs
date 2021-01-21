@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Windows.Controls;
 using System.Windows.Media;
 
 using TikzFix.Model.Styling;
@@ -12,7 +9,7 @@ using TikzFix.Model.TikzShapes;
 
 namespace TikzFix.Utils
 {
-    static class SVGParser
+    internal static class SVGParser
     {
         private static readonly Regex[] svgRegexes = new Regex[]{
           new Regex(@"<path.*"), //path line
@@ -28,8 +25,10 @@ namespace TikzFix.Utils
             {
                 string line = m.Value;
                 string d = svgRegexes[1].Match(line).Groups[1].Value;
-                System.Windows.Shapes.Path p = new System.Windows.Shapes.Path();
-                p.Data = Geometry.Parse(d);
+                System.Windows.Shapes.Path p = new System.Windows.Shapes.Path
+                {
+                    Data = Geometry.Parse(d)
+                };
                 //Parse style
 
                 string rawStrokeColor = GetSVGProperty(line, "stroke");
@@ -74,8 +73,11 @@ namespace TikzFix.Utils
         //Parses SVG hex color
         public static Color parseSVGColor(string rawColor, double opacity = 1.0)
         {
-            if (rawColor == "none" || String.IsNullOrEmpty(rawColor))
+            if (rawColor == "none" || string.IsNullOrEmpty(rawColor))
+            {
                 return Colors.Transparent;
+            }
+
             Color c = (Color)ColorConverter.ConvertFromString(rawColor);
             return Color.FromArgb((byte)Math.Round(opacity * 255), c.R, c.G, c.B);
         }
@@ -83,15 +85,26 @@ namespace TikzFix.Utils
         public static LineWidth praseSVGStrokeWidth(string rawWidth)
         {
             if (string.IsNullOrEmpty(rawWidth))
+            {
                 return LineWidth.THIN;
+            }
 
-            double val = Double.Parse(rawWidth);
+            double val = double.Parse(rawWidth);
             if (val <= .19926)
+            {
                 return LineWidth.VERY_THIN;
+            }
+
             if (val <= .3986)
+            {
                 return LineWidth.THIN;
+            }
+
             if (val <= .79702)
+            {
                 return LineWidth.THICK;
+            }
+
             return LineWidth.ULTRA_THICK;
         }
 
@@ -101,17 +114,25 @@ namespace TikzFix.Utils
             //Dashed -> first and second values are the same
             //Dashed-Dotted -> 4 or more values
             if (string.IsNullOrEmpty(rawDashArray))
+            {
                 return LineType.SOLID;
+            }
 
-            double[] values = rawDashArray.Split(',').Select(x => Double.Parse(x)).ToArray();
+            double[] values = rawDashArray.Split(',').Select(x => double.Parse(x)).ToArray();
             if (values.Length > 2)
+            {
                 return LineType.DASHDOTTED;
+            }
 
             if (values[0] != values[1])
+            {
                 return LineType.DOTTED;
+            }
 
             if (values[0] == values[1])
+            {
                 return LineType.DASHED;
+            }
 
             return LineType.SOLID;
         }

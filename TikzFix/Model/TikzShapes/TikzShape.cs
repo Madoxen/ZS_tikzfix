@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Shapes;
+
 using TikzFix.Model.Styling;
 using TikzFix.Model.Tool;
 

@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Shapes;
@@ -12,12 +8,12 @@ using TikzFix.Utils;
 
 namespace TikzFix.Model.Shapes
 {
-    class ArrowPath : Shape
+    internal class ArrowPath : Shape
     {
         public Geometry Data
         {
-            get { return (Geometry)GetValue(DataProperty); }
-            set { SetValue(DataProperty, value); }
+            get => (Geometry)GetValue(DataProperty);
+            set => SetValue(DataProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for Data.  This enables animation, styling, binding, etc...
@@ -28,8 +24,8 @@ namespace TikzFix.Model.Shapes
         //Angle in radians
         public double ArrowAngle
         {
-            get { return (double)GetValue(ArrowAngleProperty); }
-            set { SetValue(ArrowAngleProperty, value); }
+            get => (double)GetValue(ArrowAngleProperty);
+            set => SetValue(ArrowAngleProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for ArrowAngle.  This enables animation, styling, binding, etc...
@@ -42,8 +38,8 @@ namespace TikzFix.Model.Shapes
 
         public double ArrowLength
         {
-            get { return (double)GetValue(ArrowLengthProperty); }
-            set { SetValue(ArrowLengthProperty, value); }
+            get => (double)GetValue(ArrowLengthProperty);
+            set => SetValue(ArrowLengthProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for ArrowLength.  This enables animation, styling, binding, etc...
@@ -57,8 +53,8 @@ namespace TikzFix.Model.Shapes
 
         public bool HasEndArrow
         {
-            get { return (bool)GetValue(HasEndArrowProperty); }
-            set { SetValue(HasEndArrowProperty, value); }
+            get => (bool)GetValue(HasEndArrowProperty);
+            set => SetValue(HasEndArrowProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for HasEndArrow.  This enables animation, styling, binding, etc...
@@ -69,8 +65,8 @@ namespace TikzFix.Model.Shapes
 
         public bool HasStartArrow
         {
-            get { return (bool)GetValue(HasStartArrowProperty); }
-            set { SetValue(HasStartArrowProperty, value); }
+            get => (bool)GetValue(HasStartArrowProperty);
+            set => SetValue(HasStartArrowProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for HasStartArrow.  This enables animation, styling, binding, etc...
@@ -96,10 +92,14 @@ namespace TikzFix.Model.Shapes
                 //FIXME: Probably caused by bug in BezierTool
                 //see:  fixme (line 34 BezierTool.cs)
                 if (p.Figures.First().Segments.First() is not PolyLineSegment)
+                {
                     return g;
+                }
 
                 if (p.Figures.Last().Segments.Last() is not PolyLineSegment)
+                {
                     return g;
+                }
 
                 //Start vector
                 PolyLineSegment firstSeg = (PolyLineSegment)p.Figures.First().Segments.First();

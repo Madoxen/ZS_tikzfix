@@ -4,18 +4,16 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace TikzFix.Tests
 {
-    using Model;
 
     using System.Windows.Media;
     using System.Windows.Shapes;
+
     using TikzFix.Model.Shapes;
     using TikzFix.Model.Styling;
     using TikzFix.Model.Tool;
     using TikzFix.Model.ToolImpl;
 
     using TikzFixTests;
-
-    using VM;
 
 
     [STATestClass]
@@ -36,7 +34,7 @@ namespace TikzFix.Tests
             DrawTestEllipse();
         */
 
-        static TikzStyle style = new TikzStyle(Color.FromArgb(255, 0, 0, 0), Color.FromArgb(255, 0, 0, 0));
+        private static readonly TikzStyle style = new TikzStyle(Color.FromArgb(255, 0, 0, 0), Color.FromArgb(255, 0, 0, 0));
 
         [TestMethod]
         // Should create line from [1,1] to [50,50]

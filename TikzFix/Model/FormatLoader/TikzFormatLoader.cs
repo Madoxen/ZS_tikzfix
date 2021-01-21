@@ -2,20 +2,14 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Windows.Media;
+
 using TikzFix.Model.TikzShapes;
 using TikzFix.Utils;
-using TikzFix.Model.Styling;
-using System.Windows.Ink;
 
 namespace TikzFix.Model.FormatLoader
 {
     //Pseudo Tikz Loader
-    class TikzFormatLoader : IFormatLoader
+    internal class TikzFormatLoader : IFormatLoader
     {
 
         public ICollection<TikzShape> ConvertMany(string data)
@@ -34,8 +28,10 @@ namespace TikzFix.Model.FormatLoader
                 latex.Start();
                 latex.WaitForExit(100000); //wait 10s before terminating 
                 if (latex.ExitCode != 0)
+                {
                     throw new Exception("Latex conversion failed");
-                
+                }
+
                 //4. Call dvisvgm to convert dvi to svg that we can easily parse
                 Process dvi2svg = new Process();
                 dvi2svg.StartInfo.WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory;
@@ -47,7 +43,9 @@ namespace TikzFix.Model.FormatLoader
                 dvi2svg.Start();
                 dvi2svg.WaitForExit(100000); //wait 10s before terminating 
                 if (dvi2svg.ExitCode != 0)
+                {
                     throw new Exception("DVI conversion failed");
+                }
 
                 string svg = File.ReadAllText("job.svg");
 

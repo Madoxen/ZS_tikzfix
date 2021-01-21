@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+
 using TikzFix.Model.TikzShapes;
 
 namespace TikzFix.Model.FormatGenerator

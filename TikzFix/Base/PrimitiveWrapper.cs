@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace TikzFix
+﻿namespace TikzFix
 {
     /// <summary>
     /// Wraps values so that they can be used in binding expressions
@@ -34,8 +30,8 @@ namespace TikzFix
         private T val;
         public T Value
         {
-            get { return val; }
-            set { SetProperty(ref val, value); }
+            get => val;
+            set => SetProperty(ref val, value);
         }
 
 

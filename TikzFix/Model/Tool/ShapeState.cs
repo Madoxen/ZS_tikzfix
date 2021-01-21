@@ -1,9 +1,9 @@
 ﻿namespace TikzFix.Model.Tool
 {
-    enum ShapeState
+    internal enum ShapeState
     {
         //Initial phase of drawing (usually means that user clicked once)
-        START, 
+        START,
 
         // shape is being drawn
         DRAWING,

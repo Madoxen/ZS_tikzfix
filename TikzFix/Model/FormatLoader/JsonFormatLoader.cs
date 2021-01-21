@@ -54,8 +54,8 @@ namespace TikzFix.Model.FormatLoader
 
             foreach (SvgData raw in d.svgRawData)
             {
-                var c = SVGParser.Parse(raw.data);
-                foreach (var s in c)
+                List<TikzShape> c = SVGParser.Parse(raw.data);
+                foreach (TikzShape s in c)
                 {
                     Canvas.SetLeft(s.Shape, raw.translate.X);
                     Canvas.SetTop(s.Shape, raw.translate.Y);

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
@@ -11,13 +6,13 @@ using TikzFix.Utils;
 
 namespace TikzFix.Model.Shapes
 {
-    class ArrowLine : Shape
+    internal class ArrowLine : Shape
     {
 
         public double X1
         {
-            get { return (double)GetValue(X1Property); }
-            set { SetValue(X1Property, value); }
+            get => (double)GetValue(X1Property);
+            set => SetValue(X1Property, value);
         }
 
         // Using a DependencyProperty as the backing store for X1.  This enables animation, styling, binding, etc...
@@ -28,8 +23,8 @@ namespace TikzFix.Model.Shapes
 
         public double Y1
         {
-            get { return (double)GetValue(Y1Property); }
-            set { SetValue(Y1Property, value); }
+            get => (double)GetValue(Y1Property);
+            set => SetValue(Y1Property, value);
         }
 
         // Using a DependencyProperty as the backing store for Y1.  This enables animation, styling, binding, etc...
@@ -42,8 +37,8 @@ namespace TikzFix.Model.Shapes
 
         public double X2
         {
-            get { return (double)GetValue(X2Property); }
-            set { SetValue(X2Property, value); }
+            get => (double)GetValue(X2Property);
+            set => SetValue(X2Property, value);
         }
 
         // Using a DependencyProperty as the backing store for X2.  This enables animation, styling, binding, etc...
@@ -54,8 +49,8 @@ namespace TikzFix.Model.Shapes
 
         public double Y2
         {
-            get { return (double)GetValue(Y2Property); }
-            set { SetValue(Y2Property, value); }
+            get => (double)GetValue(Y2Property);
+            set => SetValue(Y2Property, value);
         }
 
         // Using a DependencyProperty as the backing store for Y2.  This enables animation, styling, binding, etc...
@@ -68,8 +63,8 @@ namespace TikzFix.Model.Shapes
         //Angle in radians
         public double ArrowAngle
         {
-            get { return (double)GetValue(ArrowAngleProperty); }
-            set { SetValue(ArrowAngleProperty, value); }
+            get => (double)GetValue(ArrowAngleProperty);
+            set => SetValue(ArrowAngleProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for ArrowAngle.  This enables animation, styling, binding, etc...
@@ -82,8 +77,8 @@ namespace TikzFix.Model.Shapes
 
         public double ArrowLength
         {
-            get { return (double)GetValue(ArrowLengthProperty); }
-            set { SetValue(ArrowLengthProperty, value); }
+            get => (double)GetValue(ArrowLengthProperty);
+            set => SetValue(ArrowLengthProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for ArrowLength.  This enables animation, styling, binding, etc...
@@ -97,8 +92,8 @@ namespace TikzFix.Model.Shapes
 
         public bool HasEndArrow
         {
-            get { return (bool)GetValue(HasEndArrowProperty); }
-            set { SetValue(HasEndArrowProperty, value); }
+            get => (bool)GetValue(HasEndArrowProperty);
+            set => SetValue(HasEndArrowProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for HasEndArrow.  This enables animation, styling, binding, etc...
@@ -111,8 +106,8 @@ namespace TikzFix.Model.Shapes
 
         public bool HasStartArrow
         {
-            get { return (bool)GetValue(HasStartArrowProperty); }
-            set { SetValue(HasStartArrowProperty, value); }
+            get => (bool)GetValue(HasStartArrowProperty);
+            set => SetValue(HasStartArrowProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for HasStartArrow.  This enables animation, styling, binding, etc...

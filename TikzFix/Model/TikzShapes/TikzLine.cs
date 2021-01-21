@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Windows.Controls;
 using System.Windows.Shapes;
 
@@ -10,13 +9,13 @@ using TikzFix.Model.Tool;
 
 namespace TikzFix.Model.TikzShapes
 {
-    class TikzLine : TikzShape
+    internal class TikzLine : TikzShape
     {
         public TikzLine(ArrowLine line, TikzStyle tikzStyle) : base(line, tikzStyle)
         {
 
         }
-        
+
         private ArrowLine line;
         public override Shape Shape
         {

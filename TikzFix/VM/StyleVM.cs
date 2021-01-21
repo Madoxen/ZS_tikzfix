@@ -8,7 +8,7 @@ namespace TikzFix.VM
     /// <summary>
     /// Provides user-defined style for other objects 
     /// </summary>
-    class StyleVM : BaseVM
+    internal class StyleVM : BaseVM
     {
         public static TikzStyle CurrentStyle
         {
@@ -20,10 +20,7 @@ namespace TikzFix.VM
         private Color strokeColor = Color.FromRgb(0, 0, 0);
         public Color StrokeColor
         {
-            get
-            {
-                return strokeColor;
-            }
+            get => strokeColor;
             set
             {
                 SetProperty(ref strokeColor, value);
@@ -34,10 +31,7 @@ namespace TikzFix.VM
         private Color fillColor = Color.FromArgb(0, 0, 0, 0);
         public Color FillColor
         {
-            get
-            {
-                return fillColor;
-            }
+            get => fillColor;
             set
             {
                 SetProperty(ref fillColor, value);
@@ -48,10 +42,7 @@ namespace TikzFix.VM
         private LineEnding lineEnding = LineEnding.NONE;
         public LineEnding LineEnding
         {
-            get
-            {
-                return lineEnding;
-            }
+            get => lineEnding;
             set
             {
                 SetProperty(ref lineEnding, value);
@@ -62,10 +53,7 @@ namespace TikzFix.VM
         private LineWidth lineWidth = LineWidth.THIN;
         public LineWidth LineWidth
         {
-            get
-            {
-                return lineWidth;
-            }
+            get => lineWidth;
             set
             {
                 SetProperty(ref lineWidth, value);
@@ -77,10 +65,7 @@ namespace TikzFix.VM
         private LineType lineType = LineType.SOLID;
         public LineType LineType
         {
-            get
-            {
-                return lineType;
-            }
+            get => lineType;
             set
             {
                 SetProperty(ref lineType, value);

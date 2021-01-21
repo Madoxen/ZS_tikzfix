@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows.Input;
 
 namespace TikzFix
@@ -9,8 +7,8 @@ namespace TikzFix
     {
         #region Fields
 
-        readonly Action _execute = null;
-        readonly Func<object, bool> _canExecute = null;
+        private readonly Action _execute = null;
+        private readonly Func<object, bool> _canExecute = null;
 
         #endregion
 
@@ -62,7 +60,7 @@ namespace TikzFix
             add { CommandManager.RequerySuggested += value; }
             remove { CommandManager.RequerySuggested -= value; }
         }
-       
+
 
         ///<summary>
         ///Defines the method to be called when the command is invoked.
@@ -73,10 +71,10 @@ namespace TikzFix
             _execute();
         }
 
-       // public void RaiseCanExecuteChanged(object sender, EventArgs e)
+        // public void RaiseCanExecuteChanged(object sender, EventArgs e)
         //{
-          //  CanExecuteChanged(sender, e);
-       // }
+        //  CanExecuteChanged(sender, e);
+        // }
 
         #endregion
 

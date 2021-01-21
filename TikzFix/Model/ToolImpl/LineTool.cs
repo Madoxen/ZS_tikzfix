@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Windows.Controls;
-using System.Windows.Media;
-using System.Windows.Shapes;
 
 using TikzFix.Model.Shapes;
 using TikzFix.Model.Styling;
@@ -23,7 +19,7 @@ namespace TikzFix.Model.ToolImpl
             if (canvasEventArgs.MouseState == MouseState.DOWN)
             {
                 firstPoint = canvasEventArgs.Point;
-                var line = new ArrowLine
+                ArrowLine line = new ArrowLine
                 {
                     X1 = firstPoint.X,
                     X2 = firstPoint.X,
@@ -88,7 +84,7 @@ namespace TikzFix.Model.ToolImpl
                 }
             }
 
-           
+
 
             return current;
         }

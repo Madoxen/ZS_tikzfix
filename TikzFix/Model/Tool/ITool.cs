@@ -2,7 +2,7 @@
 
 namespace TikzFix.Model.Tool
 {
-    interface ITool
+    internal interface ITool
     {
         public const string LINE_TOOL_NAME = "LineTool";
         public const string RECTANGLE_TOOL_NAME = "RectangleTool";

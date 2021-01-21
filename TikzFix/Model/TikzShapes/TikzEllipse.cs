@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Windows.Controls;
 using System.Windows.Shapes;
+
 using TikzFix.Model.Styling;
 using TikzFix.Model.Tool;
 
 namespace TikzFix.Model.TikzShapes
 {
-    class TikzEllipse : TikzShape
+    internal class TikzEllipse : TikzShape
     {
         public TikzEllipse(Ellipse ellipse, TikzStyle tikzStyle) : base(ellipse, tikzStyle)
         {

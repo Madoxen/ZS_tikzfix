@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Shapes;
 
 using TikzFix.Model.Shapes;
 using TikzFix.Model.Styling;
@@ -11,7 +10,7 @@ using TikzFix.Utils;
 
 namespace TikzFix.Model.ToolImpl
 {
-    class BezierTool : ITool
+    internal class BezierTool : ITool
     {
         private sbyte click = 0;
 

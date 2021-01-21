@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows;
-using System.Windows.Media;
 using System.Windows.Shapes;
+
 using TikzFix.Model.Styling;
 using TikzFix.Model.TikzShapes;
 using TikzFix.Model.Tool;
@@ -20,8 +20,10 @@ namespace TikzFix.Model.ToolImpl
             {
                 Rectangle rect = new Rectangle();
                 rect.SetStyle(TikzStyle.SelectionStyle);
-                current = new DrawingShape(new TikzRectangle(rect, null), ShapeState.START);
-                current.RemoveOnFinish = true;
+                current = new DrawingShape(new TikzRectangle(rect, null), ShapeState.START)
+                {
+                    RemoveOnFinish = true
+                };
                 firstPoint = canvasEventArgs.Point;
             }
             else
@@ -31,9 +33,13 @@ namespace TikzFix.Model.ToolImpl
                 current.TikzShape.Shape.Margin = new Thickness(Math.Min(firstPoint.X, canvasEventArgs.Point.X), Math.Min(firstPoint.Y, canvasEventArgs.Point.Y), 0, 0);
 
                 if (canvasEventArgs.MouseState == MouseState.UP)
+                {
                     current.ShapeState = ShapeState.FINISHED;
+                }
                 else if (canvasEventArgs.MouseState == MouseState.MOVE)
+                {
                     current.ShapeState = ShapeState.DRAWING;
+                }
             }
             return current;
         }

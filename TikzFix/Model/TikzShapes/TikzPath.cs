@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Shapes;
 
@@ -13,7 +8,7 @@ using TikzFix.Utils;
 
 namespace TikzFix.Model.TikzShapes
 {
-    class TikzPath : TikzShape
+    internal class TikzPath : TikzShape
     {
         public TikzPath(Path path, TikzStyle style, string rawData) : base(path, style)
         {
@@ -22,8 +17,8 @@ namespace TikzFix.Model.TikzShapes
             pathData = SVGParser.GetSVGProperty(rawData, "d");
         }
 
-        private string pathData;
-        private string rawData;
+        private readonly string pathData;
+        private readonly string rawData;
         private Path path;
         public override Shape Shape
         {
@@ -38,14 +33,8 @@ namespace TikzFix.Model.TikzShapes
             }
         }
 
-        public string RawData
-        {
-            get => rawData;
-        }
-        public string PathData
-        {
-            get => pathData;
-        }
+        public string RawData => rawData;
+        public string PathData => pathData;
 
         public override LocalShapeData GenerateLocalData()
         {
