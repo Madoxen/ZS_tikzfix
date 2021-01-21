@@ -18,15 +18,11 @@ namespace TikzFix.Model.FormatLoader
     class TikzFormatLoader : IFormatLoader
     {
 
-        const string BEGIN_ENVIROMENT_TOKEN = "\\begin{tikzpicture}";
-        const string END_ENVIROMENT_TOKEN = "\\end{tikzpicture}";
-
         public ICollection<TikzShape> ConvertMany(string data)
         {
             try
             {
                 File.WriteAllText("job.txt", data);
-
                 //3. Call latex for conversion to DVI
                 Process latex = new Process();
                 latex.StartInfo.WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory;
@@ -44,7 +40,7 @@ namespace TikzFix.Model.FormatLoader
                 Process dvi2svg = new Process();
                 dvi2svg.StartInfo.WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory;
                 dvi2svg.StartInfo.FileName = "dvisvgm";
-                dvi2svg.StartInfo.Arguments = "-n -v 0 job.dvi";
+                dvi2svg.StartInfo.Arguments = "-n -v 0 -o job.svg job.dvi";
                 dvi2svg.StartInfo.CreateNoWindow = true;
                 dvi2svg.StartInfo.UseShellExecute = true;
                 dvi2svg.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
