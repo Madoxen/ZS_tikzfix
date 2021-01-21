@@ -37,7 +37,7 @@ namespace TikzFix.Model.TikzShapes
         {
             BezierSegment b = (path.Data as PathGeometry).Figures[0].Segments[0] as BezierSegment;
 
-            Point firstPoint = new Point((int)Canvas.GetLeft(path), (int)Canvas.GetTop(path));
+            Point firstPoint = new Point((int)Canvas.GetLeft(path) + (int)path.Margin.Left, (int)Canvas.GetTop(path) + (int)path.Margin.Top);
 
 
             List<CanvasEventArgs> keyPointList = new List<CanvasEventArgs>
@@ -58,7 +58,7 @@ namespace TikzFix.Model.TikzShapes
         {
             BezierSegment b = (path.Data as PathGeometry).Figures[0].Segments[0] as BezierSegment;
 
-            return $"\\filldraw[color={TikzStyle.StrokeColor.GetLaTeXColorString()}, {TikzStyle.LineEnding.GetLineEndingTikz()} ,fill={TikzStyle.FillColor.GetLaTeXColorString()}, fill opacity={(double)TikzStyle.FillColor.A / 255.0}, draw opacity={TikzStyle.StrokeColor.A / 255.0}, {TikzStyle.LineWidth.GetLineWidthTikz()},{TikzStyle.LineType.GetLineTypeTikz()}] ({Canvas.GetLeft(path)}pt,{Canvas.GetTop(path)}pt) .. controls ({b.Point1.X + Canvas.GetLeft(path)}pt,{b.Point1.Y + Canvas.GetTop(path)}pt) and ({b.Point2.X + Canvas.GetLeft(path)}pt,{b.Point2.Y + Canvas.GetTop(path)}pt) .. ({b.Point3.X + Canvas.GetLeft(path)}pt,{b.Point3.Y + Canvas.GetTop(path)}pt);";
+            return $"\\filldraw[color={TikzStyle.StrokeColor.GetLaTeXColorString()}, {TikzStyle.LineEnding.GetLineEndingTikz()}, fill={TikzStyle.FillColor.GetLaTeXColorString()}, fill opacity={(double)TikzStyle.FillColor.A / 255.0}, draw opacity={TikzStyle.StrokeColor.A / 255.0}, {TikzStyle.LineWidth.GetLineWidthTikz()},{TikzStyle.LineType.GetLineTypeTikz()}] ({Canvas.GetLeft(path)}pt,{Canvas.GetTop(path)}pt) .. controls ({b.Point1.X + Canvas.GetLeft(path)}pt,{b.Point1.Y + Canvas.GetTop(path)}pt) and ({b.Point2.X + Canvas.GetLeft(path)}pt,{b.Point2.Y + Canvas.GetTop(path)}pt) .. ({b.Point3.X + Canvas.GetLeft(path)}pt,{b.Point3.Y + Canvas.GetTop(path)}pt);";
         }
     }
 }
