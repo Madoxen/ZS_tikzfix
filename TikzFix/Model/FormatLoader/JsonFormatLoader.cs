@@ -34,13 +34,11 @@ namespace TikzFix.Model.FormatLoader
         {
             SaveData d = JsonSerializer.Deserialize<SaveData>(data);
             List<TikzShape> result = new List<TikzShape>();
-
             ITool currentTool;
 
             foreach (LocalShapeData shapeData in d.localShapeData)
             {
                 currentTool = toolNameToolMap[shapeData.ToolName];
-
                 foreach (CanvasEventArgs canvasEventArgs in shapeData.KeyPoints)
                 {
                     DrawingShape r = currentTool.GetShape(canvasEventArgs, shapeData.Style);
@@ -59,6 +57,8 @@ namespace TikzFix.Model.FormatLoader
                 {
                     Canvas.SetLeft(s.Shape, raw.translate.X);
                     Canvas.SetTop(s.Shape, raw.translate.Y);
+                    s.TikzStyle = raw.style;
+                    s.Shape.SetStyle(raw.style);
                 }
 
                 result.AddRange(c);

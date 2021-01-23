@@ -11,7 +11,7 @@ namespace TikzFix.Model.ToolImpl
 {
     internal class SelectionRectangleTool : ITool
     {
-        private Tool.Point firstPoint;
+        private Point firstPoint;
         private DrawingShape current;
 
         public virtual DrawingShape GetShape(CanvasEventArgs canvasEventArgs, TikzStyle style)
@@ -31,7 +31,7 @@ namespace TikzFix.Model.ToolImpl
                 current.TikzShape.Shape.Width = Math.Abs(firstPoint.X - canvasEventArgs.Point.X);
                 current.TikzShape.Shape.Height = Math.Abs(firstPoint.Y - canvasEventArgs.Point.Y);
                 current.TikzShape.Shape.Margin = new Thickness(Math.Min(firstPoint.X, canvasEventArgs.Point.X), Math.Min(firstPoint.Y, canvasEventArgs.Point.Y), 0, 0);
-
+                
                 if (canvasEventArgs.MouseState == MouseState.UP)
                 {
                     current.ShapeState = ShapeState.FINISHED;
@@ -46,7 +46,6 @@ namespace TikzFix.Model.ToolImpl
 
         public void Reset()
         {
-            firstPoint = null;
             current = null;
         }
     }

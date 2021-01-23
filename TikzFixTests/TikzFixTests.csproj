@@ -17,4 +17,10 @@
     <ProjectReference Include="..\TikzFix\TikzFix.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="TestData\test.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

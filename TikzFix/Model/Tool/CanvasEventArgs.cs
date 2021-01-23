@@ -1,4 +1,6 @@
-﻿namespace TikzFix.Model.Tool
+﻿using System.Windows;
+
+namespace TikzFix.Model.Tool
 {
     public class CanvasEventArgs
     {

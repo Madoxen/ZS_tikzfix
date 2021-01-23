@@ -24,8 +24,7 @@ namespace TikzFix.VM
         private readonly ITool ellipseTool = new EllipseTool();
         private readonly ITool bezierTool = new BezierTool();
         private readonly ITool selectionRectTool = new SelectionRectangleTool();
-
-        private readonly ITool canvasMovingTool = new CanvasMovingTool();
+        private readonly ITool canvasMovingTool;
         public readonly List<ITool> Tools = new List<ITool>();
 
 
@@ -70,13 +69,6 @@ namespace TikzFix.VM
         {
             get => canvasSelectable;
             set => SetProperty(ref canvasSelectable, value);
-        }
-
-        private bool canvasMovable = false;
-        public bool CanvasMovable
-        {
-            get => canvasMovable;
-            set => SetProperty(ref canvasMovable, value);
         }
 
 
@@ -147,9 +139,10 @@ namespace TikzFix.VM
             Tools.Add(ellipseTool);
             Tools.Add(bezierTool);
             Tools.Add(selectionRectTool);
+            canvasMovingTool = new CanvasMovingTool(shapes);
             Tools.Add(canvasMovingTool);
 
-            CurrentToolIndex = 0;
+            CurrentToolIndex = -1;
 
             StepDrawingCommand = new RelayCommand<CanvasEventArgs>(StepDrawing);
             UpdateDrawingCommand = new RelayCommand<CanvasEventArgs>(UpdateDrawing, CanUpdateDrawing);
@@ -173,8 +166,8 @@ namespace TikzFix.VM
                 foreach (TikzShape s in SelectedShapes)
                 {
                     s.Shape.SetStyle(style);
+                    s.TikzStyle = style;
                 }
-
             }
             else
             {
@@ -188,7 +181,6 @@ namespace TikzFix.VM
             CurrentDrawingShape = null;
             CurrentTool?.Reset();
             CancelSelection();
-
             Shapes.Clear();
         }
 
@@ -205,14 +197,12 @@ namespace TikzFix.VM
                     // do nothing, ShapeCannot be drawn yet
                     // CurrentDrawingShape = null;
                     CurrentDrawingShape = drawingShape;
-
                     break;
 
                 case ShapeState.DRAWING:
                     // shape drawing isn't finished
                     // draw shape but do not add it to list
                     CurrentDrawingShape = drawingShape;
-
                     break;
 
                 case ShapeState.FINISHED:
@@ -222,7 +212,6 @@ namespace TikzFix.VM
                     {
                         Shapes.Add(drawingShape.TikzShape);
                     }
-
                     break;
             }
         }
@@ -230,26 +219,12 @@ namespace TikzFix.VM
 
         private void StepDrawing(CanvasEventArgs e)
         {
-            CanvasMovable = currentToolIndex == 5 && e.MouseState == MouseState.DOWN;
-            if (CanvasMovable)
-            {
-                return;
-            }
-            //Debug.WriteLine(e.MouseState);
             HandleDrawingShape(CurrentTool?.GetShape(e, StyleVM.CurrentStyle)); //update shape with event args.
         }
 
         private void UpdateDrawing(CanvasEventArgs e)
         {
-            Debug.WriteLine(e.Point);
-            if (CanvasMovable)
-            {
-                return;
-            }
-
             HandleDrawingShape(CurrentTool?.GetShape(e, StyleVM.CurrentStyle)); //update shape with event args.
-
-
         }
 
         private bool CanUpdateDrawing(object _)

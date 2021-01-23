@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Media;
@@ -42,6 +43,7 @@ namespace TikzFix.Utils
                 double fillOpacity = double.TryParse(rawFillOpacity, out double of) ? of : 1.0;
                 TikzStyle s = new TikzStyle(parseSVGColor(rawStrokeColor, strokeOpacity),
                     parseSVGColor(rawFillColor, fillOpacity), LineEnding.NONE, praseSVGStrokeWidth(rawStrokeWidth), parseSVGDashArray(rawStrokeDasharray));
+
                 p.SetStyle(s);
                 result.Add(new TikzPath(p, s, line));
             }

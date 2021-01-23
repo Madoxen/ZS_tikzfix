@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json;
+using System.Windows;
 using System.Windows.Controls;
 
 using TikzFix.Model.TikzShapes;
@@ -14,7 +15,7 @@ namespace TikzFix.Model.FormatGenerator
             SaveData d = new SaveData
             {
                 svgRawData = new List<SvgData>(),
-                localShapeData = new List<LocalShapeData>()
+                localShapeData = new List<LocalShapeData>(),
             };
             foreach (TikzShape s in shapes)
             {
@@ -23,9 +24,7 @@ namespace TikzFix.Model.FormatGenerator
                     //Prepare path data
                     Point move = new Point((int)Canvas.GetLeft(p.Shape), (int)Canvas.GetTop(p.Shape));
                     //Modify move data
-
-
-                    d.svgRawData.Add(new SvgData() { data = p.RawData, translate = move });
+                    d.svgRawData.Add(new SvgData() { data = p.RawData, translate = move, style = p.TikzStyle });
                     continue;
                 }
                 d.localShapeData.Add(s.GenerateLocalData());

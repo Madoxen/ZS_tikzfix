@@ -8,7 +8,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Effects;
 using System.Windows.Shapes;
-
 using TikzFix.Model.TikzShapes;
 using TikzFix.Utils;
 
@@ -204,6 +203,7 @@ namespace TikzFix.Views
                     foreach (TikzShape ele in newItems)
                     {
                         c.Children.Add(ele.Shape);
+   
                     }
                     break;
                 case NotifyCollectionChangedAction.Remove:
@@ -230,65 +230,27 @@ namespace TikzFix.Views
         private Point? movingStartPoint;
         private void HandleSelectionBegin(object sender, MouseButtonEventArgs e)
         {
-            if (!CanvasSelectable)
-            {
-                return; //Canvas is marked as not selectable, abort
-            }
-
             Point pos = e.GetPosition(c);
-            selectionStartPoint = pos;
-            SelectedShapes.Clear(ResetEffect);
+            
+            if (CanvasSelectable)
+            {
+                selectionStartPoint = pos;
+                SelectedShapes.Clear(ResetEffect);
+            }               
         }
-
-        private List<(Guid ShapeId, double Left, double Top)> _initialShapesPositions;
 
         private void HandleSelectionMoved(object sender, MouseEventArgs e)
         {
             if (CanvasMovable)
             {
-                if (_initialShapesPositions == null)
-                {
-                    _initialShapesPositions = new List<(Guid ShapeId, double Left, double Top)>();
-                    foreach (TikzShape shape in Shapes)
-                    {
-                        if (double.IsNaN(Canvas.GetLeft(shape.Shape)))
-                        {
-                            Canvas.SetLeft(shape.Shape, shape.Shape.Margin.Left);
-                        }
-
-                        if (double.IsNaN(Canvas.GetTop(shape.Shape)))
-                        {
-                            Canvas.SetTop(shape.Shape, shape.Shape.Margin.Top);
-                        }
-
-                        _initialShapesPositions.Add((shape.Id, Canvas.GetLeft(shape.Shape), Canvas.GetTop(shape.Shape)));
-                    }
-                }
-
-                if (!movingStartPoint.HasValue)
-                {
-                    movingStartPoint = e.GetPosition((IInputElement)e.Source);
-                }
-
-                foreach (TikzShape child in Shapes)
-                {
-                    Shape shape = child.Shape;
-
-                    Canvas.SetLeft(shape, _initialShapesPositions.Single(s => s.ShapeId == child.Id).Left + (e.GetPosition((IInputElement)e.Source).X - movingStartPoint.Value.X));
-                    Canvas.SetTop(shape, _initialShapesPositions.Single(s => s.ShapeId == child.Id).Top + (e.GetPosition((IInputElement)e.Source).Y - movingStartPoint.Value.Y));
-                    //Debug.WriteLine($"{e.GetPosition((IInputElement)e.Source).X - movingStartPoint.Value.X} ");
-
-                }
+                
             }
-
-            if (!CanvasSelectable)
+            if (CanvasSelectable)
             {
-                return; //Canvas is marked as not selectable, abort
+                Point pos = e.GetPosition(c);
+                selectionRaycastBox.Width = Math.Abs(pos.X - selectionStartPoint.X);
+                selectionRaycastBox.Height = Math.Abs(pos.Y - selectionStartPoint.Y);
             }
-
-            Point pos = e.GetPosition(c);
-            selectionRaycastBox.Width = Math.Abs(pos.X - selectionStartPoint.X);
-            selectionRaycastBox.Height = Math.Abs(pos.Y - selectionStartPoint.Y);
         }
 
 
@@ -297,11 +259,6 @@ namespace TikzFix.Views
             if (movingStartPoint != null)
             {
                 movingStartPoint = null;
-            }
-
-            if (_initialShapesPositions != null)
-            {
-                _initialShapesPositions = null;
             }
 
             if (!CanvasSelectable)

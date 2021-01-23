@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
@@ -43,13 +44,12 @@ namespace TikzFix.Model.TikzShapes
                 {
                     // prob it can be done with 3 points instead of 6 but I got strange bugs
                     new CanvasEventArgs(firstPoint, MouseState.DOWN),
-                    new CanvasEventArgs(new Point(BezierTool.GetPointWithMargin(firstPoint, new Point(b.Point3))), MouseState.UP),
-                    new CanvasEventArgs(new Point(BezierTool.GetPointWithMargin(firstPoint, new Point(b.Point1))), MouseState.DOWN),
-                    new CanvasEventArgs(new Point(BezierTool.GetPointWithMargin(firstPoint, new Point(b.Point1))), MouseState.UP),
-                    new CanvasEventArgs(new Point(BezierTool.GetPointWithMargin(firstPoint, new Point(b.Point2))), MouseState.DOWN),
-                    new CanvasEventArgs(new Point(BezierTool.GetPointWithMargin(firstPoint, new Point(b.Point2))), MouseState.UP),
+                    new CanvasEventArgs(PointExtensions.CreateFromPoint(BezierTool.GetPointWithMargin(firstPoint, PointExtensions.CreateFromPoint(b.Point3))), MouseState.UP),
+                    new CanvasEventArgs(PointExtensions.CreateFromPoint(BezierTool.GetPointWithMargin(firstPoint, PointExtensions.CreateFromPoint(b.Point1))), MouseState.DOWN),
+                    new CanvasEventArgs(PointExtensions.CreateFromPoint(BezierTool.GetPointWithMargin(firstPoint, PointExtensions.CreateFromPoint(b.Point1))), MouseState.UP),
+                    new CanvasEventArgs(PointExtensions.CreateFromPoint(BezierTool.GetPointWithMargin(firstPoint, PointExtensions.CreateFromPoint(b.Point2))), MouseState.DOWN),
+                    new CanvasEventArgs(PointExtensions.CreateFromPoint(BezierTool.GetPointWithMargin(firstPoint, PointExtensions.CreateFromPoint(b.Point2))), MouseState.UP),
                 };
-
             return new LocalShapeData(ITool.BEZIER_TOOL_NAME, keyPointList, TikzStyle);
         }
 
