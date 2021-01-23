@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Windows;
 using System.Windows.Controls;
-
 using TikzFix.Model.Shapes;
 using TikzFix.Model.Styling;
 using TikzFix.Model.TikzShapes;
@@ -89,7 +89,6 @@ namespace TikzFix.Model.ToolImpl
         public void Reset()
         {
             current = null;
-            firstPoint = null;
         }
     }
 }

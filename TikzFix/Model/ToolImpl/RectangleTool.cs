@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Shapes;
-
 using TikzFix.Model.Styling;
 using TikzFix.Model.TikzShapes;
 using TikzFix.Model.Tool;
@@ -44,7 +44,7 @@ namespace TikzFix.Model.ToolImpl
                     }
                     else
                     {
-                        int b = Math.Min(firstPoint.X - canvasEventArgs.Point.X, firstPoint.Y - canvasEventArgs.Point.Y);
+                        double b = Math.Min(firstPoint.X - canvasEventArgs.Point.X, firstPoint.Y - canvasEventArgs.Point.Y);
                         w = b;
                         h = b;
                         x = firstPoint.X - b;
@@ -72,7 +72,6 @@ namespace TikzFix.Model.ToolImpl
 
         public void Reset()
         {
-            firstPoint = null;
             current = null;
         }
     }

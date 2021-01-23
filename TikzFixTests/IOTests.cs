@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Windows;
 using System.Windows.Media;
 
 using TikzFix.Model.FormatGenerator;

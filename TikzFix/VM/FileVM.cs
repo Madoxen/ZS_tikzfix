@@ -108,7 +108,7 @@ namespace TikzFix.VM
 
         private void Load(string fileName)
         {
-            string ext = System.IO.Path.GetExtension(fileName);
+            string ext = Path.GetExtension(fileName);
             Debug.WriteLine(ext);
             if (ext == null)
             {

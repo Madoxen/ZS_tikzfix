@@ -4,7 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace TikzFix.Tests
 {
-
+    using System.Windows;
     using System.Windows.Media;
     using System.Windows.Shapes;
 

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -9,7 +8,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Effects;
 using System.Windows.Shapes;
-
 using TikzFix.Model.TikzShapes;
 using TikzFix.Utils;
 
@@ -53,13 +51,6 @@ namespace TikzFix.Views
         // Using a DependencyProperty as the backing store for SelectedShapes.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty SelectedShapesProperty =
             DependencyProperty.Register("SelectedShapes", typeof(ICollection<TikzShape>), typeof(CollectionCanvas), new PropertyMetadata(null, OnShapesSelectedChanged));
-
-
-
-
-        private Point canvasPosition = new Point(0,0);
-        private Point previousMousePos;
-
 
 
         private static void OnShapesSelectedChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -240,9 +231,7 @@ namespace TikzFix.Views
         private void HandleSelectionBegin(object sender, MouseButtonEventArgs e)
         {
             Point pos = e.GetPosition(c);
-            previousMousePos = pos;
             
-
             if (CanvasSelectable)
             {
                 selectionStartPoint = pos;
@@ -254,16 +243,7 @@ namespace TikzFix.Views
         {
             if (CanvasMovable)
             {
-                Point mousePos = e.GetPosition(c);
-                Vector delta = mousePos - previousMousePos;
-                previousMousePos = mousePos;
-                canvasPosition += delta;
-
-                foreach (Shape s in c.Children)
-                {
-                    Canvas.SetLeft(s, Canvas.GetLeft(s) + delta.X);
-                    Canvas.SetTop(s, Canvas.GetTop(s) + delta.Y);
-                }
+                
             }
             if (CanvasSelectable)
             {

@@ -11,7 +11,7 @@ namespace TikzFix.Model.ToolImpl
 {
     internal class SelectionRectangleTool : ITool
     {
-        private Tool.Point firstPoint;
+        private Point firstPoint;
         private DrawingShape current;
 
         public virtual DrawingShape GetShape(CanvasEventArgs canvasEventArgs, TikzStyle style)
@@ -46,7 +46,6 @@ namespace TikzFix.Model.ToolImpl
 
         public void Reset()
         {
-            firstPoint = null;
             current = null;
         }
     }

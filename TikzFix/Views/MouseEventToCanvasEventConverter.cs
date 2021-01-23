@@ -24,16 +24,16 @@ namespace TikzFix.Views
             {
                 if (b.LeftButton == MouseButtonState.Pressed)
                 {
-                    return new CanvasEventArgs(new Model.Tool.Point(p), MouseState.DOWN, modKey);
+                    return new CanvasEventArgs(PointExtensions.CreateFromPoint(p), MouseState.DOWN, modKey);
                 }
 
                 if (b.LeftButton == MouseButtonState.Released)
                 {
-                    return new CanvasEventArgs(new Model.Tool.Point(p), MouseState.UP, modKey);
+                    return new CanvasEventArgs(PointExtensions.CreateFromPoint(p), MouseState.UP, modKey);
                 }
             }
 
-            return new CanvasEventArgs(new Model.Tool.Point(p), MouseState.MOVE, modKey);
+            return new CanvasEventArgs(PointExtensions.CreateFromPoint(p), MouseState.MOVE, modKey);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
