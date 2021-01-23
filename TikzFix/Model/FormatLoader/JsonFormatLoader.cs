@@ -34,7 +34,6 @@ namespace TikzFix.Model.FormatLoader
         {
             SaveData d = JsonSerializer.Deserialize<SaveData>(data);
             List<TikzShape> result = new List<TikzShape>();
-
             ITool currentTool;
 
             foreach (LocalShapeData shapeData in d.localShapeData)

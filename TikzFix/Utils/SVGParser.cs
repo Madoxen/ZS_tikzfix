@@ -39,14 +39,11 @@ namespace TikzFix.Utils
                 string rawStrokeOpacity = GetSVGProperty(line, "stroke-opacity");
                 string rawFillOpacity = GetSVGProperty(line, "fill-opacity");
 
-                Debug.WriteLine(rawStrokeColor);
-
                 double strokeOpacity = double.TryParse(rawStrokeOpacity, out double o) ? o : 1.0;
                 double fillOpacity = double.TryParse(rawFillOpacity, out double of) ? of : 1.0;
                 TikzStyle s = new TikzStyle(parseSVGColor(rawStrokeColor, strokeOpacity),
                     parseSVGColor(rawFillColor, fillOpacity), LineEnding.NONE, praseSVGStrokeWidth(rawStrokeWidth), parseSVGDashArray(rawStrokeDasharray));
 
-                Debug.WriteLine(s);
                 p.SetStyle(s);
                 result.Add(new TikzPath(p, s, line));
             }

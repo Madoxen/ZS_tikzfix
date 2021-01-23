@@ -25,9 +25,9 @@ namespace TikzFix.Tests
         //imo no need for io dialog tests because of filters
         private static readonly TikzStyle style = new TikzStyle(Color.FromArgb(255, 0, 0, 0), Color.FromArgb(255, 0, 0, 0));
 
-        //Converter test
+        //Loads prepared specified json file and checks count of various shapes
         [TestMethod]
-        public void ConvertTikzJsonTest()
+        public void LoadJsonCountTest()
         {
             //Arrange
             string jsonTikz = File.ReadAllText("TestData/test.json");
@@ -68,14 +68,12 @@ namespace TikzFix.Tests
             Debug.WriteLine(rectCount);
             Debug.WriteLine(pathCount);
 
-
             //Assert
-            Assert.AreEqual(ellipseCount, 2);
-            Assert.AreEqual(lineCount, 20);
-            Assert.AreEqual(bezierCount, 2);
-            Assert.AreEqual(rectCount, 7);
-            Assert.AreEqual(pathCount, 0);
-
+            Assert.AreEqual(1,ellipseCount);
+            Assert.AreEqual(2,lineCount);
+            Assert.AreEqual(2,bezierCount);
+            Assert.AreEqual(1,rectCount);
+            Assert.AreEqual(496,pathCount);
         }
 
         //Converter test
