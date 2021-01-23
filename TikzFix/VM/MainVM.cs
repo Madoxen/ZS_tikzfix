@@ -142,7 +142,7 @@ namespace TikzFix.VM
             canvasMovingTool = new CanvasMovingTool(shapes);
             Tools.Add(canvasMovingTool);
 
-            CurrentToolIndex = 0;
+            CurrentToolIndex = -1;
 
             StepDrawingCommand = new RelayCommand<CanvasEventArgs>(StepDrawing);
             UpdateDrawingCommand = new RelayCommand<CanvasEventArgs>(UpdateDrawing, CanUpdateDrawing);
@@ -166,6 +166,7 @@ namespace TikzFix.VM
                 foreach (TikzShape s in SelectedShapes)
                 {
                     s.Shape.SetStyle(style);
+                    s.TikzStyle = style;
                 }
             }
             else

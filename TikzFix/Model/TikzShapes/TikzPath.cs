@@ -15,6 +15,8 @@ namespace TikzFix.Model.TikzShapes
             this.path = path;
             this.rawData = rawData;
             pathData = SVGParser.GetSVGProperty(rawData, "d");
+            Canvas.SetLeft(this.path, 0);
+            Canvas.SetTop(this.path, 0);
         }
 
         private readonly string pathData;
@@ -27,7 +29,7 @@ namespace TikzFix.Model.TikzShapes
             {
                 if (value is not Path p)
                 {
-                    throw new ArgumentException("TikzLine Shape has to be Line");
+                    throw new ArgumentException("TikzLine Shape has to be Path");
                 }
                 path = p;
             }

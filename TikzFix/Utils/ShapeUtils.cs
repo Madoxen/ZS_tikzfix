@@ -33,6 +33,9 @@ namespace TikzFix.Utils
 
         public static void SetStyle(this Shape s, TikzStyle style)
         {
+            if (style == null)
+                return;
+
             s.Stroke = new SolidColorBrush(style.StrokeColor);
             s.Fill = new SolidColorBrush(style.FillColor);
             s.StrokeThickness = style.LineWidth.GetLineWidth();

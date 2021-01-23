@@ -30,11 +30,9 @@ namespace TikzFix.Model.ToolImpl
             }
             else
             {
-
                 Point mousePos = canvasEventArgs.Point;
                 Vector delta = mousePos - previousMousePos;
                 previousMousePos = mousePos;
-
                 foreach (TikzShape s in shapes)
                 {
                     Canvas.SetLeft(s.Shape, Canvas.GetLeft(s.Shape) + delta.X);
@@ -50,6 +48,7 @@ namespace TikzFix.Model.ToolImpl
                     dummy.ShapeState = ShapeState.DRAWING;
                 }
             }
+            dummy.RemoveOnFinish = true;
             return dummy;
         }
 

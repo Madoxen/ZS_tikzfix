@@ -284,7 +284,6 @@
             Shapes="{Binding Shapes, Mode=OneWay}"
             Background="Transparent"
             CanvasSelectable="{Binding CanvasSelectable}"
-            CanvasMovable="{Binding CanvasMovable}"
             SelectedShapes="{Binding SelectedShapes}"
             Grid.Row="2">
 
