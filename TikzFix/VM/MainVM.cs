@@ -235,13 +235,11 @@ namespace TikzFix.VM
             {
                 return;
             }
-            //Debug.WriteLine(e.MouseState);
             HandleDrawingShape(CurrentTool?.GetShape(e, StyleVM.CurrentStyle)); //update shape with event args.
         }
 
         private void UpdateDrawing(CanvasEventArgs e)
         {
-            Debug.WriteLine(e.Point);
             if (CanvasMovable)
             {
                 return;

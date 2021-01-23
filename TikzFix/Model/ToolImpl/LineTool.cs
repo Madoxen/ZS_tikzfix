@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Controls;
 
 using TikzFix.Model.Shapes;
 using TikzFix.Model.Styling;
@@ -70,21 +71,17 @@ namespace TikzFix.Model.ToolImpl
                     l.Y2 = l.Y1 + Math.Sin(snapAngle) * maxDim;
                 }
 
-
-
-
                 if (canvasEventArgs.MouseState == MouseState.UP)
                 {
                     current.ShapeState = ShapeState.FINISHED;
-
+                    Canvas.SetLeft(l, 0);
+                    Canvas.SetTop(l, 0);
                 }
                 else if (canvasEventArgs.MouseState == MouseState.MOVE)
                 {
                     current.ShapeState = ShapeState.DRAWING;
                 }
             }
-
-
 
             return current;
         }
